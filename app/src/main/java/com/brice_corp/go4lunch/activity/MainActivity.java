@@ -23,9 +23,9 @@ import androidx.fragment.app.Fragment;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
-import com.brice_corp.go4lunch.view.ListViewFragment;
-import com.brice_corp.go4lunch.view.MapViewFragment;
-import com.brice_corp.go4lunch.view.WorkmatesFragment;
+import com.brice_corp.go4lunch.view.fragment.ListViewFragment;
+import com.brice_corp.go4lunch.view.fragment.MapViewFragment;
+import com.brice_corp.go4lunch.view.fragment.WorkmatesFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
