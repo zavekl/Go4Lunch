@@ -1,20 +1,25 @@
 package com.brice_corp.go4lunch.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
@@ -31,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     //Components
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
+    private ConstraintLayout mConstraintLayout;
+    private EditText mEditText;
 
 
     @Override
@@ -40,8 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         //TOOLBAR
-        mToolbar= findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        mConstraintLayout = findViewById(R.id.toolbar_constraint);
+        mEditText = findViewById(R.id.search_edit_text);
 
         //BOTTOM MENU
         setBottomMenu();
@@ -52,6 +61,23 @@ public class MainActivity extends AppCompatActivity {
 
         //SET THE DEFAULT FRAGMENT
         setDefaultFragment();
+
+        //SET THE ONCLICK MENU BUTTON TOOLBAR
+        setCLickOnMenuToolbar();
+    }
+
+    //Manage the back for the navigation drawer
+    @Override
+    public void onBackPressed() {
+        //Handle back click to close menu
+        if (this.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+        if (this.mConstraintLayout.getVisibility() == View.VISIBLE) {
+            hideSearchBar();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     //SET THE DEFAULT FRAGMENT
@@ -163,5 +189,42 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog alert = builder.create();
         alert.setTitle("Sign Out");
         alert.show();
+    }
+
+    private void setCLickOnMenuToolbar() {
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.search_restaurant) {
+                    revealSearchBar();
+                }
+                return true;
+            }
+        });
+    }
+
+    //Hide the searchbar
+    private void hideSearchBar() {
+        mConstraintLayout.setVisibility(View.INVISIBLE);
+    }
+
+    //Reveal the searchbar
+    private void revealSearchBar() {
+        mConstraintLayout.setVisibility(View.VISIBLE);
+        //TODO initSearchToolbar();
+    }
+
+    private void initSearchToolbar() {
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                        || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER) {
+                    //TODO Do the research of the wanted restaurant
+//                    String mSearchString = mEditText.getText().toString(); //Get the text from research
+                }
+                return false;
+            }
+        });
     }
 }
