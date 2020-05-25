@@ -5,4 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_restaurant_recyclerview"
+        android:name="com.brice_corp.go4lunch.view.bottom_menu.ListViewFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".activity.MainActivity"
+        tools:listitem="@layout/item_recyclerview_listview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

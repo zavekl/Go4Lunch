@@ -1,4 +1,4 @@
-package com.brice_corp.go4lunch.view;
+package com.brice_corp.go4lunch.view.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;

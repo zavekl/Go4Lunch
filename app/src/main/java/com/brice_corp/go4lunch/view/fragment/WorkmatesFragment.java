@@ -1,4 +1,4 @@
-package com.brice_corp.go4lunch.view;
+package com.brice_corp.go4lunch.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
