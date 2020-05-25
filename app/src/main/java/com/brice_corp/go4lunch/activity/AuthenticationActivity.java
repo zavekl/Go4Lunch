@@ -3,12 +3,10 @@ package com.brice_corp.go4lunch.activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
@@ -59,14 +57,14 @@ public class AuthenticationActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 //Show email
-                Toast.makeText(this, "" + user.getEmail(), Toast.LENGTH_SHORT).show();
+                Log.e("onActivityResult", "onActivityResult: " + user.getEmail());
 
                 //Start the new activity
                 Intent intent = new Intent(this, MainActivity.class);
                 finish();
                 startActivity(intent);
             } else {
-                Toast.makeText(this, "" + response.getError().getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("onActivityResult", "onActivityResult: " + response.getError().getMessage() );
             }
         }
     }
