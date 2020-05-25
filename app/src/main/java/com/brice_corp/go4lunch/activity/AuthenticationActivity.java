@@ -30,9 +30,11 @@ public class AuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-            //TODO Location Permissions
+        if (checkPermission()) {
             displaySignIn();
-
+        } else {
+            getLocationPermission();
+        }
     }
 
     //Get the result of the Location permission
@@ -76,5 +78,15 @@ public class AuthenticationActivity extends AppCompatActivity {
 
         //Display signin
         authenticationUtils.showSignInOptions(this);
+    }
+
+    //Make the request Location permission
+    public void getLocationPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+    }
+
+    //Check if the permission is granted
+    public boolean checkPermission() {
+        return ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }
