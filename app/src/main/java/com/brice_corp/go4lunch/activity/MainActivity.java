@@ -2,20 +2,28 @@ package com.brice_corp.go4lunch.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.utils.AuthenticationUtils;
 import com.brice_corp.go4lunch.view.ListViewFragment;
 import com.brice_corp.go4lunch.view.MapViewFragment;
 import com.brice_corp.go4lunch.view.WorkmatesFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -92,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.logout:
-                        //TODO lancer le dialog alert
+                        buildAlertMessageLogout();
                         return false;
                     case R.id.settings:
                         return false;
@@ -122,5 +130,38 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //Alert dialog which use to disconnect the user
+    private void buildAlertMessageLogout() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want to signout?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        AuthenticationUtils.signOut(MainActivity.this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(MainActivity.this, "Disconnected", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MainActivity.this, AuthenticationActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(MainActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //  Action for 'NO' Button
+                dialog.cancel();
+            }
+        });
+        final AlertDialog alert = builder.create();
+        alert.setTitle("Sign Out");
+        alert.show();
     }
 }
