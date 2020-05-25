@@ -2,8 +2,9 @@
     <string name="app_name">Go4Lunch</string>
 
     <!-- FACEBOOK API -->
-    <string name="facebook_application_id" translatable="false">2657679107845100</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb2657679107845100</string>
+    <string name="facebook_application_id" translatable="false">253851662625205</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb253851662625205</string>
+
 
     <!-- BOTTOM MENU -->
     <string name="bottom_navigation_menu_map">Restaurant map</string>
