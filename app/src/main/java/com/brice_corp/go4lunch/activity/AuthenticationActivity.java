@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +25,8 @@ import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_ACCESS
  */
 
 public class AuthenticationActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,10 @@ public class AuthenticationActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 //Get User
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                //Set user in firestore
+                FirestoreUserRepository mFirestoreUser = new FirestoreUserRepository();
+                mFirestoreUser.createCurrentUserFirestore();
 
                 //Show email
                 Log.e("onActivityResult", "onActivityResult: " + user.getEmail());
