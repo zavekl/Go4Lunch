@@ -30,7 +30,7 @@ public class AuthenticationUtils {
 
     public void showSignInOptions(Activity activity) {
         activity.startActivityForResult(
-                AuthUI.getInstance().createSignInIntentBuilder().setIsSmartLockEnabled(false).setAvailableProviders(initProviders()).setTheme(R.style.SignInTheme).setLogo(R.drawable.go4lunch_logo).build(), AUTHENTICATION);
+                AuthUI.getInstance().createSignInIntentBuilder().setIsSmartLockEnabled(false,true).setAvailableProviders(initProviders()).setTheme(R.style.SignInTheme).setLogo(R.drawable.go4lunch_logo).build(), AUTHENTICATION);
     }
 
     //Signout
