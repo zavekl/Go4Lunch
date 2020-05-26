@@ -4,6 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -44,23 +46,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TOOLBAR
+        //Toolbar
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         mConstraintLayout = findViewById(R.id.toolbar_constraint);
         mEditText = findViewById(R.id.search_edit_text);
 
-        //BOTTOM MENU
+        //Bottom menu
         setBottomMenu();
 
-        //NAVIGATION DRAWER
+        //Navigation drawer
         mDrawerLayout = findViewById(R.id.drawer_layout);
         setNavigationDrawerMenu();
 
-        //SET THE DEFAULT FRAGMENT
+        //Set the default fragment
         setDefaultFragment();
 
-        //SET THE ONCLICK MENU BUTTON TOOLBAR
+        //Set listener on search toolbar
         setCLickOnMenuToolbar();
     }
 
@@ -78,12 +80,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //SET THE DEFAULT FRAGMENT
+    //Create search menu in toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    //Set the default fragment
     private void setDefaultFragment() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapViewFragment()).commit();
     }
 
-    //SET THE DEFAULT MENUS
+    //Set the bottom menus
     private void setBottomMenu() {
         BottomNavigationView bottomNavView = findViewById(R.id.bottom_navigation);
         bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -93,12 +102,15 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.map_view_bottom_menu:
                         mSelectedFragment = new MapViewFragment();
+                        checkIfSearchBarVisibleAndHideItYes();
                         break;
                     case R.id.list_view__bottom_menu:
                         mSelectedFragment = new ListViewFragment();
+                        checkIfSearchBarVisibleAndHideItYes();
                         break;
                     case R.id.workmates__bottom_menu:
                         mSelectedFragment = new WorkmatesFragment();
+                        checkIfSearchBarVisibleAndHideItYes();
                         break;
                 }
                 if (mSelectedFragment != null) {
@@ -109,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //SET NAVIGATION MENU
+    //Set navigation drawer
     private void setNavigationDrawerMenu() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
@@ -187,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    //Set listener on search toolbar to reveal the edit text if clicked
     private void setCLickOnMenuToolbar() {
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -204,12 +217,20 @@ public class MainActivity extends AppCompatActivity {
         mConstraintLayout.setVisibility(View.INVISIBLE);
     }
 
+    //Check if the search bar is visible if true  hide it
+    private void checkIfSearchBarVisibleAndHideItYes(){
+        if (mConstraintLayout.getVisibility() == View.VISIBLE) {
+            hideSearchBar();
+        }
+    }
+
     //Reveal the searchbar
     private void revealSearchBar() {
         mConstraintLayout.setVisibility(View.VISIBLE);
         //TODO initSearchToolbar();
     }
 
+    //When more than X character start a research in database of PLACE API
     private void initSearchToolbar() {
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
