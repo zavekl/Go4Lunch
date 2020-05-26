@@ -26,8 +26,6 @@ import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_ACCESS
 
 public class AuthenticationActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +71,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                 finish();
                 startActivity(intent);
             } else {
-                Log.e("onActivityResult", "onActivityResult: " + response.getError().getMessage() );
+                Log.e("onActivityResult", "onActivityResult: " + response.getError().getMessage());
             }
         }
     }
