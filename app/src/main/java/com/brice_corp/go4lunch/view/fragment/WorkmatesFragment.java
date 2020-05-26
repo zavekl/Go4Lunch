@@ -14,7 +14,7 @@ import com.brice_corp.go4lunch.model.Workmates;
 import com.brice_corp.go4lunch.view.recyclerview.WorkmatesRecyclerViewAdapter;
 
 /**
- * Created by <VOTRE-NOM> on <DATE-DU-JOUR>.
+ * Created by <NIATEL Brice> on <08/04/2020>.
  */
 public class WorkmatesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

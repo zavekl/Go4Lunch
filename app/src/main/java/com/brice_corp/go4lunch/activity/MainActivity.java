@@ -39,12 +39,10 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private EditText mEditText;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         //TOOLBAR
         mToolbar = findViewById(R.id.toolbar);
@@ -113,8 +111,6 @@ public class MainActivity extends AppCompatActivity {
 
     //SET NAVIGATION MENU
     private void setNavigationDrawerMenu() {
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
