@@ -18,7 +18,7 @@ public class MapViewModel extends AndroidViewModel {
 
     public MapViewModel(@NonNull Application application) {
         super(application);
-        mapRepository = ((MyApplication) application).getContainerDependencies().getRepositoryMap();
+        mapRepository = ((MyApplication) application).getContainerDependencies().getMapRepository();
     }
 
     public void startLocationUpdates(LocationCallback locationCallback) {
