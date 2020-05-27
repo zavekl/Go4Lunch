@@ -12,15 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.Workmates;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by <NIATEL Brice> on <20/05/2020>.
  */
 public class WorkmatesRecyclerViewAdapter extends RecyclerView.Adapter<WorkmatesRecyclerViewAdapter.ViewHolder> {
-    private List<Workmates> workmates;
+    private ArrayList<String> workmates;
 
-    public WorkmatesRecyclerViewAdapter(List<Workmates> workmates) {
+    public WorkmatesRecyclerViewAdapter(ArrayList<String> workmates) {
         this.workmates = workmates;
     }
 
@@ -34,12 +35,22 @@ public class WorkmatesRecyclerViewAdapter extends RecyclerView.Adapter<Workmates
 
     @Override
     public void onBindViewHolder(@NonNull WorkmatesRecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.mPersonName.setText(workmates.get(position).getName());
+        holder.mPersonName.setText(workmates.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return workmates.size();
+        if (workmates == null) {
+            return 0;
+        } else {
+            return workmates.size();
+        }
+
+    }
+
+    public void addWorkmatesList(ArrayList<String> workmates) {
+        this.workmates = workmates;
+        notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
