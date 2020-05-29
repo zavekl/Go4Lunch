@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
-import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
