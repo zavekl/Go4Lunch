@@ -1,33 +1,21 @@
 package com.brice_corp.go4lunch.view.fragment;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.User;
-import com.brice_corp.go4lunch.model.Workmates;
-import com.brice_corp.go4lunch.modelview.MapViewModel;
 import com.brice_corp.go4lunch.modelview.WorkmatesViewModel;
 import com.brice_corp.go4lunch.view.recyclerview.WorkmatesRecyclerViewAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.Query;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by <NIATEL Brice> on <08/04/2020>.
