@@ -4,27 +4,25 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
 
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
-
-import java.util.ArrayList;
+import com.google.firebase.firestore.Query;
 
 /**
- * Created by <NIATEL Brice> on <27/5/2020>.
+ * Created by <NIATEL Brice> on <27/05/2020>.
  */
 public class WorkmatesViewModel extends AndroidViewModel {
 
-    private MutableLiveData<ArrayList<String>> liveData;
+    private Query query;
 
     public WorkmatesViewModel(@NonNull Application application) {
         super(application);
         FirestoreUserRepository mFirestoreUserRepository = ((MyApplication) application).getContainerDependencies().getFirestoreUserRepository();
-        liveData = mFirestoreUserRepository.getUsersName();
+        query = mFirestoreUserRepository.getQuery();
     }
 
-    public MutableLiveData<ArrayList<String>> getUsersName() {
-        return liveData;
+    public Query getQuery() {
+        return query;
     }
 }

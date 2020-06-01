@@ -5,15 +5,20 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
+import com.brice_corp.go4lunch.model.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -27,21 +32,25 @@ import java.util.Objects;
  * Created by <NIATEL Brice> on <27/05/2020>.
  */
 public class FirestoreUserRepository {
-    private ArrayList<String> mList = new ArrayList<>();
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Attributes
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     //Firestore
     private FirebaseFirestore mFirebaseFirestore;
 
     //Collections
     private CollectionReference nameNoteRef;
 
-    //Constants collection
+    //Constants
     private static final String USERS = "users";
-
-    //Constants documents
     private static final String USER_NAME = "name";
 
-    private MutableLiveData<ArrayList<String>> data = new MutableLiveData<>();
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //Methods
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //Constructor
     public FirestoreUserRepository() {
         initFirestore();
     }
@@ -72,35 +81,6 @@ public class FirestoreUserRepository {
         });
     }
 
-    private void getUsersNameFirestore() {
-        nameNoteRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    mList.add(Objects.requireNonNull(document.getData().get(USER_NAME)).toString());
-                }
-                data.setValue(mList);
-                Log.i("FirestoreUserRepository", "getUserFirestore 1 " + mList);
-                Log.i("FirestoreUserRepository", "livedata " + data.getValue());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("FirestoreUserRepository", "onFailure: ", e);
-            }
-        });
-    }
-
-    public MutableLiveData<ArrayList<String>> getUsersName() {
-        new GetUsers(this).execute();
-
-        //        getUsersNameFirestore();
-//        MutableLiveData<ArrayList<String>> data = new MutableLiveData<>();
-//        data.setValue(mList);
-
-        return data;
-    }
-
     //Get current user
     private FirebaseUser getUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
@@ -116,42 +96,11 @@ public class FirestoreUserRepository {
         return getUser().getEmail();
     }
 
-
-
-
-
-
-
-    private static class GetUsers extends AsyncTask<Void, Void, Void> {
-        private WeakReference<FirestoreUserRepository> activityReference;
-
-        GetUsers(FirestoreUserRepository firestoreUserRepository) {
-            activityReference = new WeakReference<>(firestoreUserRepository);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            FirestoreUserRepository activity = activityReference.get();
-            if (activity != null) activity.getUsersNameFirestore();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            FirestoreUserRepository activity = activityReference.get();
-            if (activity != null) {
-                activity.data.setValue(activity.mList);
-            }
-        }
+    //Get the call of query
+    public Query getQuery() {
+        //Query firestore
+        return nameNoteRef.orderBy(USER_NAME, Query.Direction.ASCENDING);
     }
-
-
-
-
-
-
-
 
 //TODO IMAGE
 }
