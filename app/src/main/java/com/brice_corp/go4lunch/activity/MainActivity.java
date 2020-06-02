@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
+import com.brice_corp.go4lunch.utils.NotificationUtils;
 import com.brice_corp.go4lunch.view.fragment.ListViewFragment;
 import com.brice_corp.go4lunch.view.fragment.MapViewFragment;
 import com.brice_corp.go4lunch.view.fragment.WorkmatesFragment;
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Set listener on search toolbar
         setCLickOnMenuToolbar();
+
+        buildNotification();
     }
 
     //Manage the back for the navigation drawer
@@ -243,5 +245,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+
+    private void buildNotification(){
+        NotificationUtils notificationUtils = new NotificationUtils(this);
+        notificationUtils.sendNotification("TEST");
     }
 }
