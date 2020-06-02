@@ -60,7 +60,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 //Set user in firestore
-                ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository().createCurrentUserFirestore();
+                ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository().checkIfUserAlreadyCreated();
 
                 //Show email
                 Log.e("onActivityResult", "onActivityResult: " + user.getEmail());
