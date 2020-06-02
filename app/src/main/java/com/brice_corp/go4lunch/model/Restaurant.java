@@ -38,6 +38,6 @@ public class Restaurant {
     public static List<Restaurant> listGetFakesRestaurants() {
         return Arrays.asList(
                 new Restaurant("Chez Roger", "Français", "4 rue des Baobabs", "Bientôt ouvert"),
-                new Restaurant("Chez Hans", "Allemand", "8 rue de l'Allemagne", "Bientôt fermé"));
+                new Restaurant("Chez Hans", "Allemand", "8 rue de Panzer", "Bientôt fermé"));
     }
 }
