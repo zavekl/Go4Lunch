@@ -85,12 +85,12 @@ public class AuthenticationActivity extends AppCompatActivity {
     }
 
     //Make the request Location permission
-    public void getLocationPermission() {
+    private void getLocationPermission() {
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
     }
 
     //Check if the permission is granted
-    public boolean checkPermission() {
+    private boolean checkPermission() {
         return ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }

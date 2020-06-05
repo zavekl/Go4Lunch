@@ -5,7 +5,6 @@ package com.brice_corp.go4lunch.model;
  */
 public class User {
     private String mName;
-    private String mHourEat;
     private String mEmail;
     private Restaurant mRestaurant;
 
@@ -13,23 +12,14 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String hourEat, Restaurant restaurant) {
+    public User(String name, String email, Restaurant restaurant) {
         this.mName = name;
-        this.mHourEat = hourEat;
         this.mEmail = email;
         this.mRestaurant = restaurant;
     }
 
     public String getName() {
         return mName;
-    }
-
-    public String getmHourEat() {
-        return mHourEat;
-    }
-
-    public void setmHourEat(String mHourEat) {
-        this.mHourEat = mHourEat;
     }
 
     public String getmEmail() {

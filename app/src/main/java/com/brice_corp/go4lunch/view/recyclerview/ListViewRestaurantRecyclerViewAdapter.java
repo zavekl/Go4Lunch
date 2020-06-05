@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRestaurantRecyclerViewAdapter.ViewHolder> {
 
-    private List<Restaurant> restaurants;
+    private final List<Restaurant> restaurants;
 
 
     public ListViewRestaurantRecyclerViewAdapter(List<Restaurant> items) {
@@ -47,11 +47,11 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameRestaurant;
-        TextView typeRestaurant;
-        TextView scheduleRestaurant;
-        ImageView imageRestaurant;
-        View itemList;
+        final TextView nameRestaurant;
+        final TextView typeRestaurant;
+        final TextView scheduleRestaurant;
+        final ImageView imageRestaurant;
+        final View itemList;
 
         ViewHolder(View view) {
             super(view);
