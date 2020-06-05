@@ -244,4 +244,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+<<<<<<< HEAD
+=======
+
+
+    private void buildNotification(){
+        NotificationUtils notificationUtils = new NotificationUtils(this);
+        notificationUtils.sendNotification("TEST");
+    }
+>>>>>>> parent of 664d497... Change the parameters of methods
 }
