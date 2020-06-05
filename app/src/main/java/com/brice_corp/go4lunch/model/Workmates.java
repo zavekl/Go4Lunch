@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * Created by <NIATEL Brice> on <19/05/2020>.
  */
+//TODO workmates extends user
 public class Workmates {
     private String mName;
 
