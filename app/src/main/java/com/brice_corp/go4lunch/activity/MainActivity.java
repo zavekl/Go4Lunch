@@ -250,6 +250,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildNotification(){
         NotificationUtils notificationUtils = new NotificationUtils(this);
-        notificationUtils.sendNotification("TEST");
+        notificationUtils.sendNotification("restaurant","4 rue de France","Cécile");
     }
 }
