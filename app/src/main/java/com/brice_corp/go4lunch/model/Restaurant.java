@@ -11,6 +11,7 @@ public class Restaurant {
     private String typeFood;
     private String address;
     private String schedule;
+    //TODO ID Resto
 
     public Restaurant(String name, String typeFood, String address, String schedule) {
         this.name = name;
