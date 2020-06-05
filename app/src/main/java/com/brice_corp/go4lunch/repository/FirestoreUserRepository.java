@@ -59,7 +59,7 @@ public class FirestoreUserRepository {
 
     //Check if current user is already created in database, if not create it
     public void checkIfUserAlreadyCreated() {
-        mFirebaseFirestore.collection("users").document(CURRENT_USER_ID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        mNameNoteRef.document(CURRENT_USER_ID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.getResult().exists()) {
@@ -101,9 +101,9 @@ public class FirestoreUserRepository {
     //Get current user
     private User getUser() {
         FirebaseUser user = getCurrentUser();
-        //TODO lier le restaurant
+        //TODO lier l'ID du resto
         Restaurant restaurant = new Restaurant("Chez Hans", "Allemand", "42 rue du Panzer", "Ouvre bientôt");
-        return new User(user.getDisplayName(), user.getEmail(), "", restaurant);
+        return new User(user.getDisplayName(), user.getEmail(), restaurant);
     }
 
     //Get name of the current user
