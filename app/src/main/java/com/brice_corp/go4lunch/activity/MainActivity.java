@@ -2,14 +2,15 @@ package com.brice_corp.go4lunch.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,30 +22,53 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.modelview.MapViewModel;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
 import com.brice_corp.go4lunch.utils.NotificationUtils;
+import com.brice_corp.go4lunch.view.AutoCompleteAdapter;
 import com.brice_corp.go4lunch.view.fragment.ListViewFragment;
 import com.brice_corp.go4lunch.view.fragment.MapViewFragment;
 import com.brice_corp.go4lunch.view.fragment.WorkmatesFragment;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import java.lang.ref.WeakReference;
+
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivityLogi";
     //Components
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ConstraintLayout mConstraintLayout;
     private EditText mEditText;
+    private RecyclerView mRecyclerView;
+
+    private LocationCallback mLocationCallback;
+
+    private AutoCompleteAdapter autoCompleteAdapter;
+
+    private MapViewModel mMapViewModel;
+
+    private LatLng mLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mMapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
 
         //Toolbar
         mToolbar = findViewById(R.id.toolbar);
@@ -65,7 +89,11 @@ public class MainActivity extends AppCompatActivity {
         //Set listener on search toolbar
         setCLickOnMenuToolbar();
 
-        buildNotification();
+        //Set the listview
+        mRecyclerView = findViewById(R.id.listview);
+
+        //TODO Notification
+        //buildNotification();
     }
 
     //Manage the back for the navigation drawer
@@ -77,9 +105,16 @@ public class MainActivity extends AppCompatActivity {
         }
         if (this.mConstraintLayout.getVisibility() == View.VISIBLE) {
             hideSearchBar();
+            mRecyclerView.setVisibility(View.INVISIBLE);
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new GetLocationAsyncTask(MainActivity.this).execute();
     }
 
     //Create search menu in toolbar
@@ -207,7 +242,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.search_restaurant) {
-                    revealSearchBar();
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    if (fragment instanceof MapViewFragment) {
+                        revealSearchBar();
+                    } else if (fragment instanceof ListViewFragment) {
+                        Log.i(TAG, "onMenuItemClick: 2");
+                    } else if (fragment instanceof WorkmatesFragment) {
+                        Log.i(TAG, "onMenuItemClick: 3");
+                    }
                 }
                 return true;
             }
@@ -229,26 +271,94 @@ public class MainActivity extends AppCompatActivity {
     //Reveal the searchbar
     private void revealSearchBar() {
         mConstraintLayout.setVisibility(View.VISIBLE);
-        //TODO initSearchToolbar();
+        mRecyclerView.setVisibility(View.VISIBLE);
+
     }
 
-    //When more than X character start a research in database of PLACE API
-    private void initSearchToolbar() {
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-                        || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER) {
-                    //TODO Do the research of the wanted restaurant
-//                    String mSearchString = mEditText.getText().toString(); //Get the text from research
+    //AutoComplete
+    private void setRecyclerviewWithPrediction() {
+        if (mLatLng != null) {
+            Log.i(TAG, "setRecyclerviewWithPrediction: NO NULL");
+            RectangularBounds rectangularBounds = RectangularBounds.newInstance(
+                    new LatLng(mLatLng.latitude - 0.01, mLatLng.longitude - 0.01),
+                    new LatLng(mLatLng.latitude + 0.01, mLatLng.longitude + 0.01));
+            Log.i(TAG, "setRecyclerviewWithPrediction: " + rectangularBounds.getNortheast() + "   " + rectangularBounds.getSouthwest());
+            autoCompleteAdapter = new AutoCompleteAdapter(MainActivity.this, rectangularBounds, mLatLng);
+            mRecyclerView.setAdapter(autoCompleteAdapter);
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+            mEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
-                return false;
-            }
-        });
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.length() > 4) {
+                        autoCompleteAdapter.getFilter().filter(s.toString());
+                    }
+                    if (s.length() ==0) {
+                        autoCompleteAdapter.getFilter().filter(s.toString());
+                        autoCompleteAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        } else {
+            Log.i(TAG, "setRecyclerviewWithPrediction: NULL");
+            new GetLocationAsyncTask(MainActivity.this).execute();
+        }
     }
 
+    private LatLng createLocationCallback() {
+        Log.i(TAG, "createLocationCallback: ");
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+                mLatLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
+            }
+        };
+        return mLatLng;
+    }
+
+    //Get the geolocation
+    private static class GetLocationAsyncTask extends AsyncTask<Void, Void, Void> {
+        private WeakReference<MainActivity> activityReference;
+
+        GetLocationAsyncTask(MainActivity mainActivity) {
+            activityReference = new WeakReference<>(mainActivity);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MainActivity activity = activityReference.get();
+            if (activity != null && !activity.isFinishing()) {
+                Log.i(TAG, "doInBackground: ");
+                activity.createLocationCallback();
+                activity.mMapViewModel.startLocationUpdates(activity.mLocationCallback);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            MainActivity activity = activityReference.get();
+            if (activity != null && !activity.isFinishing()) {
+                Log.i(TAG, "onPostExecute: ");
+                activity.setRecyclerviewWithPrediction();
+            }
+        }
+    }
+
+    //Notification builder
     private void buildNotification() {
         NotificationUtils notificationUtils = new NotificationUtils(this);
         notificationUtils.sendNotification("restaurant", "4 rue de France", "Cécile");
     }
+
 }

@@ -21,7 +21,6 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
 
     private final List<Restaurant> restaurants;
 
-
     public ListViewRestaurantRecyclerViewAdapter(List<Restaurant> items) {
         restaurants = items;
     }
@@ -36,9 +35,9 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(@NonNull ListViewRestaurantRecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.nameRestaurant.setText(restaurants.get(position).getName());
-        holder.typeRestaurant.setText(restaurants.get(position).getTypeFood() + " - " + restaurants.get(position).getAddress());
-        holder.scheduleRestaurant.setText(restaurants.get(position).getSchedule());
+        holder.nameRestaurant.setText(restaurants.get(position).getmName());
+        holder.typeRestaurant.setText(restaurants.get(position).getmFypeFood() + " - " + restaurants.get(position).getmAddress());
+        holder.scheduleRestaurant.setText(restaurants.get(position).getmSchedule());
     }
 
     @Override
