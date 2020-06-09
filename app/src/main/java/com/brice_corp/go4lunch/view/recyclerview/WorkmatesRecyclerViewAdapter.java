@@ -1,20 +1,18 @@
 package com.brice_corp.go4lunch.view.recyclerview;
 
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.ImageView;
-        import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-        import androidx.annotation.NonNull;
-        import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-        import com.brice_corp.go4lunch.R;
-        import com.brice_corp.go4lunch.model.User;
-        import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-        import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-
-        import java.util.ArrayList;
+import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.model.User;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 /**
  * Created by <NIATEL Brice> on <20/05/2020>.
