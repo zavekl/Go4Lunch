@@ -1,5 +1,6 @@
 package com.brice_corp.go4lunch.view.recyclerview;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User,
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
+        Log.i("TAG", "onBindViewHolder: " + model.getName());
         holder.mPersonName.setText(model.getName());
     }
 
