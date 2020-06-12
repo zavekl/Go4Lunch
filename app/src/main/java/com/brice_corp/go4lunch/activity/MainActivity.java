@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         mConstraintLayout.setVisibility(View.INVISIBLE);
     }
 
-    //Check if the search bar is visible if true  hide it
+    //Check if the search bar is visible if true hide it
     private void checkIfSearchBarVisibleAndHideItYes() {
         if (mConstraintLayout.getVisibility() == View.VISIBLE) {
             hideSearchBar();
@@ -327,7 +327,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     //TODO Notification
     //Notification builder
