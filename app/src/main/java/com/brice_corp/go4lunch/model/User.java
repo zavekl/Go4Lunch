@@ -4,7 +4,7 @@ package com.brice_corp.go4lunch.model;
  * Created by <NIATEL BRICE> on <26/05/2020>.
  */
 public class User {
-    private String mName;
+    private String name;
     private String mEmail;
     private String mId;
 
@@ -13,13 +13,13 @@ public class User {
     }
 
     public User(String name, String email, String id) {
-        this.mName = name;
+        this.name = name;
         this.mEmail = email;
         this.mId = id;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public String getmEmail() {
@@ -30,3 +30,20 @@ public class User {
         return mId;
     }
 }
+
+
+//public class User {
+//    private String name;
+//
+//
+//    public User(){
+//        //need an empty constructor
+//    }
+//    public User(String name) {
+//        this.name = name;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//}
