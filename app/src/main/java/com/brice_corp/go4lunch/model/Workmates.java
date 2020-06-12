@@ -6,7 +6,6 @@ import java.util.List;
 /**
  * Created by <NIATEL Brice> on <19/05/2020>.
  */
-//TODO workmates extends user
 public class Workmates {
     private String mName;
 
@@ -16,11 +15,5 @@ public class Workmates {
 
     public String getName() {
         return mName;
-    }
-
-    public static List<Workmates> getListFakesWorkmates() {
-        return Arrays.asList(new Workmates("Javier"),
-                new Workmates("Julien"),
-                new Workmates("Thomas"));
     }
 }

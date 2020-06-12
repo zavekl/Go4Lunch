@@ -25,7 +25,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,33 +39,50 @@
             android:elevation="4dp"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnusedAttribute">
 
             <ImageView
                 android:id="@+id/image_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:contentDescription="search"
+                android:contentDescription="@string/search_image"
                 android:elevation="5dp"
                 android:src="@drawable/ic_search"
                 android:tint="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="@id/toolbar_constraint"
                 app:layout_constraintStart_toStartOf="@id/toolbar_constraint"
-                app:layout_constraintTop_toTopOf="@id/toolbar_constraint" />
+                app:layout_constraintTop_toTopOf="@id/toolbar_constraint"
+                tools:ignore="UnusedAttribute" />
 
             <EditText
                 android:id="@+id/search_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:hint="Enter name of restaurant"
+                android:hint="Enter name of restaurant ( + 4 chars)"
                 android:imeOptions="actionSearch"
                 android:importantForAutofill="no"
-                android:inputType=""
+                android:inputType="textAutoComplete"
+                android:maxLines="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/image_search" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="2dp"
+            android:id="@+id/autocomplete_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:elevation="6dp"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_constraint"
+            android:visibility="invisible"
+            tools:ignore="UnusedAttribute"
+            tools:listitem="@layout/item_listview_restaurant"
+            android:background="@drawable/white_borders"
+            />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container"

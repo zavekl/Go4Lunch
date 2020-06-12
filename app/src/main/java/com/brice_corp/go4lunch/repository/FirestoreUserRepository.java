@@ -102,8 +102,8 @@ public class FirestoreUserRepository {
     private User getUser() {
         FirebaseUser user = getCurrentUser();
         //TODO lier l'ID du resto
-        Restaurant restaurant = new Restaurant("Chez Hans", "Allemand", "42 rue du Panzer", "Ouvre bientôt");
-        return new User(user.getDisplayName(), user.getEmail(), restaurant);
+        Restaurant restaurant = new Restaurant("","Chez Hans", "Allemand", "42 rue du Panzer", "Ouvre bientôt");
+        return new User(user.getDisplayName(), user.getEmail(), restaurant.getId());
     }
 
     //Get name of the current user
