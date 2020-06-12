@@ -6,16 +6,16 @@ package com.brice_corp.go4lunch.model;
 public class User {
     private String mName;
     private String mEmail;
-    private Restaurant mRestaurant;
+    private String mId;
 
-    //Need an empty constructor
     public User() {
+        //Need an empty constructor
     }
 
-    public User(String name, String email, Restaurant restaurant) {
+    public User(String name, String email, String id) {
         this.mName = name;
         this.mEmail = email;
-        this.mRestaurant = restaurant;
+        this.mId = id;
     }
 
     public String getName() {
@@ -26,4 +26,7 @@ public class User {
         return mEmail;
     }
 
+    public String getmId() {
+        return mId;
+    }
 }

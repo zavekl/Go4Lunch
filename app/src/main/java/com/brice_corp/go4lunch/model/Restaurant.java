@@ -11,8 +11,8 @@ public class Restaurant {
     private String mFypeFood;
     private String mAddress;
     private String mSchedule;
+
     private String id;
-    //TODO ID Resto
 
     public Restaurant(String id, String name, String typeFood, String address, String schedule) {
         this.id = id;
@@ -36,6 +36,10 @@ public class Restaurant {
 
     public String getmSchedule() {
         return mSchedule;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public static List<Restaurant> listGetFakesRestaurants() {

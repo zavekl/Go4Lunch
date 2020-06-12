@@ -2,7 +2,7 @@ package com.brice_corp.go4lunch.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,21 +30,21 @@ import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.modelview.MapViewModel;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
 import com.brice_corp.go4lunch.utils.NotificationUtils;
-import com.brice_corp.go4lunch.view.AutoCompleteAdapter;
+import com.brice_corp.go4lunch.view.recyclerview.AutoCompleteAdapter;
 import com.brice_corp.go4lunch.view.fragment.ListViewFragment;
 import com.brice_corp.go4lunch.view.fragment.MapViewFragment;
 import com.brice_corp.go4lunch.view.fragment.WorkmatesFragment;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-
-import java.lang.ref.WeakReference;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivityLogi";
@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
         //Set listener on search toolbar
         setCLickOnMenuToolbar();
 
-        //Set the listview
-        mRecyclerView = findViewById(R.id.listview);
+        //Set the autocomplete recyclerview
+        mRecyclerView = findViewById(R.id.autocomplete_recyclerview);
 
         //TODO Notification
         //buildNotification();
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new GetLocationAsyncTask(MainActivity.this).execute();
+        getLocation();
     }
 
     //Create search menu in toolbar
@@ -278,11 +278,11 @@ public class MainActivity extends AppCompatActivity {
     //AutoComplete
     private void setRecyclerviewWithPrediction() {
         if (mLatLng != null) {
-            Log.i(TAG, "setRecyclerviewWithPrediction: NO NULL");
+            Log.i(TAG, "setRecyclerviewWithPrediction: mLatLng != null");
             RectangularBounds rectangularBounds = RectangularBounds.newInstance(
                     new LatLng(mLatLng.latitude - 0.01, mLatLng.longitude - 0.01),
                     new LatLng(mLatLng.latitude + 0.01, mLatLng.longitude + 0.01));
-            Log.i(TAG, "setRecyclerviewWithPrediction: " + rectangularBounds.getNortheast() + "   " + rectangularBounds.getSouthwest());
+            Log.i(TAG, "setRecyclerviewWithPrediction: " + rectangularBounds.getNortheast() + "/ " + rectangularBounds.getSouthwest());
             autoCompleteAdapter = new AutoCompleteAdapter(MainActivity.this, rectangularBounds, mLatLng);
             mRecyclerView.setAdapter(autoCompleteAdapter);
             mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -301,60 +301,35 @@ public class MainActivity extends AppCompatActivity {
                     if (s.length() > 4) {
                         autoCompleteAdapter.getFilter().filter(s.toString());
                     }
-                    if (s.length() ==0) {
-                        autoCompleteAdapter.getFilter().filter(s.toString());
-                        autoCompleteAdapter.notifyDataSetChanged();
-                    }
                 }
             });
         } else {
-            Log.i(TAG, "setRecyclerviewWithPrediction: NULL");
-            new GetLocationAsyncTask(MainActivity.this).execute();
+            Log.i(TAG, "setRecyclerviewWithPrediction: mLatLng == null");
         }
     }
 
-    private LatLng createLocationCallback() {
-        Log.i(TAG, "createLocationCallback: ");
-        mLocationCallback = new LocationCallback() {
+    //Get geolocation
+    private void getLocation() {
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                mLatLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
+            public void onSuccess(Location location) {
+                if (location!=null){
+                    Log.i(TAG, "GPS "+location.getLatitude());
+                    Log.i(TAG, "GPS "+location.getLongitude());
+                    mLatLng =new LatLng(location.getLatitude(),location.getLongitude());
+                    setRecyclerviewWithPrediction();
+                }else{
+                    mLatLng= null;
+                    getLocation();
+                }
             }
-        };
-        return mLatLng;
+        });
     }
 
-    //Get the geolocation
-    private static class GetLocationAsyncTask extends AsyncTask<Void, Void, Void> {
-        private WeakReference<MainActivity> activityReference;
 
-        GetLocationAsyncTask(MainActivity mainActivity) {
-            activityReference = new WeakReference<>(mainActivity);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            MainActivity activity = activityReference.get();
-            if (activity != null && !activity.isFinishing()) {
-                Log.i(TAG, "doInBackground: ");
-                activity.createLocationCallback();
-                activity.mMapViewModel.startLocationUpdates(activity.mLocationCallback);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            MainActivity activity = activityReference.get();
-            if (activity != null && !activity.isFinishing()) {
-                Log.i(TAG, "onPostExecute: ");
-                activity.setRecyclerviewWithPrediction();
-            }
-        }
-    }
-
+    //TODO Notification
     //Notification builder
     private void buildNotification() {
         NotificationUtils notificationUtils = new NotificationUtils(this);

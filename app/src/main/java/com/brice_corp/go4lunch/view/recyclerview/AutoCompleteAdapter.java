@@ -1,6 +1,7 @@
-package com.brice_corp.go4lunch.view;
+package com.brice_corp.go4lunch.view.recyclerview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.activity.DescriptionRestaurantActivity;
 import com.brice_corp.go4lunch.model.Restaurant;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
@@ -26,7 +28,6 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -35,11 +36,12 @@ import java.util.concurrent.TimeoutException;
  * Created by <NIATEL Brice> on <06/06/2020>.
  */
 public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapter.ViewHolder> implements Filterable {
-    private static final String TAG = "ListviewAdapter";
+    private static final String TAG = "AutoCompleteAdapter";
     private final PlacesClient placesClient;
     private RectangularBounds mBounds;
     private ArrayList<Restaurant> mResultList = new ArrayList<>();
     private LatLng mLatLng;
+    private Context mContext;
 
     /**
      * Constructor
@@ -51,11 +53,14 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
         Log.i(TAG, "ListviewAdapter: ");
         this.mBounds = bounds;
         this.mLatLng = latLng;
+        this.mContext = context;
 //        Places.initialize(context, Places.initialize(context, context.getResources().getString(R.string.google_maps_key)));
+        //TODO
         Places.initialize(context, "AIzaSyC_1zEF7WGkg-FRO7ATSoX1Y32VY3wzvqM");
         placesClient = com.google.android.libraries.places.api.Places.createClient(context);
     }
 
+    //AutoCompletePrediction with findAutoCompletePrediction method
     private ArrayList<Restaurant> getPredictions(CharSequence constraint) {
         Log.i(TAG, "Enter in getPredictions method ");
         final ArrayList<Restaurant> resultList = new ArrayList<>();
@@ -66,7 +71,6 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
 
         // Use the builder to create a FindAutocompletePredictionsRequest.
         FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-                // Call either setLocationBias() OR setLocationRestriction().
                 .setLocationRestriction(mBounds)
                 .setOrigin(mLatLng)
                 .setCountry("FR")
@@ -77,6 +81,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
 
         Task<FindAutocompletePredictionsResponse> autocompletePredictions = placesClient.findAutocompletePredictions(request);
 
+        //No problem with the main thread because of the Filterable class uses
         try {
             Tasks.await(autocompletePredictions, 20, TimeUnit.SECONDS);
         } catch (ExecutionException | InterruptedException | TimeoutException e) {
@@ -87,21 +92,8 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
             FindAutocompletePredictionsResponse findAutocompletePredictionsResponse = autocompletePredictions.getResult();
             if (findAutocompletePredictionsResponse != null)
                 for (com.google.android.libraries.places.api.model.AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
-                    Log.i(TAG, prediction.getPlaceId());
-                    Log.i(TAG, prediction.getPrimaryText(null).toString());
-                    //TODO
-                    StringTokenizer st = new StringTokenizer(prediction.getPrimaryText(null).toString(), ",");
-                    while (st.hasMoreTokens()) {
-                        Log.i(TAG,"StringTokenizer: "+st.nextToken());
-                    }
-
-
-//                    for (int i = 0; i <= 2; i++) {
-//                        st.hasMoreTokens();
-//                        Log.i(TAG, "StringTokenizer: " + st.nextToken());
-//                    }
-
-                    resultList.add(new Restaurant(prediction.getPlaceId(), prediction.getFullText(null).toString(), "", "", ""));
+                    resultList.add(new Restaurant(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(), "",
+                            prediction.getSecondaryText(null).toString(), ""));
                 }
             return resultList;
         } else {
@@ -113,7 +105,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
     @NonNull
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
@@ -133,7 +125,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                Log.d(TAG, "publishResults: ");
+                Log.d(TAG, "Enter in publishResults method");
                 if (results != null && results.count > 0) {
                     // The API returned at least one result, update the data.
                     Log.d(TAG, "publishResults:  if condition");
@@ -144,7 +136,6 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
                 }
             }
         };
-        return filter;
     }
 
     @NonNull
@@ -159,10 +150,20 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "Enter in onBindViewHolder method");
         Restaurant restaurant = mResultList.get(position);
+
         holder.mName.setText(restaurant.getmName());
         Log.i(TAG, "onBindViewHolder: name " + restaurant.getmName());
+
         holder.mAddress.setText(restaurant.getmAddress());
         Log.i(TAG, "onBindViewHolder: address " + restaurant.getmAddress());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, DescriptionRestaurantActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

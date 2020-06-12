@@ -19,7 +19,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
  */
 public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User, WorkmatesRecyclerViewAdapter.ViewHolder> {
 
-    public WorkmatesRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions options) {
+    public WorkmatesRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options) {
         super(options);
     }
 

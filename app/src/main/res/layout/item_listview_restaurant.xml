@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:singleLine="true"
-        android:textSize="16sp"
+        android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,7 @@
         android:layout_marginStart="6dp"
         android:singleLine="true"
         android:textStyle="bold"
-        android:textSize="13sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameListView"
         tools:text="ADRESSE" />

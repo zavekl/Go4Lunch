@@ -2,14 +2,19 @@ package com.brice_corp.go4lunch.repository;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Looper;
+import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 /**
  * Created by <NIATEL BRICE> on <01/05/2020>.
@@ -43,6 +48,4 @@ public class MapRepository {
     public void requestGPSUpdate(LocationListener locationListener) {
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000000, 1000000, locationListener);
     }
-
-
 }
