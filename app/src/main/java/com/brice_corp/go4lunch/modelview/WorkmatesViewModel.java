@@ -19,7 +19,7 @@ public class WorkmatesViewModel extends AndroidViewModel {
     public WorkmatesViewModel(@NonNull Application application) {
         super(application);
         FirestoreUserRepository mFirestoreUserRepository = ((MyApplication) application).getContainerDependencies().getFirestoreUserRepository();
-        query = mFirestoreUserRepository.getQuery();
+        query = mFirestoreUserRepository.getQueryWorkmates();
     }
 
     public Query getQuery() {
