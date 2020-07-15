@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.activity.DescriptionRestaurantActivity;
-import com.brice_corp.go4lunch.model.Restaurant;
+import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -92,8 +92,8 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
             FindAutocompletePredictionsResponse findAutocompletePredictionsResponse = autocompletePredictions.getResult();
             if (findAutocompletePredictionsResponse != null)
                 for (com.google.android.libraries.places.api.model.AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
-                    resultList.add(new Restaurant(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(), "",
-                            prediction.getSecondaryText(null).toString(), ""));
+                    resultList.add(new Restaurant(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(),
+                            prediction.getSecondaryText(null).toString()));
                 }
             return resultList;
         } else {
@@ -138,6 +138,11 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
         };
     }
 
+    public void cleanAdapter(){
+        mResultList.clear();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -149,18 +154,20 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "Enter in onBindViewHolder method");
-        Restaurant restaurant = mResultList.get(position);
+        final Restaurant restaurant = mResultList.get(position);
 
-        holder.mName.setText(restaurant.getmName());
-        Log.i(TAG, "onBindViewHolder: name " + restaurant.getmName());
+        holder.mName.setText(restaurant.getName());
+        Log.i(TAG, "onBindViewHolder: name " + restaurant.getName());
 
-        holder.mAddress.setText(restaurant.getmAddress());
-        Log.i(TAG, "onBindViewHolder: address " + restaurant.getmAddress());
+        holder.mAddress.setText(restaurant.getAdrAddress());
+        Log.i(TAG, "onBindViewHolder: address " + restaurant.getAdrAddress());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, DescriptionRestaurantActivity.class);
+                Log.i(TAG, "onClick: " + restaurant.getId());
+                intent.putExtra("id", restaurant.getId());
                 mContext.startActivity(intent);
             }
         });
