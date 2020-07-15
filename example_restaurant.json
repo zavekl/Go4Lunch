@@ -1,0 +1,285 @@
+{
+   "html_attributions" : [],
+   "result" : {
+      "address_components" : [
+         {
+            "long_name" : "France",
+            "short_name" : "FR",
+            "types" : [ "country", "political" ]
+         },
+         {
+            "long_name" : "Longuenée-en-Anjou",
+            "short_name" : "Longuenée-en-Anjou",
+            "types" : [ "locality", "political" ]
+         },
+         {
+            "long_name" : "Maine-et-Loire",
+            "short_name" : "Maine-et-Loire",
+            "types" : [ "administrative_area_level_2", "political" ]
+         },
+         {
+            "long_name" : "Pays de la Loire",
+            "short_name" : "Pays de la Loire",
+            "types" : [ "administrative_area_level_1", "political" ]
+         },
+         {
+            "long_name" : "49770",
+            "short_name" : "49770",
+            "types" : [ "postal_code" ]
+         }
+      ],
+      "adr_address" : "place du 8 mai 45, \u003cspan class=\"postal-code\"\u003e49770\u003c/span\u003e \u003cspan class=\"locality\"\u003eLonguenée-en-Anjou\u003c/span\u003e, \u003cspan class=\"country-name\"\u003eFrance\u003c/span\u003e",
+      "business_status" : "OPERATIONAL",
+      "formatted_address" : "place du 8 mai 45, 49770 Longuenée-en-Anjou, France",
+      "formatted_phone_number" : "02 41 36 04 56",
+      "geometry" : {
+         "location" : {
+            "lat" : 47.5198582,
+            "lng" : -0.6676873999999999
+         },
+         "viewport" : {
+            "northeast" : {
+               "lat" : 47.5211865802915,
+               "lng" : -0.6662828197084979
+            },
+            "southwest" : {
+               "lat" : 47.5184886197085,
+               "lng" : -0.668980780291502
+            }
+         }
+      },
+      "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png",
+      "id" : "813a5fd51b6a5af6d6fa3d267ba1cdce4525d0be",
+      "international_phone_number" : "+33 2 41 36 04 56",
+      "name" : "Le Kiosque à Pizza",
+      "opening_hours" : {
+         "open_now" : false,
+         "periods" : [
+            {
+               "close" : {
+                  "day" : 0,
+                  "time" : "2200"
+               },
+               "open" : {
+                  "day" : 0,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 1,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 1,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 1,
+                  "time" : "2130"
+               },
+               "open" : {
+                  "day" : 1,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 2,
+                  "time" : "2130"
+               },
+               "open" : {
+                  "day" : 2,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 3,
+                  "time" : "2130"
+               },
+               "open" : {
+                  "day" : 3,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 4,
+                  "time" : "2130"
+               },
+               "open" : {
+                  "day" : 4,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 5,
+                  "time" : "2200"
+               },
+               "open" : {
+                  "day" : 5,
+                  "time" : "1800"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "1330"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1130"
+               }
+            },
+            {
+               "close" : {
+                  "day" : 6,
+                  "time" : "2200"
+               },
+               "open" : {
+                  "day" : 6,
+                  "time" : "1800"
+               }
+            }
+         ],
+         "weekday_text" : [
+            "lundi: 11:30 – 13:30, 18:00 – 21:30",
+            "mardi: 11:30 – 13:30, 18:00 – 21:30",
+            "mercredi: 11:30 – 13:30, 18:00 – 21:30",
+            "jeudi: 11:30 – 13:30, 18:00 – 21:30",
+            "vendredi: 11:30 – 13:30, 18:00 – 22:00",
+            "samedi: 11:30 – 13:30, 18:00 – 22:00",
+            "dimanche: 18:00 – 22:00"
+         ]
+      },
+      "photos" : [
+         {
+            "height" : 444,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108526702802308372030\"\u003eAntonin Maillet\u003c/a\u003e"
+            ],
+            "photo_reference" : "CmRaAAAAVdLr9w_VCLENoP7tIERE3R-cXUiJ7jQ0r-iN5SHWPfG5L82NHGaZlUf35zPVd9AKJyJEk0k383lCUiv7j6HzUcn_3PFopdJwrr7BId3sabsGPiEA8DSK0xCM3hPVHehCEhCNdiKRcJLw-4L9YjkiLVXJGhS8l1ForAP81Wbnm4dce33a6hJAww",
+            "width" : 444
+         },
+         {
+            "height" : 360,
+            "html_attributions" : [
+               "\u003ca href=\"https://maps.google.com/maps/contrib/108526702802308372030\"\u003eAntonin Maillet\u003c/a\u003e"
+            ],
+            "photo_reference" : "CmRaAAAAmz2I0h--VZ0nw9jtgqWVx6iF80Zc9ZfI8pbdR4PVIdTN62h_UQBIIShc2qbXO7DvRYayhR_Oy2-PM_a_t6JFLua4g2GcioxQVIeeDYY5BPHQSUtsPZY_fCl5UhNlnopSEhCmlRnGc81Nd61H2rDEPfqkGhRnnZnGyGkr1l0A-zX1pw0-wxnvVw",
+            "width" : 640
+         }
+      ],
+      "place_id" : "ChIJayLV5bGACEgRBYE25omMwFE",
+      "plus_code" : {
+         "compound_code" : "G89J+WW Longuenée-en-Anjou, France",
+         "global_code" : "8CVXG89J+WW"
+      },
+      "price_level" : 2,
+      "rating" : 4.2,
+      "reference" : "ChIJayLV5bGACEgRBYE25omMwFE",
+      "reviews" : [
+         {
+            "author_name" : "Alexis Martinet",
+            "author_url" : "https://www.google.com/maps/contrib/113125659152160215744/reviews",
+            "language" : "fr",
+            "profile_photo_url" : "https://lh4.ggpht.com/-8lHu8kJWbUs/AAAAAAAAAAI/AAAAAAAAAAA/dwJXls9toHE/s128-c0x00000000-cc-rp-mo/photo.jpg",
+            "rating" : 1,
+            "relative_time_description" : "il y a 2 mois",
+            "text" : "Il devrais apprendre à faire un kebab ( qui ressemble étrangement à un Burger ) dans un kebab il y à de la salade des tomates puis oignons  et de la sauce ( au choix) , dans votre kebab il y à que 1 tranche de tomate 1 tranche de salade la sauce ( degeulasse ) cela est honteux de proposer des kebab sans savoir les préparé, si vous supprimer ce commentaire cela prouve votre malveillance.",
+            "time" : 1586613291
+         },
+         {
+            "author_name" : "stephane azzopardi",
+            "author_url" : "https://www.google.com/maps/contrib/106647740767751780825/reviews",
+            "language" : "fr",
+            "profile_photo_url" : "https://lh5.ggpht.com/-RwDRJ9wGK3s/AAAAAAAAAAI/AAAAAAAAAAA/pPwNzdxMi5I/s128-c0x00000000-cc-rp-mo/photo.jpg",
+            "rating" : 5,
+            "relative_time_description" : "il y a 3 mois",
+            "text" : "Service nickel, pizza très bonne avec une pâte fine et croustillante. Le top!",
+            "time" : 1584366362
+         },
+         {
+            "author_name" : "jerem france",
+            "author_url" : "https://www.google.com/maps/contrib/104171819408566180487/reviews",
+            "language" : "fr",
+            "profile_photo_url" : "https://lh3.ggpht.com/-jRiirglOEa8/AAAAAAAAAAI/AAAAAAAAAAA/vZbgFCvkxXg/s128-c0x00000000-cc-rp-mo/photo.jpg",
+            "rating" : 5,
+            "relative_time_description" : "il y a 4 mois",
+            "text" : "Client depuis le début ,je ne suis jamais déçu ,les choix sont variés et Vincent est tres commerçant et on passe un bon moment en allant chercher nos pizzas \nJe conseil vivement",
+            "time" : 1581453505
+         },
+         {
+            "author_name" : "Nodastora",
+            "author_url" : "https://www.google.com/maps/contrib/114470704211770076135/reviews",
+            "language" : "fr",
+            "profile_photo_url" : "https://lh3.ggpht.com/-RJwiiw58d-0/AAAAAAAAAAI/AAAAAAAAAAA/HDK1eEg-17g/s128-c0x00000000-cc-rp-mo/photo.jpg",
+            "rating" : 2,
+            "relative_time_description" : "il y a 4 mois",
+            "text" : "On reviendra pas car c'est vraiment pas terribles 😢",
+            "time" : 1580906413
+         },
+         {
+            "author_name" : "Valentin Rochedreux",
+            "author_url" : "https://www.google.com/maps/contrib/118299714770999507311/reviews",
+            "language" : "fr",
+            "profile_photo_url" : "https://lh6.ggpht.com/-7ufzPXg-oYY/AAAAAAAAAAI/AAAAAAAAAAA/5N_a939jhwE/s128-c0x00000000-cc-rp-mo/photo.jpg",
+            "rating" : 5,
+            "relative_time_description" : "il y a 4 mois",
+            "text" : "Trop bon",
+            "time" : 1580194704
+         }
+      ],
+      "scope" : "GOOGLE",
+      "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+      "url" : "https://maps.google.com/?cid=5890862836501348613",
+      "user_ratings_total" : 49,
+      "utc_offset" : 120,
+      "vicinity" : "place du 8 mai 45"
+   },
+   "status" : "OK"
+}
