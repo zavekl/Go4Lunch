@@ -17,4 +17,10 @@
     <string name="your_lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>
+    <string name="restaurant_image">restaurant image</string>
+    <string name="phone_description">phone_description</string>
+    <string name="call">CALL</string>
+    <string name="like">LIKE</string>
+    <string name="website">WEBSITE</string>
+    <string name="go4lunch">Go4Lunch</string>
 </resources>
