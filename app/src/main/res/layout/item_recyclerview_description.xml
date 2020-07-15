@@ -28,7 +28,7 @@
         app:layout_constraintBottom_toBottomOf="@id/imagePerson"
         app:layout_constraintStart_toEndOf="@id/imagePerson"
         app:layout_constraintTop_toTopOf="@id/imagePerson"
-        tools:text="Zoé" />
+        tools:text="X is joining" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
