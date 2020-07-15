@@ -37,8 +37,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull ListViewRestaurantRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.nameRestaurant.setText(restaurants.get(position).getName());
-        //TODO get FOOD TYPE
-        holder.typeRestaurant.setText("FOOD TYPE - " + restaurants.get(position).getAdrAddress());
+        holder.typeRestaurant.setText(restaurants.get(position).getAdrAddress());
         //TODO GET HOUR
         holder.scheduleRestaurant.setText("A FAIRE HEURE");
     }
