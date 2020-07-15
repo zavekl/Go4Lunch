@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
-import com.brice_corp.go4lunch.model.Restaurant;
 import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
 
 /**
@@ -23,7 +22,7 @@ public class ListViewFragment extends Fragment {
 
         RecyclerView mRecyclerView = view.findViewById(R.id.list_restaurant_recyclerview);
 
-        ListViewRestaurantRecyclerViewAdapter adapter = new ListViewRestaurantRecyclerViewAdapter(Restaurant.listGetFakesRestaurants());
+        ListViewRestaurantRecyclerViewAdapter adapter = new ListViewRestaurantRecyclerViewAdapter(null);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         return view;
