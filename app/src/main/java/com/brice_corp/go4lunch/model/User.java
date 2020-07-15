@@ -7,14 +7,19 @@ public class User {
     private String name;
     private String mEmail;
     private String mId;
+    private String image;
+    private String eatToday;
+
+    //TODO Créer un nouveau champ avec le nom du resto pour l'afficher dans les workamtes
 
     public User() {
         //Need an empty constructor
     }
 
-    public User(String name, String email, String id) {
+    public User(String name, String email, String image, String id) {
         this.name = name;
         this.mEmail = email;
+        this.image = image;
         this.mId = id;
     }
 
@@ -22,28 +27,23 @@ public class User {
         return name;
     }
 
-    public String getmEmail() {
+    public String getEmail() {
         return mEmail;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     public String getmId() {
         return mId;
     }
+
+    public String getTodayEat() {
+        return eatToday;
+    }
+
+    public void setTodayEat(String todayEat) {
+        this.eatToday = todayEat;
+    }
 }
-
-
-//public class User {
-//    private String name;
-//
-//
-//    public User(){
-//        //need an empty constructor
-//    }
-//    public User(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//}
