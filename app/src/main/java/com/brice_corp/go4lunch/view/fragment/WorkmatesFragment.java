@@ -32,17 +32,20 @@ public class WorkmatesFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.workmates_recyclerview);
 
         mWorkmatesViewModel = new ViewModelProvider(requireActivity()).get(WorkmatesViewModel.class);
+
         setUpRecyclerView();
         return view;
     }
 
     private void setUpRecyclerView() {
-
         Query query = mWorkmatesViewModel.getQuery();
+
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>().setQuery(query, User.class)
                 .build();
-        adapter = new WorkmatesRecyclerViewAdapter(options);
+
+        adapter = new WorkmatesRecyclerViewAdapter(options, requireContext());
         mRecyclerView.setAdapter(adapter);
     }
 

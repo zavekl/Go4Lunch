@@ -17,9 +17,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        app:maxImageSize="35dp"
         android:src="@android:drawable/ic_menu_mylocation"
         app:layout_constraintBottom_toBottomOf="@id/mapView"
-        app:layout_constraintEnd_toEndOf="@id/mapView" />
+        app:layout_constraintEnd_toEndOf="@id/mapView"
+        android:backgroundTint="@color/colorPrimary"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

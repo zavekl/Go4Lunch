@@ -34,7 +34,7 @@ public class AuthenticationUtils {
     }
 
     //Signout
-    public static void signOut(final @NonNull Context context, @NonNull OnCompleteListener onCompleteListener, @NonNull OnFailureListener onFailureListener) {
+    public static void signOut(final @NonNull Context context, @NonNull OnCompleteListener<Void> onCompleteListener, @NonNull OnFailureListener onFailureListener) {
         AuthUI.getInstance().signOut(context).addOnCompleteListener(onCompleteListener).addOnFailureListener(onFailureListener);
     }
 }

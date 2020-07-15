@@ -1,6 +1,7 @@
 package com.brice_corp.go4lunch.view.recyclerview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +21,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by <NIATEL Brice> on <20/05/2020>.
  */
-public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User, WorkmatesRecyclerViewAdapter.ViewHolder> {
+public class DescriptionRestaurantRecyclerViewAdapter extends FirestoreRecyclerAdapter<User, DescriptionRestaurantRecyclerViewAdapter.ViewHolder> {
     private Context context;
 
-    public WorkmatesRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options, Context context) {
+    public DescriptionRestaurantRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options, Context context) {
         super(options);
         this.context = context;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
-        holder.mPersonName.setText(model.getName());
-
+        Log.i("TAG", "onBindViewHolder: " + model.getName());
+        holder.mPersonName.setText(model.getName() + " is joining !");
         Glide.with(context)
                 .load(model.getImage())
                 .centerCrop()
