@@ -11,9 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,20 +24,20 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
-import com.brice_corp.go4lunch.modelview.MapViewModel;
+import com.brice_corp.go4lunch.di.MyApplication;
+import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
 import com.brice_corp.go4lunch.utils.NotificationUtils;
-import com.brice_corp.go4lunch.view.recyclerview.AutoCompleteAdapter;
 import com.brice_corp.go4lunch.view.fragment.ListViewFragment;
 import com.brice_corp.go4lunch.view.fragment.MapViewFragment;
 import com.brice_corp.go4lunch.view.fragment.WorkmatesFragment;
+import com.brice_corp.go4lunch.view.recyclerview.AutoCompleteAdapter;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,29 +48,24 @@ import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivityLogi";
+    private LatLng mLatLng;
+
     //Components
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ConstraintLayout mConstraintLayout;
     private EditText mEditText;
     private RecyclerView mRecyclerView;
-
-    private LocationCallback mLocationCallback;
-
-    private AutoCompleteAdapter autoCompleteAdapter;
-
-    private MapViewModel mMapViewModel;
-
-    private LatLng mLatLng;
+    private AutoCompleteAdapter mAutoCompleteAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mMapViewModel = new ViewModelProvider(this).get(MapViewModel.class);
 
         //Toolbar
         mToolbar = findViewById(R.id.toolbar);
@@ -76,11 +73,12 @@ public class MainActivity extends AppCompatActivity {
         mConstraintLayout = findViewById(R.id.toolbar_constraint);
         mEditText = findViewById(R.id.search_edit_text);
 
+        mRecyclerView = findViewById(R.id.autocomplete_recyclerview);
+
         //Bottom menu
         setBottomMenu();
 
         //Navigation drawer
-        mDrawerLayout = findViewById(R.id.drawer_layout);
         setNavigationDrawerMenu();
 
         //Set the default fragment
@@ -89,14 +87,10 @@ public class MainActivity extends AppCompatActivity {
         //Set listener on search toolbar
         setCLickOnMenuToolbar();
 
-        //Set the autocomplete recyclerview
-        mRecyclerView = findViewById(R.id.autocomplete_recyclerview);
-
         //TODO Notification
         //buildNotification();
     }
 
-    //Manage the back for the navigation drawer
     @Override
     public void onBackPressed() {
         //Handle back click to close menu
@@ -115,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getLocation();
+    }
+
+    //TODO Savoir quand on reveint de l'activité description
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //hideRecyclerview();
     }
 
     //Create search menu in toolbar
@@ -140,14 +142,17 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.map_view_bottom_menu:
                         mSelectedFragment = new MapViewFragment();
                         checkIfSearchBarVisibleAndHideItYes();
+
                         break;
                     case R.id.list_view__bottom_menu:
                         mSelectedFragment = new ListViewFragment();
                         checkIfSearchBarVisibleAndHideItYes();
+                        hideRecyclerview();
                         break;
                     case R.id.workmates__bottom_menu:
                         mSelectedFragment = new WorkmatesFragment();
                         checkIfSearchBarVisibleAndHideItYes();
+                        hideRecyclerview();
                         break;
                 }
                 if (mSelectedFragment != null) {
@@ -160,12 +165,17 @@ public class MainActivity extends AppCompatActivity {
 
     //Set navigation drawer
     private void setNavigationDrawerMenu() {
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         //Set the listener for the buttons
         NavigationView navigationView = findViewById(R.id.navigation_drawer_view);
+
+        //Complete the header of nav drawer
+        completeNavDrawerHeader(navigationView);
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -258,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Hide the searchbar
     private void hideSearchBar() {
+        mEditText.setText("");
         mConstraintLayout.setVisibility(View.INVISIBLE);
     }
 
@@ -275,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //AutoComplete
+    //Manage AutoComplete
     private void setRecyclerviewWithPrediction() {
         if (mLatLng != null) {
             Log.i(TAG, "setRecyclerviewWithPrediction: mLatLng != null");
@@ -283,8 +294,8 @@ public class MainActivity extends AppCompatActivity {
                     new LatLng(mLatLng.latitude - 0.01, mLatLng.longitude - 0.01),
                     new LatLng(mLatLng.latitude + 0.01, mLatLng.longitude + 0.01));
             Log.i(TAG, "setRecyclerviewWithPrediction: " + rectangularBounds.getNortheast() + "/ " + rectangularBounds.getSouthwest());
-            autoCompleteAdapter = new AutoCompleteAdapter(MainActivity.this, rectangularBounds, mLatLng);
-            mRecyclerView.setAdapter(autoCompleteAdapter);
+            mAutoCompleteAdapter = new AutoCompleteAdapter(MainActivity.this, rectangularBounds, mLatLng);
+            mRecyclerView.setAdapter(mAutoCompleteAdapter);
             mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
             mEditText.addTextChangedListener(new TextWatcher() {
@@ -299,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.length() > 4) {
-                        autoCompleteAdapter.getFilter().filter(s.toString());
+                        mAutoCompleteAdapter.getFilter().filter(s.toString());
                     }
                 }
             });
@@ -315,17 +326,41 @@ public class MainActivity extends AppCompatActivity {
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location!=null){
-                    Log.i(TAG, "GPS "+location.getLatitude());
-                    Log.i(TAG, "GPS "+location.getLongitude());
-                    mLatLng =new LatLng(location.getLatitude(),location.getLongitude());
+                if (location != null) {
+                    Log.i(TAG, "GPS " + location.getLatitude());
+                    Log.i(TAG, "GPS " + location.getLongitude());
+                    mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                     setRecyclerviewWithPrediction();
-                }else{
-                    mLatLng= null;
+                } else {
+                    mLatLng = null;
                     getLocation();
                 }
             }
         });
+    }
+
+    //Load user's information from firestore on drawer header
+    private void completeNavDrawerHeader(NavigationView navigationView) {
+        View headerView = navigationView.getHeaderView(0);
+
+        CircleImageView mHeaderImage = headerView.findViewById(R.id.imageview_header);
+        TextView mHeaderName = headerView.findViewById(R.id.name_header);
+        TextView mHeaderEmail = headerView.findViewById(R.id.email_header);
+
+        FirestoreUserRepository fsUserRepo = ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository();
+
+        Glide.with(MainActivity.this)
+                .load(fsUserRepo.getUser().getImage())
+                .centerCrop()
+                .into(mHeaderImage);
+
+        mHeaderName.setText(fsUserRepo.getUser().getName());
+        mHeaderEmail.setText(fsUserRepo.getUser().getEmail());
+    }
+
+    private void hideRecyclerview() {
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mAutoCompleteAdapter.cleanAdapter();
     }
 
     //TODO Notification
@@ -334,5 +369,4 @@ public class MainActivity extends AppCompatActivity {
         NotificationUtils notificationUtils = new NotificationUtils(this);
         notificationUtils.sendNotification("restaurant", "4 rue de France", "Cécile");
     }
-
 }
