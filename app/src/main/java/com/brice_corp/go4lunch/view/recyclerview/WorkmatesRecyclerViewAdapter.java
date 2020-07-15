@@ -1,10 +1,9 @@
 package com.brice_corp.go4lunch.view.recyclerview;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,22 +11,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.User;
+import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by <NIATEL Brice> on <20/05/2020>.
  */
 public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User, WorkmatesRecyclerViewAdapter.ViewHolder> {
+    private Context context;
 
-    public WorkmatesRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options) {
+    public WorkmatesRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options, Context context) {
         super(options);
+        this.context = context;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
-        Log.i("TAG", "onBindViewHolder: " + model.getName());
         holder.mPersonName.setText(model.getName());
+
+        Glide.with(context)
+                .load(model.getImage())
+                .centerCrop()
+                .into(holder.mImageView);
     }
 
     @NonNull
@@ -38,7 +46,7 @@ public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User,
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageView;
+        CircleImageView mImageView;
         TextView mPersonName;
 
         ViewHolder(@NonNull View itemView) {
