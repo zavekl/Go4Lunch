@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
-import com.brice_corp.go4lunch.model.Restaurant;
+import com.brice_corp.go4lunch.model.projo.Restaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,14 +36,24 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onBindViewHolder(@NonNull ListViewRestaurantRecyclerViewAdapter.ViewHolder holder, int position) {
-        holder.nameRestaurant.setText(restaurants.get(position).getmName());
-        holder.typeRestaurant.setText(restaurants.get(position).getmFypeFood() + " - " + restaurants.get(position).getmAddress());
-        holder.scheduleRestaurant.setText(restaurants.get(position).getmSchedule());
+        holder.nameRestaurant.setText(restaurants.get(position).getName());
+        //TODO get FOOD TYPE
+        holder.typeRestaurant.setText("FOOD TYPE - " + restaurants.get(position).getAdrAddress());
+        //TODO GET HOUR
+        holder.scheduleRestaurant.setText("A FAIRE HEURE");
     }
 
     @Override
     public int getItemCount() {
-        return restaurants.size();
+        if (restaurants != null) {
+            if (restaurants.size() == 0) {
+                return 0;
+            } else {
+                return restaurants.size();
+            }
+        } else {
+            return 0;
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
