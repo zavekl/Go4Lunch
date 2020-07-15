@@ -1,5 +1,6 @@
 package com.brice_corp.go4lunch.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -17,8 +18,11 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 import static com.brice_corp.go4lunch.utils.Constants.AUTHENTICATION;
 import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
+import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_CALL_PHONE;
 
 /**
  * Created by <NIATEL Brice> on <08/04/2020>.
@@ -31,20 +35,42 @@ public class AuthenticationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authentication);
 
-        if (checkPermission()) {
-            displaySignIn();
+        if (checkPermissionLocation()) {
+            if (checkPermissionPhone()) {
+                displaySignIn();
+            } else {
+                getPhonePermission();
+            }
         } else {
             getLocationPermission();
+            if (!checkPermissionPhone()) {
+                getPhonePermission();
+            }
         }
     }
 
-    //Get the result of the Location permission
+    //Get the result of the permissions
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                displaySignIn();
+                if (checkPermissionPhone()) {
+                    displaySignIn();
+                } else {
+                    getPhonePermission();
+                }
+            }
+        }
+
+        if (requestCode == PERMISSIONS_REQUEST_CALL_PHONE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (checkPermissionLocation()) {
+                    displaySignIn();
+                } else {
+                    getLocationPermission();
+                }
             }
         }
     }
@@ -63,14 +89,18 @@ public class AuthenticationActivity extends AppCompatActivity {
                 ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository().checkIfUserAlreadyCreated();
 
                 //Show email
-                Log.e("onActivityResult", "onActivityResult: " + user.getEmail());
+                if (user != null) {
+                    Log.e("onActivityResult", "onActivityResult: " + user.getEmail());
+                }
 
                 //Start the new activity
                 Intent intent = new Intent(this, MainActivity.class);
                 finish();
                 startActivity(intent);
             } else {
-                Log.e("onActivityResult", "onActivityResult: " + response.getError().getMessage());
+                if (response != null) {
+                    Log.e("onActivityResult", "onActivityResult: " + Objects.requireNonNull(response.getError()).getMessage());
+                }
             }
         }
     }
@@ -89,8 +119,20 @@ public class AuthenticationActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
     }
 
-    //Check if the permission is granted
-    private boolean checkPermission() {
+    //Check if the Location permission is granted
+    private boolean checkPermissionLocation() {
         return ContextCompat.checkSelfPermission(this.getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+    }
+
+    //Check if the call permission is granted
+    private boolean checkPermissionPhone() {
+        return ContextCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED;
+
+    }
+
+    //Make the request call permission
+    private void getPhonePermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_REQUEST_CALL_PHONE);
     }
 }
