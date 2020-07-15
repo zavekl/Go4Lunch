@@ -150,6 +150,7 @@ public class MapViewFragment extends Fragment {
         }
     }
 
+    //If map was saved before, load it
     private void setupMapIfNeeded() {
         try {
             MapsInitializer.initialize(requireContext());
