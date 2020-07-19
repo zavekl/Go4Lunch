@@ -33,6 +33,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     private static final String TAG = "DescRestaurantActivity";
 
     private String mRestaurantId;
+    private String mRestaurantName;
 
     private ImageView mImage;
     private TextView mName;
@@ -94,6 +95,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
                             //Restaurant name
                             mName.setText(currentRestaurant.getName());
+                            mRestaurantName = currentRestaurant.getName();
 
                             //Restaurant address
                             StringBuilder sb = new StringBuilder(currentRestaurant.getFormattedAddress());
@@ -199,14 +201,13 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
         ftUserRepository.getTheLikeRestaurant(mRestaurantId).observe(DescriptionRestaurantActivity.this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+                Log.i(TAG, "getLike : " + aBoolean);
                 if (aBoolean) {
                     mLikeButton.setImageResource(R.drawable.ic_star_black_24dp);
                     mLikeButton.setTag(R.drawable.ic_star_black_24dp);
-                    Log.i(TAG, "getLike : " + aBoolean);
                 } else {
                     mLikeButton.setImageResource(R.drawable.ic_star_border_black_24dp);
                     mLikeButton.setTag(R.drawable.ic_star_border_black_24dp);
-                    Log.i(TAG, "getLike : " + aBoolean);
                 }
             }
         });
@@ -244,7 +245,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                 integer = integer == null ? 0 : integer;
                 switch (integer) {
                     case R.drawable.ic_cancel_black_24dp:
-                        ftUserRepository.setUserEatTodayRestaurantTrue(mRestaurantId);
+                        ftUserRepository.setUserEatTodayRestaurantTrue(mRestaurantId, mRestaurantName);
                         break;
 
                     case R.drawable.ic_check_circle_black_24dp:

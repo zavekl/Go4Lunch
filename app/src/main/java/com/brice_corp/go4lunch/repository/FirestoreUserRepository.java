@@ -238,10 +238,11 @@ public class FirestoreUserRepository {
     }
 
     //Set the true eat today in firestore
-    public void setUserEatTodayRestaurantTrue(String id) {
+    public void setUserEatTodayRestaurantTrue(String id, String name) {
         setDocumentReference();
         final Map<String, Object> user = new HashMap<>();
         user.put("eatToday", id);
+        user.put("eatTodayName", name);
 
         mDocumentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -261,6 +262,7 @@ public class FirestoreUserRepository {
         setDocumentReference();
         final Map<String, Object> user = new HashMap<>();
         user.put("eatToday", "");
+        user.put("eatTodayName", "");
 
         mDocumentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

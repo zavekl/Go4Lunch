@@ -21,18 +21,22 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by <NIATEL Brice> on <20/05/2020>.
  */
 public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User, WorkmatesRecyclerViewAdapter.ViewHolder> {
-    private Context context;
+    private Context mContext;
 
     public WorkmatesRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options, Context context) {
         super(options);
-        this.context = context;
+        mContext = context;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
-        holder.mPersonName.setText(model.getName());
+        //TODO
+//        holder.mPersonName.setText(model.getName() + " is eating at " + model.getEatTodayName());
 
-        Glide.with(context)
+        String personName = mContext.getString(R.string.tv_person_name_workmate_adp, model.getName(), model.getEatTodayName());
+        holder.mPersonName.setText(personName);
+
+        Glide.with(mContext)
                 .load(model.getImage())
                 .centerCrop()
                 .into(holder.mImageView);
