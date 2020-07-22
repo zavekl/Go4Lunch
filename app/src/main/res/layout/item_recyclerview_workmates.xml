@@ -20,15 +20,17 @@
 
     <TextView
         android:id="@+id/personName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:singleLine="true"
+        android:maxLines="3"
+        android:singleLine="false"
         android:textSize="19sp"
         app:layout_constraintBottom_toBottomOf="@id/imagePerson"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imagePerson"
         app:layout_constraintTop_toTopOf="@id/imagePerson"
-        tools:text="Zoé" />
+        tools:text="Zoéeeeeeeeeeee eeeeeeee eeeeee ee e e e e ee" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
