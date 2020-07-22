@@ -35,7 +35,7 @@ public class NotificationUtils {
 
         //  Create a Style for the Notification
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        inboxStyle.setBigContentTitle("N'oubliez pas votre rendez-vous!");
+        inboxStyle.setBigContentTitle(context.getString(R.string.notif_title));
         inboxStyle.addLine(nameRestaurant);
         inboxStyle.addLine(address);
         inboxStyle.addLine(workmates);
