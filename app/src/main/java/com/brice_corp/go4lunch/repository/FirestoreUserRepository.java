@@ -5,9 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.brice_corp.go4lunch.model.User;
@@ -18,15 +15,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -54,6 +52,10 @@ public class FirestoreUserRepository {
     //Livedata
     private MutableLiveData<Boolean> mLikeLivedata = new MutableLiveData<>();
     private MutableLiveData<String> mEatTodayLivedata = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<String>> mNameLivedata = new MutableLiveData<>();
+
+    //List
+    private ArrayList<String> mNameList = new ArrayList<>();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Methods
@@ -275,5 +277,30 @@ public class FirestoreUserRepository {
                 Log.e("FirestoreUserRepository", "onFailure: ", e);
             }
         });
+    }
+
+    public MutableLiveData<ArrayList<String>> getEatTodayWorkmates(String idREstaurant) {
+        Log.i(TAG, "getEatTodayWorkmates: " + idREstaurant);
+        mNameNoteRef.orderBy(USER_NAME, Query.Direction.ASCENDING).whereEqualTo("eatToday", idREstaurant).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e == null) {
+                    if (queryDocumentSnapshots != null) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Log.i(TAG, "onEvent: " + Objects.requireNonNull(documentSnapshot.get("name")).toString());
+                            String documentSearch = Objects.requireNonNull(documentSnapshot.get("name")).toString();
+                            mNameList.add(documentSearch);
+                            mNameLivedata.setValue(mNameList);
+                        }
+                    } else {
+                        Log.e(TAG, "onEvent: queryDocumentSnapshots is null");
+                    }
+                } else {
+                    Log.e(TAG, "onEvent: ", e);
+                }
+            }
+        });
+        Log.i(TAG, "getEatTodayWorkmates: " + mNameLivedata);
+        return mNameLivedata;
     }
 }
