@@ -40,6 +40,7 @@ public class NotificationUtils {
         inboxStyle.addLine(address);
         inboxStyle.addLine(workmates);
 
+
         //  Create a Channel (Android 8)
         String channelId = "fcm_default_channel";
         //  Build a Notification object

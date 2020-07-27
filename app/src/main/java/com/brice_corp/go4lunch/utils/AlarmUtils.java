@@ -29,14 +29,15 @@ public class AlarmUtils {
     public void addAlarm(Context context, Intent intent, int notificationId) {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //TODO Mettre midi pour la dernière version une fois que tout fonctionne sur les notifs
+        //TODO changer en mettant le jour
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 15);
-        calendar.set(Calendar.MINUTE, 30);
-        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 2);
+        calendar.set(Calendar.MINUTE, 4);
+        calendar.set(Calendar.SECOND, 30);
 
         if (alarmManager != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -48,13 +49,12 @@ public class AlarmUtils {
             }
             saveAlarmId(context, notificationId);
         }
-
     }
 
     public void cancelAlarm(Context context, Intent intent, int notificationId) {
         Log.d(TAG, "cancelAlarm: start");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
             Log.d(TAG, "cancelAlarm: done");

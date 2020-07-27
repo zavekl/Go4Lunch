@@ -25,14 +25,16 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 }
 
-            for (String name : list) {
+                for (String name : list) {
 
-            }
-        }else {
+                }
+            } else {
                 //TODO AFFICHER JUSTE SON PROPRE PRENOM
                 Log.i(TAG, "onReceive: ");
             }
         }
-        notificationUtils.sendNotification("restaurant", "4 rue de France", "Cécile");
+        if (list != null) {
+            notificationUtils.sendNotification("restaurant", "4 rue de France", "list.get(0)");
+        }
     }
 }
