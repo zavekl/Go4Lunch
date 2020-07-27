@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+
 /**
  * Created by <NIATEL Brice> on <27/05/2020>.
  */
@@ -137,15 +138,15 @@ public class FirestoreUserRepository {
     }
 
     //Get the query of the actual restaurant
-    public Query getQueryDescription(String idREstaurant) {
+    public Query getQueryDescription(@NonNull String idREstaurant) {
         return mNameNoteRef.orderBy(USER_NAME, Query.Direction.ASCENDING).whereEqualTo("eatToday", idREstaurant);
     }
 
     //Set the true like in firestore
-    public void setUserLikeRestaurantTrue(String id) {
+    public void setUserLikeRestaurantTrue(@NonNull String id) {
         setDocumentReference();
         final Map<String, Object> user = new HashMap<>();
-        user.put("like" + id, true);
+        user.put(id, true);
 
         mDocumentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -161,10 +162,10 @@ public class FirestoreUserRepository {
     }
 
     //Set the false like in firestore
-    public void setUserLikeRestaurantFalse(String id) {
+    public void setUserLikeRestaurantFalse(@NonNull String id) {
         setDocumentReference();
         final Map<String, Object> user = new HashMap<>();
-        user.put("like" + id, false);
+        user.put(id, false);
 
         mDocumentReference.update(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -181,32 +182,38 @@ public class FirestoreUserRepository {
 
     //Get the like boolean from firestore
     public MutableLiveData<Boolean> getTheLikeRestaurant(final String id) {
-        setDocumentReference();
+        if (id != null) {
+            setDocumentReference();
 
-        mNameNoteRef.document(CURRENT_USER_ID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                if (e == null) {
-                    if (documentSnapshot != null) {
-                        if (documentSnapshot.exists()) {
-                            if (documentSnapshot.get("like" + id) == null) {
-                                setUserLikeRestaurantFalse(id);
-                                Log.i(TAG, "getTheLikeRestaurant: first creation of like restaurant");
-                                mLikeLivedata.setValue(false);
+            mNameNoteRef.document(CURRENT_USER_ID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    if (e == null) {
+                        if (documentSnapshot != null) {
+                            if (documentSnapshot.exists()) {
+                                if (documentSnapshot.get(id) == null) {
+                                    setUserLikeRestaurantFalse(id);
+                                    Log.i(TAG, "getTheLikeRestaurant: first creation of like restaurant");
+                                    mLikeLivedata.setValue(false);
+                                } else {
+                                    mLikeLivedata.setValue(Boolean.valueOf(Objects.requireNonNull(documentSnapshot.get(id)).toString()));
+                                    Log.i(TAG, "getTheLikeRestaurant: result" + mLikeLivedata.getValue());
+                                }
                             } else {
-                                mLikeLivedata.setValue(Boolean.valueOf(Objects.requireNonNull(documentSnapshot.get("like" + id)).toString()));
-                                Log.i(TAG, "getTheLikeRestaurant: result" + mLikeLivedata.getValue());
+                                Log.i(TAG, "getTheLikeRestaurant : document don't exist");
                             }
-                        } else {
-                            Log.i(TAG, "getTheLikeRestaurant : document don't exist");
                         }
+                    } else {
+                        Log.e(TAG, "getTheLikeRestaurant error :", e);
                     }
-                } else {
-                    Log.e(TAG, "getTheLikeRestaurant error :", e);
                 }
-            }
-        });
-        return mLikeLivedata;
+            });
+            return mLikeLivedata;
+        } else {
+            mLikeLivedata.setValue(false);
+            return mLikeLivedata;
+        }
+
     }
 
     //Get the eat today boolean from firestore
@@ -240,7 +247,7 @@ public class FirestoreUserRepository {
     }
 
     //Set the true eat today in firestore
-    public void setUserEatTodayRestaurantTrue(String id, String name) {
+    public void setUserEatTodayRestaurantTrue(@NonNull String id, @NonNull String name) {
         setDocumentReference();
         final Map<String, Object> user = new HashMap<>();
         user.put("eatToday", id);
@@ -279,8 +286,11 @@ public class FirestoreUserRepository {
         });
     }
 
-    public MutableLiveData<ArrayList<String>> getEatTodayWorkmates(String idREstaurant) {
+    public MutableLiveData<ArrayList<String>> getEatTodayWorkmates(@NonNull String idREstaurant) {
         Log.i(TAG, "getEatTodayWorkmates: " + idREstaurant);
+        if (mNameList != null) {
+            mNameList.clear();
+        }
         mNameNoteRef.orderBy(USER_NAME, Query.Direction.ASCENDING).whereEqualTo("eatToday", idREstaurant).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -300,7 +310,6 @@ public class FirestoreUserRepository {
                 }
             }
         });
-        Log.i(TAG, "getEatTodayWorkmates: " + mNameLivedata);
         return mNameLivedata;
     }
 }
