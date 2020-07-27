@@ -1,6 +1,8 @@
 package com.brice_corp.go4lunch.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -24,15 +27,20 @@ import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.DescriptionRestaurantViewModel;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.repository.RetrofitRepository;
+import com.brice_corp.go4lunch.utils.AlarmReceiver;
 import com.brice_corp.go4lunch.view.recyclerview.DescriptionRestaurantRecyclerViewAdapter;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class DescriptionRestaurantActivity extends AppCompatActivity {
     private static final String TAG = "DescRestaurantActivity";
 
     private String mRestaurantId;
+    private String mRestaurantName;
 
     private ImageView mImage;
     private TextView mName;
@@ -46,6 +54,8 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private DescriptionRestaurantRecyclerViewAdapter adapter;
     private DescriptionRestaurantViewModel mViewModel;
+    private Query query;
+    private Intent alarmIntent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +73,46 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.description_recyclerview);
 
         mViewModel = new ViewModelProvider(DescriptionRestaurantActivity.this).get(DescriptionRestaurantViewModel.class);
+    }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle mySavedInstanceState) {
+        super.onSaveInstanceState(mySavedInstanceState);
+        mySavedInstanceState.putString("restaurant_id", mRestaurantId);
+        Log.i(TAG, "onSaveInstanceState: ");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mRestaurantId = savedInstanceState.getString("restaurant_id");
+        Log.i(TAG, "onRestoreInstanceState: " + mRestaurantId);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
         setInformations();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+        Log.d(TAG, "onStop: ");
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("restaurant_id", mRestaurantId);
+        editor.apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear().apply();
     }
 
     //Get id of restaurant from intent
@@ -74,26 +122,40 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
         ftUserRepository = ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository();
 
-        retrofitRepo.getRestaurantDetails(intentValue.getStringExtra("id")).observe(DescriptionRestaurantActivity.this,
+        retrofitRepo.getRestaurantDetails(Objects.requireNonNull(intentValue.getStringExtra("id"))).observe(DescriptionRestaurantActivity.this,
                 new Observer<Restaurant>() {
                     @Override
                     public void onChanged(Restaurant restaurant) {
+
                         Restaurant currentRestaurant = restaurant.getResult();
                         if (currentRestaurant != null) {
                             //Set the id of restaurant
-                            mRestaurantId = currentRestaurant.getId();
+                            if (currentRestaurant.getId() == null) {
+                                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                                mRestaurantId = sharedPref.getString("restaurant_id", null);
+                            } else {
+                                mRestaurantId = currentRestaurant.getId();
+                            }
+                            Log.i(TAG, "onChanged: setInformations : id :" + mRestaurantId);
 
                             //Restaurant image
-                            Log.i(TAG, "onChanged: " + currentRestaurant.getIcon());
-                            Glide.with(DescriptionRestaurantActivity.this)
-                                    .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="
-                                            + currentRestaurant.getPhotos().get(0).getPhotoReference() + "&key="
-                                            + "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA")
-                                    .centerCrop()
-                                    .into(mImage);
+                            if (currentRestaurant.getPhotos() != null) {
+                                Glide.with(DescriptionRestaurantActivity.this)
+                                        .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="
+                                                + currentRestaurant.getPhotos().get(0).getPhotoReference() + "&key="
+                                                + "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA")
+                                        .centerCrop()
+                                        .into(mImage);
+                            } else {
+                                Glide.with(DescriptionRestaurantActivity.this)
+                                        .load(R.drawable.no_image_restaurant)
+                                        .centerCrop()
+                                        .into(mImage);
+                            }
 
                             //Restaurant name
                             mName.setText(currentRestaurant.getName());
+                            mRestaurantName = currentRestaurant.getName();
 
                             //Restaurant address
                             StringBuilder sb = new StringBuilder(currentRestaurant.getFormattedAddress());
@@ -120,6 +182,10 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
                             //Get the restaurant which the person eat today and change the icon if the user click on
                             onClickEatTodayButton();
+
+
+                            //Set the query
+                            query = mViewModel.getQuery(mRestaurantId);
 
                             //Set the recyclerview
                             setUpRecyclerView();
@@ -196,17 +262,17 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
     //Get the like in firestore
     private void getLike() {
-        ftUserRepository.getTheLikeRestaurant(mRestaurantId).observe(DescriptionRestaurantActivity.this, new Observer<Boolean>() {
+        Log.i(TAG, "getLike: id restaurant :" + mRestaurantId);
+        mViewModel.getTheLikeRestaurant(mRestaurantId).observe(DescriptionRestaurantActivity.this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+                Log.i(TAG, "getLike : " + aBoolean);
                 if (aBoolean) {
                     mLikeButton.setImageResource(R.drawable.ic_star_black_24dp);
                     mLikeButton.setTag(R.drawable.ic_star_black_24dp);
-                    Log.i(TAG, "getLike : " + aBoolean);
                 } else {
                     mLikeButton.setImageResource(R.drawable.ic_star_border_black_24dp);
                     mLikeButton.setTag(R.drawable.ic_star_border_black_24dp);
-                    Log.i(TAG, "getLike : " + aBoolean);
                 }
             }
         });
@@ -217,20 +283,29 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
         ftUserRepository.getTheEatToday().observe(DescriptionRestaurantActivity.this, new Observer<String>() {
             @Override
             public void onChanged(String aString) {
-                if (aString.equals("") || !mRestaurantId.equals(aString)) {
-                    mEatTodayButton.setImageResource(R.drawable.ic_cancel_black_24dp);
-                    mEatTodayButton.setTag(R.drawable.ic_cancel_black_24dp);
-                    mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorFalse));
-                    Log.i(TAG, "getLike : " + aString);
-                } else {
-                    mEatTodayButton.setImageResource(R.drawable.ic_check_circle_black_24dp);
-                    mEatTodayButton.setTag(R.drawable.ic_check_circle_black_24dp);
-                    mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorTrue));
-                    Log.i(TAG, "getLike : " + aString);
+                try {
+                    if (aString != null && mRestaurantId != null) {
+                        if (aString.equals("") || !mRestaurantId.equals(aString)) {
+                            mEatTodayButton.setImageResource(R.drawable.ic_cancel_black_24dp);
+                            mEatTodayButton.setTag(R.drawable.ic_cancel_black_24dp);
+                            mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorFalse));
+                            Log.i(TAG, "getEatToday : no : " + aString);
+                        } else {
+                            mEatTodayButton.setImageResource(R.drawable.ic_check_circle_black_24dp);
+                            mEatTodayButton.setTag(R.drawable.ic_check_circle_black_24dp);
+                            mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorTrue));
+                            Log.i(TAG, "getEatToday : yes : " + aString);
+                            buildNotification();
+                        }
+                    } else {
+                        Log.i(TAG, "aString = " + aString + " / mREstaurantId = " + mRestaurantId);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "onChanged:getEatToday :  ", e);
                 }
-                Log.i(TAG, "onChanged eat today : " + aString);
             }
         });
+
     }
 
     //Check if the user click on eat today button
@@ -244,7 +319,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                 integer = integer == null ? 0 : integer;
                 switch (integer) {
                     case R.drawable.ic_cancel_black_24dp:
-                        ftUserRepository.setUserEatTodayRestaurantTrue(mRestaurantId);
+                        ftUserRepository.setUserEatTodayRestaurantTrue(mRestaurantId, mRestaurantName);
                         break;
 
                     case R.drawable.ic_check_circle_black_24dp:
@@ -255,10 +330,9 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
         });
     }
 
-    //Set the recyclerview
+    //Set the recyclerview²
     private void setUpRecyclerView() {
         Log.i(TAG, "Enter in setRecyclerview");
-        Query query = mViewModel.getQuery(mRestaurantId);
 
         mRecyclerView.addItemDecoration(new DividerItemDecoration(DescriptionRestaurantActivity.this, DividerItemDecoration.VERTICAL));
 
@@ -266,16 +340,35 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                 .build();
 
         adapter = new DescriptionRestaurantRecyclerViewAdapter(options, DescriptionRestaurantActivity.this);
-        Log.i(TAG, "setUpRecyclerView: item " + adapter.getItemCount());
         adapter.startListening();
         mRecyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-        Log.d(TAG, "onStop: ");
+    //Notification builder
+    private void buildNotification() {
+        Log.i(TAG, "buildNotification: start method");
+
+        alarmIntent = new Intent(DescriptionRestaurantActivity.this, AlarmReceiver.class);
+
+        mViewModel.getEatTodayWorkmates(mRestaurantId).observe(DescriptionRestaurantActivity.this, new Observer<ArrayList<String>>() {
+            @Override
+            public void onChanged(ArrayList<String> strings) {
+                if (strings != null) {
+                    //Enlever notre user
+                    for (int i = 0; i < strings.size(); i++) {
+                        if (strings.get(i).equals(mViewModel.getCurrenUser().getName())) {
+                            strings.remove(i);
+                            break;
+                        }
+                    }
+                    alarmIntent.removeExtra("listWorkmates");
+                    Log.i(TAG, "onChanged: buildNotification :" + strings);
+                    mViewModel.cancelAlarm(DescriptionRestaurantActivity.this, alarmIntent);
+                    alarmIntent.putStringArrayListExtra("listWorkmates", strings);
+                    mViewModel.addAlarm(DescriptionRestaurantActivity.this, alarmIntent);
+                }
+            }
+        });
     }
 }
 

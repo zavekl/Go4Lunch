@@ -9,6 +9,7 @@ public class User {
     private String mId;
     private String image;
     private String eatToday;
+    private String eatTodayName;
 
     //TODO Créer un nouveau champ avec le nom du resto pour l'afficher dans les workamtes
 
@@ -27,6 +28,14 @@ public class User {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String mEmail) {
+        this.mEmail = mEmail;
+    }
+
     public String getEmail() {
         return mEmail;
     }
@@ -35,15 +44,31 @@ public class User {
         return image;
     }
 
-    public String getmId() {
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getId() {
         return mId;
     }
 
-    public String getTodayEat() {
+    public void setId(String mId) {
+        this.mId = mId;
+    }
+
+    public String getEatToday() {
         return eatToday;
     }
 
-    public void setTodayEat(String todayEat) {
-        this.eatToday = todayEat;
+    public void setEatToday(String eatToday) {
+        this.eatToday = eatToday;
+    }
+
+    public String getEatTodayName() {
+        return eatTodayName;
+    }
+
+    public void setEatTodayName(String eatTodayName) {
+        this.eatTodayName = eatTodayName;
     }
 }

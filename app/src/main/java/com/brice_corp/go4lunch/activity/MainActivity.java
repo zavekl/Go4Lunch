@@ -31,7 +31,6 @@ import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
-import com.brice_corp.go4lunch.utils.NotificationUtils;
 import com.brice_corp.go4lunch.view.fragment.ListViewFragment;
 import com.brice_corp.go4lunch.view.fragment.MapViewFragment;
 import com.brice_corp.go4lunch.view.fragment.WorkmatesFragment;
@@ -49,6 +48,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivityLogi";
@@ -86,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Set listener on search toolbar
         setCLickOnMenuToolbar();
-
-        //TODO Notification
-        //buildNotification();
     }
 
     @Override
@@ -361,12 +358,5 @@ public class MainActivity extends AppCompatActivity {
     private void hideRecyclerview() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mAutoCompleteAdapter.cleanAdapter();
-    }
-
-    //TODO Notification
-    //Notification builder
-    private void buildNotification() {
-        NotificationUtils notificationUtils = new NotificationUtils(this);
-        notificationUtils.sendNotification("restaurant", "4 rue de France", "Cécile");
     }
 }

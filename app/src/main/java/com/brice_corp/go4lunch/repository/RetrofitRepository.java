@@ -2,6 +2,7 @@ package com.brice_corp.go4lunch.repository;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -41,7 +42,7 @@ public class RetrofitRepository {
         mApiService = retrofit.create(ApiGoogleMapRetrofit.class);
     }
 
-    public LiveData<Restaurant> getRestaurantDetails(String idRestaurant) {
+    public LiveData<Restaurant> getRestaurantDetails(@NonNull String idRestaurant) {
         final MutableLiveData<Restaurant> restaurantDetailsResults = new MutableLiveData<>();
         mApiService.getRestaurantDetails(idRestaurant, "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA").enqueue(
                 new Callback<Restaurant>() {

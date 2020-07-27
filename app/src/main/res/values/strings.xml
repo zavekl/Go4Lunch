@@ -21,11 +21,16 @@
     <string name="your_lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>
-    <string name="search_image">search_image</string>
+    <string name="search_image">search image</string>
     <string name="restaurant_image">restaurant image</string>
     <string name="phone_description">phone_description</string>
     <string name="call">CALL</string>
     <string name="like">LIKE</string>
     <string name="website">WEBSITE</string>
     <string name="go4lunch">Go4Lunch</string>
+
+    <string name="tv_person_name_workmate_adp">%1$s is eating at %2$s</string>
+    <string name="tv_person_name_workmate_dont_know_adp">%1$s doesn\'t decided yet</string>
+    <string name="notif_title">D\'ont forgot your restaurant meeting!</string>
+
 </resources>

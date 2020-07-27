@@ -1,6 +1,7 @@
 package com.brice_corp.go4lunch.view.recyclerview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +22,28 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by <NIATEL Brice> on <20/05/2020>.
  */
 public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User, WorkmatesRecyclerViewAdapter.ViewHolder> {
-    private Context context;
+    private Context mContext;
+    private static final String TAG = "WorkmatesRVAdapter";
 
     public WorkmatesRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options, Context context) {
         super(options);
-        this.context = context;
+        mContext = context;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
-        holder.mPersonName.setText(model.getName());
+        String personName;
+        Log.i(TAG, "onBindViewHolder:'" + model.getEatTodayName() + "'");
+        if (!model.getEatTodayName().equals("")) {
+            personName = mContext.getString(R.string.tv_person_name_workmate_adp, model.getName(), model.getEatTodayName());
+        } else {
+            personName = mContext.getString(R.string.tv_person_name_workmate_dont_know_adp, model.getName());
+        }
 
-        Glide.with(context)
+
+        holder.mPersonName.setText(personName);
+
+        Glide.with(mContext)
                 .load(model.getImage())
                 .centerCrop()
                 .into(holder.mImageView);
@@ -55,6 +66,5 @@ public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User,
             mPersonName = itemView.findViewById(R.id.personName);
         }
     }
-
 }
 
