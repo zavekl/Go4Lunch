@@ -17,6 +17,8 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by <NIATEL Brice> on <12/07/2020>.
  */
@@ -31,11 +33,11 @@ public class DescriptionRestaurantViewModel extends AndroidViewModel {
         alarmUtils = new AlarmUtils();
     }
 
-    public Query getQuery(String idRestaurant) {
+    public Query getQuery(@Nonnull String idRestaurant) {
         return mFirestoreUserRepository.getQueryDescription(idRestaurant);
     }
 
-    public MutableLiveData<ArrayList<String>> getEatTodayWorkmates(String idREstaurant) {
+    public MutableLiveData<ArrayList<String>> getEatTodayWorkmates(@Nonnull String idREstaurant) {
         return mFirestoreUserRepository.getEatTodayWorkmates(idREstaurant);
     }
 
@@ -44,10 +46,14 @@ public class DescriptionRestaurantViewModel extends AndroidViewModel {
     }
 
     public void cancelAlarm(Context context, Intent intent) {
-        alarmUtils.cancelAlarm(context, intent,0);
+        alarmUtils.cancelAlarm(context, intent, 0);
     }
 
-    public User getCurrenUser(){
+    public User getCurrenUser() {
         return mFirestoreUserRepository.getUser();
+    }
+
+    public MutableLiveData<Boolean> getTheLikeRestaurant(final String id) {
+        return mFirestoreUserRepository.getTheLikeRestaurant(id);
     }
 }
