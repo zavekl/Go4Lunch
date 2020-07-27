@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "513105457524-n66gmddfkea0kb493fth2a5huulp7hc3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brice_corp.go4lunch",
+            "certificate_hash": "6f49acd053bec1249a2cfe227264afbae0f2876b"
+          }
+        },
+        {
+          "client_id": "513105457524-i6415rv74glll3g5s1oqnj2fe1r2qafk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.brice_corp.go4lunch",
+            "certificate_hash": "96978842cdfce71203c72f0123507b3b88f2688d"
+          }
+        },
+        {
           "client_id": "513105457524-anuc0lgc1gjjllbq91eqb02akq4a4ofj.apps.googleusercontent.com",
           "client_type": 3
         }
