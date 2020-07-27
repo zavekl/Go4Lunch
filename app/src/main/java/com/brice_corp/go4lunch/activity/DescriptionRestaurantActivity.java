@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.model.User;
+import com.brice_corp.go4lunch.model.projo.Photo;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.DescriptionRestaurantViewModel;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
@@ -34,6 +35,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class DescriptionRestaurantActivity extends AppCompatActivity {
@@ -56,6 +58,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     private DescriptionRestaurantViewModel mViewModel;
     private Query query;
     private Intent alarmIntent;
+    private boolean mValidateRestaurant = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -290,12 +293,13 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                             mEatTodayButton.setTag(R.drawable.ic_cancel_black_24dp);
                             mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorFalse));
                             Log.i(TAG, "getEatToday : no : " + aString);
+                            mValidateRestaurant = false;
                         } else {
                             mEatTodayButton.setImageResource(R.drawable.ic_check_circle_black_24dp);
                             mEatTodayButton.setTag(R.drawable.ic_check_circle_black_24dp);
                             mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorTrue));
                             Log.i(TAG, "getEatToday : yes : " + aString);
-                            buildNotification();
+                            mValidateRestaurant = true;
                         }
                     } else {
                         Log.i(TAG, "aString = " + aString + " / mREstaurantId = " + mRestaurantId);
@@ -305,7 +309,11 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                 }
             }
         });
-
+        if (mValidateRestaurant) {
+            buildNotification();
+            Log.i(TAG, "notification builded");
+            mValidateRestaurant = false;
+        }
     }
 
     //Check if the user click on eat today button
