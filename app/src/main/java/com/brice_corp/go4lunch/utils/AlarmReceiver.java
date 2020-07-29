@@ -30,11 +30,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             } else {
                 //TODO AFFICHER JUSTE SON PROPRE PRENOM
-                Log.i(TAG, "onReceive: ");
+                notificationUtils.sendNotification("restaurant", "4 rue de France", list.get(0));
             }
-        }
-        if (list != null) {
-            notificationUtils.sendNotification("restaurant", "4 rue de France", "list.get(0)");
         }
     }
 }
