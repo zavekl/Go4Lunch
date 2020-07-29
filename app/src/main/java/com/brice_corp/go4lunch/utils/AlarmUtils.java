@@ -46,6 +46,7 @@ public class AlarmUtils {
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
             } else {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
             }
             saveAlarmId(context, notificationId);
         }

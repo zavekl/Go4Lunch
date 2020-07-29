@@ -15,7 +15,6 @@ import com.brice_corp.go4lunch.utils.AlarmUtils;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import javax.annotation.Nonnull;
 

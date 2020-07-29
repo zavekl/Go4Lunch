@@ -302,17 +302,20 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                             mValidateRestaurant = true;
                         }
                     } else {
-                        Log.i(TAG, "aString = " + aString + " / mREstaurantId = " + mRestaurantId);
+                        Log.i(TAG, "aString = " + aString + " / mRestaurantId = " + mRestaurantId);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "onChanged:getEatToday :  ", e);
                 }
             }
         });
+        //TODO Ne s'active pas dès le premier passsage car false puis true
         if (mValidateRestaurant) {
             buildNotification();
             Log.i(TAG, "notification builded");
             mValidateRestaurant = false;
+        } else {
+            Log.i(TAG, "build notif false");
         }
     }
 
@@ -338,7 +341,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
         });
     }
 
-    //Set the recyclerview²
+    //Set the recyclerview
     private void setUpRecyclerView() {
         Log.i(TAG, "Enter in setRecyclerview");
 
@@ -354,6 +357,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
     //Notification builder
     private void buildNotification() {
+        //TODO Service + receiver pour avoir
         Log.i(TAG, "buildNotification: start method");
 
         alarmIntent = new Intent(DescriptionRestaurantActivity.this, AlarmReceiver.class);
