@@ -49,14 +49,11 @@ public class FirestoreUserRepository {
     private static final String USERS = "users";
     private static final String USER_NAME = "name";
     private String CURRENT_USER_ID;
+    public static User mUserShared;
 
     //Livedata
     private MutableLiveData<Boolean> mLikeLivedata = new MutableLiveData<>();
     private MutableLiveData<String> mEatTodayLivedata = new MutableLiveData<>();
-    private MutableLiveData<ArrayList<String>> mNameLivedata = new MutableLiveData<>();
-
-    //List
-    private ArrayList<String> mNameList = new ArrayList<>();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Methods
@@ -124,7 +121,8 @@ public class FirestoreUserRepository {
     //Get current user
     public User getUser() {
         FirebaseUser user = getCurrentUser();
-        return new User(user.getDisplayName(), user.getEmail(), String.valueOf(user.getPhotoUrl()), "");
+        mUserShared = new User(user.getDisplayName(), user.getEmail(), String.valueOf(user.getPhotoUrl()), "");
+        return mUserShared;
     }
 
     //Get name of the current user
@@ -286,30 +284,7 @@ public class FirestoreUserRepository {
         });
     }
 
-    public MutableLiveData<ArrayList<String>> getEatTodayWorkmates(@NonNull String idREstaurant) {
-        Log.i(TAG, "getEatTodayWorkmates: " + idREstaurant);
-        if (mNameList != null) {
-            mNameList.clear();
-        }
-        mNameNoteRef.orderBy(USER_NAME, Query.Direction.ASCENDING).whereEqualTo("eatToday", idREstaurant).addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if (e == null) {
-                    if (queryDocumentSnapshots != null) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Log.i(TAG, "onEvent: " + Objects.requireNonNull(documentSnapshot.get("name")).toString());
-                            String documentSearch = Objects.requireNonNull(documentSnapshot.get("name")).toString();
-                            mNameList.add(documentSearch);
-                            mNameLivedata.setValue(mNameList);
-                        }
-                    } else {
-                        Log.e(TAG, "onEvent: queryDocumentSnapshots is null");
-                    }
-                } else {
-                    Log.e(TAG, "onEvent: ", e);
-                }
-            }
-        });
-        return mNameLivedata;
+    public Task<QuerySnapshot> getUsersDocuments() {
+        return mNameNoteRef.get();
     }
 }
