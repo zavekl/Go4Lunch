@@ -19,30 +19,41 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.model.User;
-import com.brice_corp.go4lunch.model.projo.Photo;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.DescriptionRestaurantViewModel;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.repository.RetrofitRepository;
-import com.brice_corp.go4lunch.utils.AlarmReceiver;
+import com.brice_corp.go4lunch.utils.NotificationWorker;
 import com.brice_corp.go4lunch.view.recyclerview.DescriptionRestaurantRecyclerViewAdapter;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class DescriptionRestaurantActivity extends AppCompatActivity {
     private static final String TAG = "DescRestaurantActivity";
+    private static final String NOTIF = "notification";
+    private static final String WORK_NAME = "work_name";
+    private static final String RNAME = "restaurant_name";
+    private static final String RID = "restaurant_id";
+    private static final String RADDRESS = "restaurant_address";
 
     private String mRestaurantId;
     private String mRestaurantName;
+    private String mRestaurantAddress;
 
     private ImageView mImage;
     private TextView mName;
@@ -57,8 +68,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     private DescriptionRestaurantRecyclerViewAdapter adapter;
     private DescriptionRestaurantViewModel mViewModel;
     private Query query;
-    private Intent alarmIntent;
-    private boolean mValidateRestaurant = false;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -131,15 +141,29 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                     public void onChanged(Restaurant restaurant) {
 
                         Restaurant currentRestaurant = restaurant.getResult();
+                        Log.i(TAG, "onChanged: " + restaurant.getResult());
                         if (currentRestaurant != null) {
                             //Set the id of restaurant
                             if (currentRestaurant.getId() == null) {
                                 SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
                                 mRestaurantId = sharedPref.getString("restaurant_id", null);
+                                Log.i(TAG, "onChanged: setInformations shared pref : id :" + mRestaurantId);
+                                if (mRestaurantId == null) {
+                                    mRestaurantId = currentRestaurant.getId();
+                                    Log.i(TAG, "onChanged: setInformations  getId() 1 : id :" + mRestaurantId);
+                                    if (mRestaurantId == null) {
+                                        Log.i(TAG, "onChanged: Call setInformations again ");
+                                        setInformations();
+                                    }
+                                }
                             } else {
                                 mRestaurantId = currentRestaurant.getId();
+                                Log.i(TAG, "onChanged: setInformations  getId() 2 : id :" + mRestaurantId);
+                                if (mRestaurantId == null) {
+                                    Log.i(TAG, "onChanged: Call setInformations again ");
+                                    setInformations();
+                                }
                             }
-                            Log.i(TAG, "onChanged: setInformations : id :" + mRestaurantId);
 
                             //Restaurant image
                             if (currentRestaurant.getPhotos() != null) {
@@ -163,7 +187,8 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                             //Restaurant address
                             StringBuilder sb = new StringBuilder(currentRestaurant.getFormattedAddress());
                             sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-                            mFormattedAdr.setText(sb.toString());
+                            mRestaurantAddress = sb.toString();
+                            mFormattedAdr.setText(mRestaurantAddress);
 
                             //Phone call
                             setOnClickCallPhone(currentRestaurant.getFormattedPhoneNumber());
@@ -293,13 +318,13 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                             mEatTodayButton.setTag(R.drawable.ic_cancel_black_24dp);
                             mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorFalse));
                             Log.i(TAG, "getEatToday : no : " + aString);
-                            mValidateRestaurant = false;
+                            stopWorkRequest(DescriptionRestaurantActivity.this);
                         } else {
                             mEatTodayButton.setImageResource(R.drawable.ic_check_circle_black_24dp);
                             mEatTodayButton.setTag(R.drawable.ic_check_circle_black_24dp);
                             mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorTrue));
                             Log.i(TAG, "getEatToday : yes : " + aString);
-                            mValidateRestaurant = true;
+                            buildNotification();
                         }
                     } else {
                         Log.i(TAG, "aString = " + aString + " / mRestaurantId = " + mRestaurantId);
@@ -309,14 +334,6 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                 }
             }
         });
-        //TODO Ne s'active pas dès le premier passsage car false puis true
-        if (mValidateRestaurant) {
-            buildNotification();
-            Log.i(TAG, "notification builded");
-            mValidateRestaurant = false;
-        } else {
-            Log.i(TAG, "build notif false");
-        }
     }
 
     //Check if the user click on eat today button
@@ -325,7 +342,6 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ImageView imageView = (ImageView) v;
-
                 Integer integer = (Integer) imageView.getTag();
                 integer = integer == null ? 0 : integer;
                 switch (integer) {
@@ -357,31 +373,38 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
     //Notification builder
     private void buildNotification() {
-        //TODO Service + receiver pour avoir
-        Log.i(TAG, "buildNotification: start method");
+        Data data = new Data.Builder()
+                .putString(RNAME, mRestaurantName)
+                .putString(RID, mRestaurantId)
+                .putString(RADDRESS, mRestaurantAddress)
+                .build();
 
-        alarmIntent = new Intent(DescriptionRestaurantActivity.this, AlarmReceiver.class);
+        Calendar actualDate = Calendar.getInstance();
+        Calendar notificationDate = Calendar.getInstance();
 
-        mViewModel.getEatTodayWorkmates(mRestaurantId).observe(DescriptionRestaurantActivity.this, new Observer<ArrayList<String>>() {
-            @Override
-            public void onChanged(ArrayList<String> strings) {
-                if (strings != null) {
-                    //Enlever notre user
-                    for (int i = 0; i < strings.size(); i++) {
-                        if (strings.get(i).equals(mViewModel.getCurrenUser().getName())) {
-                            strings.remove(i);
-                            break;
-                        }
-                    }
-                    alarmIntent.removeExtra("listWorkmates");
-                    Log.i(TAG, "onChanged: buildNotification :" + strings);
-                    mViewModel.cancelAlarm(DescriptionRestaurantActivity.this, alarmIntent);
-                    alarmIntent.putStringArrayListExtra("listWorkmates", strings);
-                    mViewModel.addAlarm(DescriptionRestaurantActivity.this, alarmIntent);
-                }
-            }
-        });
+        final long nowTimeInMillis = actualDate.getTimeInMillis();
+
+        notificationDate.set(Calendar.HOUR_OF_DAY, 12);
+        notificationDate.set(Calendar.MINUTE, 0);
+        notificationDate.set(Calendar.SECOND, 0);
+        notificationDate.set(Calendar.MILLISECOND, 0);
+
+        final long delay = notificationDate.getTimeInMillis() - nowTimeInMillis;
+
+        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+
+        PeriodicWorkRequest notifRequest =
+                new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS)
+                        .setInputData(data)
+                        .setConstraints(constraints)
+                        .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                        .addTag(NOTIF)
+                        .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueueUniquePeriodicWork(WORK_NAME, ExistingPeriodicWorkPolicy.REPLACE, notifRequest);
+    }
+
+    public static void stopWorkRequest(Context context) {
+        WorkManager.getInstance(context).cancelAllWorkByTag(NOTIF);
     }
 }
-
-

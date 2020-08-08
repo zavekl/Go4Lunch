@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Go4Lunch</string>
+    <string name="go4lunch">Go4Lunch</string>
 
     <!-- BOTTOM MENU -->
     <string name="bottom_navigation_menu_map">Carte des restaurants</string>
@@ -17,13 +18,18 @@
     <string name="your_lunch">VOTRE REPAS</string>
     <string name="settings">PARAMETRES</string>
     <string name="logout">DECONNEXION</string>
-    <string name="go4lunch">Go4Lunch</string>
+
+
     <string name="search_image">image recherche</string>
     <string name="restaurant_image">image restaurant </string>
     <string name="phone_description">description phone</string>
     <string name="call">TELEPHONE</string>
     <string name="like">AIME</string>
     <string name="website">SITE INTERNET</string>
+
+
+    <string name="stg_workmates">Collègues : </string>
+
 
     <string name="tv_person_name_workmate_adp">%1$s mange à %2$s</string>
     <string name="tv_person_name_workmate_dont_know_adp">%1$s n\'a pas encore décidé</string>

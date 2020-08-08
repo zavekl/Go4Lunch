@@ -11,8 +11,6 @@ public class User {
     private String eatToday;
     private String eatTodayName;
 
-    //TODO Créer un nouveau champ avec le nom du resto pour l'afficher dans les workamtes
-
     public User() {
         //Need an empty constructor
     }

@@ -14,40 +14,49 @@ import androidx.core.app.NotificationCompat;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.activity.AuthenticationActivity;
 
+import java.util.ArrayList;
+
 /**
  * Created by <NIATEL BRICE> on <01/06/2020>.
  */
-public class NotificationUtils {
+class NotificationUtils {
     private static final String TAG = "NotificationUtils";
     private static final int NOTIFICATION_ID = 7;
     private static final String NOTIFICATION_TAG = "rappel";
+    private static final CharSequence channelName = "Rappel";
     private Context context;
 
-    public NotificationUtils(Context context) {
+    NotificationUtils(Context context) {
         this.context = context;
     }
 
-    //TODO
-    public void sendNotification(String nameRestaurant,String address,String workmates) {
-        //  Create an Intent that will be shown when user will click on the Notification
+    void sendNotification(String nameRestaurant, String address, ArrayList<String> workmates) {
         Intent intent = new Intent(context, AuthenticationActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        //  Create a Style for the Notification
+        //Build String with all the workmates
+        StringBuilder workmateNames = new StringBuilder(context.getString(R.string.stg_workmates) + " ");
+        for (int i = 0; i < workmates.size(); i++) {
+            workmateNames.append(workmates.get(i));
+            if (i != workmates.size()-1) {
+                workmateNames.append(" / ");
+            }
+        }
+
+        //Create a Style for the Notification
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        inboxStyle.setBigContentTitle(context.getString(R.string.notif_title));
         inboxStyle.addLine(nameRestaurant);
         inboxStyle.addLine(address);
-        inboxStyle.addLine(workmates);
+        inboxStyle.addLine(workmateNames);
 
-
-        //  Create a Channel (Android 8)
+        //Create a Channel (Android 8)
         String channelId = "fcm_default_channel";
-        //  Build a Notification object
+
+        //Build a Notification object
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context, channelId)
-                        .setSmallIcon(R.drawable.com_facebook_button_icon)
-                        .setContentTitle("Titre")
+                        .setSmallIcon(R.drawable.ic_search)
+                        .setContentTitle(context.getString(R.string.notif_title))
                         .setContentText(nameRestaurant)
                         .setAutoCancel(true)
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
@@ -55,9 +64,8 @@ public class NotificationUtils {
                         .setStyle(inboxStyle);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        //  Support Version >= Android 8
+        //Support Version >= Android 8
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence channelName = "Rappel";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(channelId, channelName, importance);
             if (notificationManager != null) {
@@ -67,7 +75,7 @@ public class NotificationUtils {
             }
         }
 
-        //  Show notification
+        //Show notification
         if (notificationManager != null) {
             notificationManager.notify(NOTIFICATION_TAG, NOTIFICATION_ID, notificationBuilder.build());
         } else {
