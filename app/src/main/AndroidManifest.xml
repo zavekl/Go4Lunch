@@ -19,14 +19,14 @@
         android:theme="@style/AppTheme.NoActionBar">
 
 
-        <activity android:name=".activity.DescriptionRestaurantActivity"
+        <activity android:name=".view.activity.DescriptionRestaurantActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activity.AuthenticationActivity"
+        <activity android:name=".view.activity.AuthenticationActivity"
             android:screenOrientation="portrait">
 
             <intent-filter>
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".view.activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
