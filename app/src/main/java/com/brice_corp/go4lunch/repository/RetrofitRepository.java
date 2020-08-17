@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +23,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by <NIATEL Brice> on <15/06/2020>.
  */
 public class RetrofitRepository {
-    private ApiGoogleMapRetrofit mApiService;
     private static final String TAG = "RetrofitRepository";
+
+    public static final int RADIUS = 2500;
+    public static final boolean SENSOR = true;
+    public static final String TYPESEARCH = "restaurant";
+
+    private ApiGoogleMapRetrofit mApiService;
 
     public RetrofitRepository() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -42,6 +48,7 @@ public class RetrofitRepository {
         mApiService = retrofit.create(ApiGoogleMapRetrofit.class);
     }
 
+    //Get the restaurant information with Place API
     public LiveData<Restaurant> getRestaurantDetails(@NonNull String idRestaurant) {
         final MutableLiveData<Restaurant> restaurantDetailsResults = new MutableLiveData<>();
         mApiService.getRestaurantDetails(idRestaurant, "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA").enqueue(
@@ -61,5 +68,24 @@ public class RetrofitRepository {
                 }
         );
         return restaurantDetailsResults;
+    }
+
+    public LiveData<NearByPlaceResults> getRestaurantListAroundUser(String latLng) {
+        final MutableLiveData<NearByPlaceResults> liveData = new MutableLiveData<>();
+        //TODO KEY
+        final Call<NearByPlaceResults> call = mApiService.getRestaurantListAroundUser(latLng, RADIUS, TYPESEARCH, SENSOR, "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA");
+
+        call.enqueue(new Callback<NearByPlaceResults>() {
+            @Override
+            public void onResponse(@NotNull Call<NearByPlaceResults> call, @NotNull Response<NearByPlaceResults> response) {
+                liveData.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<NearByPlaceResults> call, @NotNull Throwable t) {
+                t.printStackTrace();
+            }
+        });
+        return liveData;
     }
 }

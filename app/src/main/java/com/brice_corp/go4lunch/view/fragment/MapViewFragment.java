@@ -1,26 +1,33 @@
 package com.brice_corp.go4lunch.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
+import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.MapViewModel;
 import com.brice_corp.go4lunch.utils.MapStateManager;
 import com.google.android.gms.location.LocationCallback;
@@ -31,10 +38,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Objects;
 
 import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
@@ -42,6 +54,7 @@ import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_ENABLE
  * Created by <NIATEL Brice> on <08/04/2020>.
  */
 public class MapViewFragment extends Fragment {
+    private static final String TAG = "MapViewFragment";
     private MapView mMapView;
     private GoogleMap mGoogleMap;
     private MapViewModel mMapViewModel;
@@ -97,7 +110,7 @@ public class MapViewFragment extends Fragment {
 
             @Override
             public void onProviderEnabled(String provider) {
-
+                setCameraPosition();
             }
 
             @Override
@@ -119,12 +132,36 @@ public class MapViewFragment extends Fragment {
                 mLatLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                 if (!mIsCenter) {
                     setCameraPosition();
-
+                    getRestaurantListAroundUser(mLatLng);
                     //Set this boolean to true in the order not to center the map on the user's position a second time
                     mIsCenter = true;
                 }
             }
         };
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector() {
+        Drawable vectorDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_map_marker);
+        Objects.requireNonNull(vectorDrawable).setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    private void getRestaurantListAroundUser(final LatLng latLng) {
+        mMapViewModel.getRestaurantListAroundUser(latLng).observe(MapViewFragment.this, new Observer<NearByPlaceResults>() {
+            @Override
+            public void onChanged(NearByPlaceResults nearByPlaceResults) {
+                Log.d(TAG, "onChanged: start" + nearByPlaceResults.toString());
+
+                for (Restaurant result : nearByPlaceResults.getResults()) {
+                    LatLng latLngRestaurant = new LatLng(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng());
+                    mGoogleMap.addMarker(new MarkerOptions().position(latLngRestaurant).title(result.getName()).icon(bitmapDescriptorFromVector()));
+                    //TODO setter d'une liste pour la liste des restos
+                }
+            }
+        });
     }
 
     //Message to activate the GPS
@@ -145,8 +182,9 @@ public class MapViewFragment extends Fragment {
     //Set the camera to the user's position
     private void setCameraPosition() {
         if (mLatLng != null) {
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(mLatLng).zoom(18).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(mLatLng).zoom(16).build();
             mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            Log.d(TAG, "setCameraPosition: done");
         }
     }
 
@@ -164,6 +202,7 @@ public class MapViewFragment extends Fragment {
                 mGoogleMap = mMap;
                 mGoogleMap.setMyLocationEnabled(true);
                 mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mGoogleMap.getUiSettings().setMapToolbarEnabled(false);
 
                 try {
                     // Customise the styling of the base map using a JSON object defined
@@ -179,7 +218,6 @@ public class MapViewFragment extends Fragment {
                     Log.e("TAG", "Can't find style. Error: ", e);
                 }
 
-
                 MapStateManager mMapStateManager = new MapStateManager(requireContext());
                 CameraPosition mPosition = mMapStateManager.getSavedCameraPosition();
                 if (mPosition != null) {
@@ -187,9 +225,6 @@ public class MapViewFragment extends Fragment {
                     CameraUpdate update = CameraUpdateFactory.newCameraPosition(mPosition);
                     mGoogleMap.moveCamera(update);
                     mGoogleMap.setMapType(mMapStateManager.getSavedMapType());
-
-                    //Set this boolean to true in the order not to center the map on the user's position
-                    mIsCenter = true;
                 }
             }
         });
@@ -215,6 +250,9 @@ public class MapViewFragment extends Fragment {
         mMapStateManager.saveMapState(mGoogleMap);
 
         mMapView.onPause();
+        mMapViewModel.stopLocationUpdates(mLocationCallback);
+        mIsCenter = false;
+        Log.d(TAG, "onPause: ");
     }
 
     @Override
