@@ -12,7 +12,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.brice_corp.go4lunch.R;
-import com.brice_corp.go4lunch.activity.AuthenticationActivity;
+import com.brice_corp.go4lunch.view.activity.AuthenticationActivity;
 
 import java.util.ArrayList;
 
