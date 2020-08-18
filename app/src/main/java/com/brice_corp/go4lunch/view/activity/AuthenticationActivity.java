@@ -1,4 +1,4 @@
-package com.brice_corp.go4lunch.activity;
+package com.brice_corp.go4lunch.view.activity;
 
 import android.Manifest;
 import android.content.Intent;

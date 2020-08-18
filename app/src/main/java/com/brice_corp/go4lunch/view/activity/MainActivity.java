@@ -1,4 +1,4 @@
-package com.brice_corp.go4lunch.activity;
+package com.brice_corp.go4lunch.view.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -108,11 +108,12 @@ public class MainActivity extends AppCompatActivity {
         getLocation();
     }
 
-    //TODO Savoir quand on reveint de l'activité description
+    //TODO Savoir quand on reveint de l'activité description prendre le result code
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Log.i(TAG, "onActivityResult: " + requestCode);
         //hideRecyclerview();
     }
 
@@ -302,13 +303,17 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (count == 0) {
+                        mAutoCompleteAdapter.getFilter().filter(s.toString());
+                    }
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (s.length() > 4) {
+                    if (s.length() > 3) {
                         mAutoCompleteAdapter.getFilter().filter(s.toString());
                     }
+
                 }
             });
         } else {

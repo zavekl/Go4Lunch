@@ -21,6 +21,9 @@ public class Restaurant {
     @SerializedName("formatted_phone_number")
     @Expose
     private String formattedPhoneNumber;
+    @SerializedName("geometry")
+    @Expose
+    private Geometry geometry;
     @SerializedName("icon")
     @Expose
     private String icon;
@@ -172,11 +175,50 @@ public class Restaurant {
         return website;
     }
 
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
+    }
+
+
     public Restaurant getResult() {
         return result;
     }
 
     public String getStatus() {
         return status;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "addressComponents=" + addressComponents +
+                ", adrAddress='" + adrAddress + '\'' +
+                ", formattedAddress='" + formattedAddress + '\'' +
+                ", formattedPhoneNumber='" + formattedPhoneNumber + '\'' +
+                ", geometry=" + geometry +
+                ", icon='" + icon + '\'' +
+                ", id='" + id + '\'' +
+                ", internationalPhoneNumber='" + internationalPhoneNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", openingHours=" + openingHours +
+                ", photos=" + photos +
+                ", placeId='" + placeId + '\'' +
+                ", plusCode=" + plusCode +
+                ", rating=" + rating +
+                ", reference='" + reference + '\'' +
+                ", scope='" + scope + '\'' +
+                ", types=" + types +
+                ", url='" + url + '\'' +
+                ", userRatingsTotal=" + userRatingsTotal +
+                ", utcOffset=" + utcOffset +
+                ", vicinity='" + vicinity + '\'' +
+                ", website='" + website + '\'' +
+                ", result=" + result +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

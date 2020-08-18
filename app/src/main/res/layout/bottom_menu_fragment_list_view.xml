@@ -11,6 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".activity.MainActivity"
+        tools:context=".view.activity.MainActivity"
         tools:listitem="@layout/item_recyclerview_listview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

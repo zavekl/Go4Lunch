@@ -1,4 +1,4 @@
-package com.brice_corp.go4lunch.activity;
+package com.brice_corp.go4lunch.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -69,7 +69,6 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     private DescriptionRestaurantViewModel mViewModel;
     private Query query;
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,36 +134,16 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
         ftUserRepository = ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository();
 
-        retrofitRepo.getRestaurantDetails(Objects.requireNonNull(intentValue.getStringExtra("id"))).observe(DescriptionRestaurantActivity.this,
+        mRestaurantId = intentValue.getStringExtra("id");
+
+        retrofitRepo.getRestaurantDetails(Objects.requireNonNull(mRestaurantId)).observe(DescriptionRestaurantActivity.this,
                 new Observer<Restaurant>() {
                     @Override
                     public void onChanged(Restaurant restaurant) {
 
                         Restaurant currentRestaurant = restaurant.getResult();
-                        Log.i(TAG, "onChanged: " + restaurant.getResult());
+                        Log.i(TAG, "onChanged: " + restaurant.getResult().toString());
                         if (currentRestaurant != null) {
-                            //Set the id of restaurant
-                            if (currentRestaurant.getId() == null) {
-                                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                                mRestaurantId = sharedPref.getString("restaurant_id", null);
-                                Log.i(TAG, "onChanged: setInformations shared pref : id :" + mRestaurantId);
-                                if (mRestaurantId == null) {
-                                    mRestaurantId = currentRestaurant.getId();
-                                    Log.i(TAG, "onChanged: setInformations  getId() 1 : id :" + mRestaurantId);
-                                    if (mRestaurantId == null) {
-                                        Log.i(TAG, "onChanged: Call setInformations again ");
-                                        setInformations();
-                                    }
-                                }
-                            } else {
-                                mRestaurantId = currentRestaurant.getId();
-                                Log.i(TAG, "onChanged: setInformations  getId() 2 : id :" + mRestaurantId);
-                                if (mRestaurantId == null) {
-                                    Log.i(TAG, "onChanged: Call setInformations again ");
-                                    setInformations();
-                                }
-                            }
-
                             //Restaurant image
                             if (currentRestaurant.getPhotos() != null) {
                                 Glide.with(DescriptionRestaurantActivity.this)

@@ -34,6 +34,9 @@ public class MapRepository {
     public void startLocationUpdates(LocationCallback locationCallback) {
         fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper());
     }
+    public void stopLocationUpdates(LocationCallback locationCallback){
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    }
 
     private LocationRequest createLocationRequest() {
         LocationRequest mLocationRequest = new LocationRequest();
@@ -48,4 +51,5 @@ public class MapRepository {
     public void requestGPSUpdate(LocationListener locationListener) {
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000000, 1000000, locationListener);
     }
+
 }

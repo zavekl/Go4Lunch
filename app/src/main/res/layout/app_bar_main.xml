@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
+    tools:context=".view.activity.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.MainActivity">
+        tools:context=".view.activity.MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"

@@ -1,5 +1,6 @@
 package com.brice_corp.go4lunch.view.recyclerview;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -14,13 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
-import com.brice_corp.go4lunch.activity.DescriptionRestaurantActivity;
+import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
@@ -91,8 +93,14 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
             FindAutocompletePredictionsResponse findAutocompletePredictionsResponse = autocompletePredictions.getResult();
             if (findAutocompletePredictionsResponse != null)
                 for (com.google.android.libraries.places.api.model.AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
-                    resultList.add(new Restaurant(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(),
-                            prediction.getSecondaryText(null).toString()));
+                    for (Place.Type type : prediction.getPlaceTypes()) {
+                        if (type.toString().equals("RESTAURANT") || type.toString().equals("MEAL_DELIVERY") || type.toString().equals("MEAL_TAKEAWAY")) {
+                            resultList.add(new Restaurant(prediction.getPlaceId(), prediction.getPrimaryText(null).toString(),
+                                    prediction.getSecondaryText(null).toString()));
+                            Log.i(TAG, "getPredictions: " + prediction.getPlaceTypes().toString());
+                            break;
+                        }
+                    }
                 }
             return resultList;
         } else {
@@ -125,7 +133,8 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 Log.d(TAG, "Enter in publishResults method");
-                if (results != null && results.count > 0) {
+//                if (results != null && results.count > 0) {
+                if (results != null) {
                     // The API returned at least one result, update the data.
                     Log.d(TAG, "publishResults:  if condition");
                     notifyDataSetChanged();
@@ -137,7 +146,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
         };
     }
 
-    public void cleanAdapter(){
+    public void cleanAdapter() {
         mResultList.clear();
         notifyDataSetChanged();
     }
@@ -167,7 +176,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
                 Intent intent = new Intent(mContext, DescriptionRestaurantActivity.class);
                 Log.i(TAG, "onClick: " + restaurant.getId());
                 intent.putExtra("id", restaurant.getId());
-                mContext.startActivity(intent);
+                ((Activity) mContext).startActivityForResult(intent, 10);
             }
         });
     }
