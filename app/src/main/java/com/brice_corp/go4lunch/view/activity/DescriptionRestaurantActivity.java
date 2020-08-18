@@ -69,7 +69,6 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     private DescriptionRestaurantViewModel mViewModel;
     private Query query;
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +134,9 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
         ftUserRepository = ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository();
 
-        retrofitRepo.getRestaurantDetails(Objects.requireNonNull(intentValue.getStringExtra("id"))).observe(DescriptionRestaurantActivity.this,
+        mRestaurantId = intentValue.getStringExtra("id");
+
+        retrofitRepo.getRestaurantDetails(Objects.requireNonNull(mRestaurantId)).observe(DescriptionRestaurantActivity.this,
                 new Observer<Restaurant>() {
                     @Override
                     public void onChanged(Restaurant restaurant) {
@@ -143,85 +144,62 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                         Restaurant currentRestaurant = restaurant.getResult();
                         Log.i(TAG, "onChanged: " + restaurant.getResult().toString());
                         if (currentRestaurant != null) {
-                            //Set the id of restaurant
-                            Log.i(TAG, "onChanged: current restaurant" + currentRestaurant.getId());
-//                            if (currentRestaurant.getId() == null) {
-//                                SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-//                                mRestaurantId = sharedPref.getString("restaurant_id", null);
-//                                Log.i(TAG, "onChanged: setInformations shared pref : id :" + mRestaurantId);
-//                                if (mRestaurantId == null) {
-//                                    mRestaurantId = currentRestaurant.getId();
-//                                    Log.i(TAG, "onChanged: setInformations  getId() 1 : id :" + mRestaurantId);
-//                                    if (mRestaurantId == null) {
-//                                        Log.i(TAG, "onChanged: Call setInformations again ");
-//                                        setInformations();
-//                                    }
-//                                }
-//                            } else {
-//                                mRestaurantId = currentRestaurant.getId();
-//                                Log.i(TAG, "onChanged: setInformations  getId() 2 : id :" + mRestaurantId);
-//                                if (mRestaurantId == null) {
-//                                    Log.i(TAG, "onChanged: Call setInformations again ");
-//                                    setInformations();
-//                                }
-//                        }
+                            //Restaurant image
+                            if (currentRestaurant.getPhotos() != null) {
+                                Glide.with(DescriptionRestaurantActivity.this)
+                                        .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="
+                                                + currentRestaurant.getPhotos().get(0).getPhotoReference() + "&key="
+                                                + "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA")
+                                        .centerCrop()
+                                        .into(mImage);
+                            } else {
+                                Glide.with(DescriptionRestaurantActivity.this)
+                                        .load(R.drawable.no_image_restaurant)
+                                        .centerCrop()
+                                        .into(mImage);
+                            }
 
-                        //Restaurant image
-                        if (currentRestaurant.getPhotos() != null) {
-                            Glide.with(DescriptionRestaurantActivity.this)
-                                    .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="
-                                            + currentRestaurant.getPhotos().get(0).getPhotoReference() + "&key="
-                                            + "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA")
-                                    .centerCrop()
-                                    .into(mImage);
-                        } else {
-                            Glide.with(DescriptionRestaurantActivity.this)
-                                    .load(R.drawable.no_image_restaurant)
-                                    .centerCrop()
-                                    .into(mImage);
+                            //Restaurant name
+                            mName.setText(currentRestaurant.getName());
+                            mRestaurantName = currentRestaurant.getName();
+
+                            //Restaurant address
+                            StringBuilder sb = new StringBuilder(currentRestaurant.getFormattedAddress());
+                            sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+                            mRestaurantAddress = sb.toString();
+                            mFormattedAdr.setText(mRestaurantAddress);
+
+                            //Phone call
+                            setOnClickCallPhone(currentRestaurant.getFormattedPhoneNumber());
+
+                            //Website
+                            setOnClickWebsite(currentRestaurant.getWebsite());
+
+                            //Rating bar
+                            setTheRatingBar(currentRestaurant.getRating().floatValue());
+
+                            //Set the like true or false from the firestore
+                            getLike();
+
+                            //Get the like button and change it if the user click on
+                            onClickLikeButton();
+
+                            //Set the eat today button
+                            getEatToday();
+
+                            //Get the restaurant which the person eat today and change the icon if the user click on
+                            onClickEatTodayButton();
+
+
+                            //Set the query
+                            query = mViewModel.getQuery(mRestaurantId);
+
+                            //Set the recyclerview
+                            setUpRecyclerView();
                         }
-
-                        //Restaurant name
-                        mName.setText(currentRestaurant.getName());
-                        mRestaurantName = currentRestaurant.getName();
-
-                        //Restaurant address
-                        StringBuilder sb = new StringBuilder(currentRestaurant.getFormattedAddress());
-                        sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-                        mRestaurantAddress = sb.toString();
-                        mFormattedAdr.setText(mRestaurantAddress);
-
-                        //Phone call
-                        setOnClickCallPhone(currentRestaurant.getFormattedPhoneNumber());
-
-                        //Website
-                        setOnClickWebsite(currentRestaurant.getWebsite());
-
-                        //Rating bar
-                        setTheRatingBar(currentRestaurant.getRating().floatValue());
-
-                        //Set the like true or false from the firestore
-                        getLike();
-
-                        //Get the like button and change it if the user click on
-                        onClickLikeButton();
-
-                        //Set the eat today button
-                        getEatToday();
-
-                        //Get the restaurant which the person eat today and change the icon if the user click on
-                        onClickEatTodayButton();
-
-
-                        //Set the query
-                        query = mViewModel.getQuery(mRestaurantId);
-
-                        //Set the recyclerview
-                        setUpRecyclerView();
                     }
-                }
-    });
-}
+                });
+    }
 
     //Set the OnClickListener on call image and open the call manager of the phone
     private void setOnClickCallPhone(final String phone) {

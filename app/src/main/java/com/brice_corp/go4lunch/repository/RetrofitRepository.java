@@ -11,6 +11,9 @@ import com.brice_corp.go4lunch.model.projo.Restaurant;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -56,7 +59,7 @@ public class RetrofitRepository {
                     @Override
                     public void onResponse(@NotNull Call<Restaurant> call, @NotNull Response<Restaurant> response) {
                         if (response.body() != null) {
-                            Log.i(TAG, "onResponse: " + response.body());
+                            Log.i(TAG, "onResponse: " + response.body().getResult());
                             restaurantDetailsResults.setValue(response.body());
                         }
                     }

@@ -191,4 +191,34 @@ public class Restaurant {
     public String getStatus() {
         return status;
     }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "addressComponents=" + addressComponents +
+                ", adrAddress='" + adrAddress + '\'' +
+                ", formattedAddress='" + formattedAddress + '\'' +
+                ", formattedPhoneNumber='" + formattedPhoneNumber + '\'' +
+                ", geometry=" + geometry +
+                ", icon='" + icon + '\'' +
+                ", id='" + id + '\'' +
+                ", internationalPhoneNumber='" + internationalPhoneNumber + '\'' +
+                ", name='" + name + '\'' +
+                ", openingHours=" + openingHours +
+                ", photos=" + photos +
+                ", placeId='" + placeId + '\'' +
+                ", plusCode=" + plusCode +
+                ", rating=" + rating +
+                ", reference='" + reference + '\'' +
+                ", scope='" + scope + '\'' +
+                ", types=" + types +
+                ", url='" + url + '\'' +
+                ", userRatingsTotal=" + userRatingsTotal +
+                ", utcOffset=" + utcOffset +
+                ", vicinity='" + vicinity + '\'' +
+                ", website='" + website + '\'' +
+                ", result=" + result +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }
