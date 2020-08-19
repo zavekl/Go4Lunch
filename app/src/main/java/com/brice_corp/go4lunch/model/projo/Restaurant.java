@@ -9,6 +9,7 @@ import java.util.List;
  * Created by <BRICE NIATEL> on <07/04/2020>.
  */
 public class Restaurant {
+
     @SerializedName("address_components")
     @Expose
     private List<AddressComponent> addressComponents = null;
@@ -88,6 +89,14 @@ public class Restaurant {
         this.id = id;
         this.name = name;
         this.adrAddress = address;
+    }
+
+    public Restaurant(String name, String address, Double rating, OpeningHours openingHours, List<Photo> photos) {
+        this.name = name;
+        this.adrAddress = address;
+        this.rating = rating;
+        this.openingHours = openingHours;
+        this.photos=photos;
     }
 
 
