@@ -9,6 +9,8 @@ public class Constants {
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
     public static final int PERMISSIONS_REQUEST_CALL_PHONE = 9004;
 
+    public static final int DESCRIPTION_RESTAURANT_REQUESTCODE = 10;
+
     public static final int AUTHENTICATION = 9004;
 }
 
