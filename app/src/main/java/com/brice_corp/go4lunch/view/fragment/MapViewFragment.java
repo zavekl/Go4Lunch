@@ -1,6 +1,7 @@
 package com.brice_corp.go4lunch.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -21,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -30,6 +34,7 @@ import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.MapViewModel;
 import com.brice_corp.go4lunch.utils.MapStateManager;
+import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.CameraUpdate;
@@ -43,8 +48,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -63,6 +72,8 @@ public class MapViewFragment extends Fragment {
     private LocationCallback mLocationCallback;
     private LatLng mLatLng;
     private Boolean mIsCenter = false;
+    private ArrayList<String> mIdPlaceRestaurant = new ArrayList<>();
+    private Boolean iconMarker = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -101,12 +112,10 @@ public class MapViewFragment extends Fragment {
         mMapViewModel.requestGPSUpdate(new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
             }
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-
             }
 
             @Override
@@ -133,16 +142,28 @@ public class MapViewFragment extends Fragment {
                 mLatLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                 if (!mIsCenter) {
                     setCameraPosition();
-                    getRestaurantListAroundUser(mLatLng);
                     //Set this boolean to true in the order not to center the map on the user's position a second time
                     mIsCenter = true;
                 }
+                getUserTodayRestaurant();
+                setMarkerOnCLick();
             }
         };
     }
 
+    //Convert a vector image xml into bitmap descriptor for googlemap icon
     private BitmapDescriptor bitmapDescriptorFromVector() {
         Drawable vectorDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_map_marker);
+        if (vectorDrawable != null) {
+            if (iconMarker) {
+                Drawable wrappedDrawable = DrawableCompat.wrap(vectorDrawable);
+                DrawableCompat.setTint(wrappedDrawable, Color.GREEN);
+            } else {
+                Drawable wrappedDrawable = DrawableCompat.wrap(vectorDrawable);
+                DrawableCompat.setTint(wrappedDrawable, getResources().getColor(R.color.colorPrimary));
+            }
+        }
+
         Objects.requireNonNull(vectorDrawable).setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -150,20 +171,64 @@ public class MapViewFragment extends Fragment {
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    private void getRestaurantListAroundUser(final LatLng latLng) {
-        mMapViewModel.getRestaurantListAroundUser(latLng).observe(MapViewFragment.this, new Observer<NearByPlaceResults>() {
+    //Get the id of restaurant if workmates eat in today
+    private void getUserTodayRestaurant() {
+        mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                ArrayList<String> workmates = new ArrayList<>();
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    if (document != null) {
+                        if (document.get("eatToday") != null) {
+                            mIdPlaceRestaurant.add(Objects.requireNonNull(document.get("eatToday")).toString());
+                        } else {
+                            Log.d(TAG, "onSuccess: document.get(\"eatToday\") = null");
+                        }
+                    } else {
+                        Log.d(TAG, "onSuccess: document = null");
+                    }
+                }
+
+            }
+        });
+        getRestaurantListAroundUser();
+    }
+
+    //Display markers of the restaurant which are around the user position
+    private void getRestaurantListAroundUser() {
+        mMapViewModel.getRestaurantListAroundUser(mLatLng).observe(MapViewFragment.this, new Observer<NearByPlaceResults>() {
             @Override
             public void onChanged(NearByPlaceResults nearByPlaceResults) {
                 Log.d(TAG, "onChanged: start" + nearByPlaceResults.toString());
                 ArrayList<String> idPlaceRestaurant = new ArrayList<>();
 
-                Log.i(TAG, "onChanged: all :       "+ nearByPlaceResults.getResults());
                 for (Restaurant result : nearByPlaceResults.getResults()) {
+                    for (String idPlace : mIdPlaceRestaurant) {
+                        if (idPlace.equals(result.getPlaceId())) {
+                            iconMarker = true;
+                            break;
+                        }
+                        break;
+                    }
                     LatLng latLngRestaurant = new LatLng(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng());
-                    mGoogleMap.addMarker(new MarkerOptions().position(latLngRestaurant).title(result.getName()).icon(bitmapDescriptorFromVector()));
+                    mGoogleMap.addMarker(new MarkerOptions().position(latLngRestaurant).title(result.getName()).icon(bitmapDescriptorFromVector())).setTag(result.getPlaceId());
                     idPlaceRestaurant.add(result.getPlaceId());
+                    iconMarker = false;
                 }
                 mMapViewModel.setRestaurantListView(idPlaceRestaurant);
+            }
+        });
+    }
+
+    //When the user click on icon that will start the description of the restaurant
+    private void setMarkerOnCLick() {
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Intent intent = new Intent(requireContext(), DescriptionRestaurantActivity.class);
+                intent.putExtra("id", (String) marker.getTag());
+                startActivityForResult(intent, 10);
+                return false;
             }
         });
     }
@@ -225,7 +290,6 @@ public class MapViewFragment extends Fragment {
                 MapStateManager mMapStateManager = new MapStateManager(requireContext());
                 CameraPosition mPosition = mMapStateManager.getSavedCameraPosition();
                 if (mPosition != null) {
-
                     CameraUpdate update = CameraUpdateFactory.newCameraPosition(mPosition);
                     mGoogleMap.moveCamera(update);
                     mGoogleMap.setMapType(mMapStateManager.getSavedMapType());
