@@ -9,19 +9,19 @@
 
     <TextView
         android:id="@+id/nameRestaurant"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:singleLine="true"
         android:textSize="19sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/imageRestaurant"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Le Zinc" />
 
     <TextView
-        android:id="@+id/typeRestaurant"
+        android:id="@+id/addressRestaurant"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toStartOf="@id/imageRestaurant"
         app:layout_constraintStart_toStartOf="@id/nameRestaurant"
         app:layout_constraintTop_toBottomOf="@id/nameRestaurant"
-        tools:text="French - 12 rue du Faubourg Poissonnière" />
+        tools:text="12 rue du Faubourg Poissonnière" />
 
 
     <TextView
@@ -41,17 +41,17 @@
         android:singleLine="true"
         android:textSize="19sp"
         android:textStyle="italic"
-        app:layout_constraintStart_toStartOf="@id/typeRestaurant"
-        app:layout_constraintTop_toBottomOf="@id/typeRestaurant"
+        app:layout_constraintStart_toStartOf="@id/addressRestaurant"
+        app:layout_constraintTop_toBottomOf="@id/addressRestaurant"
         tools:text="Open XXX / Close XXX / Close soon" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageRestaurant"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@color/colorPrimary"
+        tools:background="@color/quantum_yellow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -7,9 +7,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class NearByPlaceResults {
-
-
-
     @SerializedName("status")
     @Expose
     private String status;
@@ -19,16 +16,6 @@ public class NearByPlaceResults {
     @SerializedName("results")
     @Expose
     private List<Restaurant> results = null;
-
-    @Override
-    public String toString() {
-        return "Model{" +
-
-                ", status='" + status + '\'' +
-                ", nextPageToken='" + nextPageToken + '\'' +
-                ", results=" + results +
-                '}';
-    }
 
     public String getNextPageToken() {
         return nextPageToken;
@@ -46,7 +33,6 @@ public class NearByPlaceResults {
         this.results = results;
     }
 
-
     public String getStatus() {
         return status;
     }
@@ -54,5 +40,4 @@ public class NearByPlaceResults {
     public void setStatus(String status) {
         this.status = status;
     }
-
 }
