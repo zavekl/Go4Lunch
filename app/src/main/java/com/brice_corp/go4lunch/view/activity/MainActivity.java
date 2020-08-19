@@ -31,6 +31,7 @@ import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
+import com.brice_corp.go4lunch.utils.Constants;
 import com.brice_corp.go4lunch.view.fragment.ListViewFragment;
 import com.brice_corp.go4lunch.view.fragment.MapViewFragment;
 import com.brice_corp.go4lunch.view.fragment.WorkmatesFragment;
@@ -108,13 +109,14 @@ public class MainActivity extends AppCompatActivity {
         getLocation();
     }
 
-    //TODO Savoir quand on reveint de l'activité description prendre le result code
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         Log.i(TAG, "onActivityResult: " + requestCode);
-        //hideRecyclerview();
+        if (requestCode == Constants.DESCRIPTION_RESTAURANT_REQUESTCODE) {
+            Log.i(TAG, "onActivityResult: hide RV");
+            hideRecyclerview();
+        }
     }
 
     //Create search menu in toolbar
@@ -310,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (s.length() > 3) {
+                    if (s.length() > 2) {
                         mAutoCompleteAdapter.getFilter().filter(s.toString());
                     }
 
@@ -341,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //Load user's information from firestore on drawer header
+    //Load user's informations from firestore on drawer header
     private void completeNavDrawerHeader(NavigationView navigationView) {
         View headerView = navigationView.getHeaderView(0);
 
@@ -360,8 +362,11 @@ public class MainActivity extends AppCompatActivity {
         mHeaderEmail.setText(fsUserRepo.getUser().getEmail());
     }
 
+    //Hide adapter and clean the adapter
     private void hideRecyclerview() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mAutoCompleteAdapter.cleanAdapter();
+        mEditText.setText("");
+        mConstraintLayout.setVisibility(View.INVISIBLE);
     }
 }
