@@ -34,5 +34,6 @@
     <string name="tv_person_name_workmate_adp">%1$s mange à %2$s</string>
     <string name="tv_person_name_workmate_dont_know_adp">%1$s n\'a pas encore décidé</string>
     <string name="notif_title">N\'oubliez pas votre rendez-vous!</string>
+    <string name="enter_name_min_3_letters">Entrer le nom (min 3 lettres)</string>
 
 </resources>
