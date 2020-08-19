@@ -133,7 +133,6 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 Log.d(TAG, "Enter in publishResults method");
-//                if (results != null && results.count > 0) {
                 if (results != null) {
                     // The API returned at least one result, update the data.
                     Log.d(TAG, "publishResults:  if condition");
