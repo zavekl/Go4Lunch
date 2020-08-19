@@ -3,6 +3,7 @@ package com.brice_corp.go4lunch.di;
 import android.content.Context;
 
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
+import com.brice_corp.go4lunch.repository.ListViewRepository;
 import com.brice_corp.go4lunch.repository.MapRepository;
 import com.brice_corp.go4lunch.repository.RetrofitRepository;
 
@@ -14,12 +15,14 @@ public class ContainerDependencies {
     private MapRepository mMapRepository;
     private FirestoreUserRepository mFirestoreUserRepository;
     private RetrofitRepository mRetrofitRepository;
+    private ListViewRepository mListViewRepository;
 
     ContainerDependencies(Context mContext) {
         this.mContext = mContext;
         mMapRepository = new MapRepository(mContext);
         mFirestoreUserRepository = new FirestoreUserRepository();
         mRetrofitRepository = new RetrofitRepository();
+        mListViewRepository= new ListViewRepository();
     }
 
     public Context getContext() {
@@ -36,5 +39,9 @@ public class ContainerDependencies {
 
     public RetrofitRepository getRestrofitRepository() {
         return mRetrofitRepository;
+    }
+
+    public ListViewRepository getListViewRepository() {
+        return mListViewRepository;
     }
 }
