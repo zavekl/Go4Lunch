@@ -46,6 +46,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -154,12 +155,15 @@ public class MapViewFragment extends Fragment {
             @Override
             public void onChanged(NearByPlaceResults nearByPlaceResults) {
                 Log.d(TAG, "onChanged: start" + nearByPlaceResults.toString());
+                ArrayList<String> idPlaceRestaurant = new ArrayList<>();
 
+                Log.i(TAG, "onChanged: all :       "+ nearByPlaceResults.getResults());
                 for (Restaurant result : nearByPlaceResults.getResults()) {
                     LatLng latLngRestaurant = new LatLng(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng());
                     mGoogleMap.addMarker(new MarkerOptions().position(latLngRestaurant).title(result.getName()).icon(bitmapDescriptorFromVector()));
-                    //TODO setter d'une liste pour la liste des restos
+                    idPlaceRestaurant.add(result.getPlaceId());
                 }
+                mMapViewModel.setRestaurantListView(idPlaceRestaurant);
             }
         });
     }
