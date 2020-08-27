@@ -24,11 +24,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
+import com.brice_corp.go4lunch.modelview.MainActivityViewModel;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
 import com.brice_corp.go4lunch.utils.Constants;
@@ -62,11 +64,17 @@ public class MainActivity extends AppCompatActivity {
     private EditText mEditText;
     private RecyclerView mRecyclerView;
     private AutoCompleteAdapter mAutoCompleteAdapter;
+    private MainActivityViewModel mMainActivityViewModel;
+    private TextWatcher mTextWatcher;
+    private TextWatcher mListViewTextWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Set ViewModel
+        mMainActivityViewModel = new ViewModelProvider(MainActivity.this).get(MainActivityViewModel.class);
 
         //Toolbar
         mToolbar = findViewById(R.id.toolbar);
@@ -142,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.map_view_bottom_menu:
                         mSelectedFragment = new MapViewFragment();
                         checkIfSearchBarVisibleAndHideItYes();
-
                         break;
                     case R.id.list_view__bottom_menu:
                         mSelectedFragment = new ListViewFragment();
@@ -254,11 +261,17 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.search_restaurant) {
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
                     if (fragment instanceof MapViewFragment) {
+                        setTextEditText(0);
                         revealSearchBar();
+                        mEditText.setHint(getResources().getString(R.string.enter_name_min_3_letters));
                     } else if (fragment instanceof ListViewFragment) {
-                        Log.i(TAG, "onMenuItemClick: 2");
+                        setTextEditText(1);
+                        revealSearchBar();
+                        mEditText.setHint(getResources().getString(R.string.enter_name_restaurant));
                     } else if (fragment instanceof WorkmatesFragment) {
-                        Log.i(TAG, "onMenuItemClick: 3");
+                        setTextEditText(2);
+                        revealSearchBar();
+                        mEditText.setHint(getResources().getString(R.string.enter_name_workmate));
                     }
                 }
                 return true;
@@ -283,6 +296,50 @@ public class MainActivity extends AppCompatActivity {
     private void revealSearchBar() {
         mConstraintLayout.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
+    }
+
+    //Manage editText
+    private void setTextEditText(int i) {
+        Log.d(TAG, "setTextEditText: start");
+        switch (i) {
+            case 0: {
+                mEditText.removeTextChangedListener(mListViewTextWatcher);
+                setRecyclerviewWithPrediction();
+                Log.d(TAG, "setTextEditText: 0");
+                break;
+            }
+            case 1: {
+                mEditText.removeTextChangedListener(mTextWatcher);
+                sortListView();
+                Log.d(TAG, "setTextEditText: 1");
+                break;
+            }
+            case 2: {
+                mEditText.removeTextChangedListener(mListViewTextWatcher);
+                mEditText.removeTextChangedListener(mTextWatcher);
+                Log.d(TAG, "setTextEditText: 2");
+                break;
+            }
+        }
+    }
+
+    //Sort listView by the user text
+    private void sortListView() {
+        mListViewTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mMainActivityViewModel.getListViewAdapter().getFilter().filter(s.toString());
+            }
+        };
+        mEditText.addTextChangedListener(mListViewTextWatcher);
 
     }
 
@@ -298,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
             mRecyclerView.setAdapter(mAutoCompleteAdapter);
             mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-            mEditText.addTextChangedListener(new TextWatcher() {
+            mTextWatcher = new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
@@ -317,10 +374,12 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
-            });
+            };
+            mEditText.addTextChangedListener(mTextWatcher);
         } else {
             Log.i(TAG, "setRecyclerviewWithPrediction: mLatLng == null");
         }
+
     }
 
     //Get geolocation
@@ -331,10 +390,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
-                    Log.i(TAG, "GPS " + location.getLatitude());
-                    Log.i(TAG, "GPS " + location.getLongitude());
+                    Log.i(TAG, "GPS " + location.getLatitude() + " / " + location.getLongitude());
                     mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    setRecyclerviewWithPrediction();
+//                    setTextEditText();
                 } else {
                     mLatLng = null;
                     getLocation();
@@ -365,7 +423,9 @@ public class MainActivity extends AppCompatActivity {
     //Hide adapter and clean the adapter
     private void hideRecyclerview() {
         mRecyclerView.setVisibility(View.INVISIBLE);
-        mAutoCompleteAdapter.cleanAdapter();
+        if (mAutoCompleteAdapter != null) {
+            mAutoCompleteAdapter.cleanAdapter();
+        }
         mEditText.setText("");
         mConstraintLayout.setVisibility(View.INVISIBLE);
     }
