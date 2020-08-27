@@ -59,7 +59,6 @@
                 android:id="@+id/search_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:hint="@string/enter_name_min_3_letters"
                 android:imeOptions="actionDone"
                 android:importantForAutofill="no"
                 android:inputType="textAutoComplete"
