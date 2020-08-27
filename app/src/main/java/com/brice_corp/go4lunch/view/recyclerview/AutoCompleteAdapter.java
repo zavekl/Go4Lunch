@@ -56,7 +56,7 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
         this.mBounds = bounds;
         this.mLatLng = latLng;
         this.mContext = context;
-        //TODO
+        //TODO Clef
         Places.initialize(context, "AIzaSyC_1zEF7WGkg-FRO7ATSoX1Y32VY3wzvqM");
         placesClient = com.google.android.libraries.places.api.Places.createClient(context);
     }

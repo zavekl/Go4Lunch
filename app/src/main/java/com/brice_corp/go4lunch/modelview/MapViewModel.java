@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData;
 
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
-import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.repository.ListViewRepository;
 import com.brice_corp.go4lunch.repository.MapRepository;
@@ -18,8 +17,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.xml.sax.XMLFilter;
 
 import java.util.ArrayList;
 
@@ -58,7 +55,7 @@ public class MapViewModel extends AndroidViewModel {
     }
 
     public void setRestaurantListView(ArrayList<String> idPlaceRestaurant) {
-        mListViewRepository.setRestaurant(idPlaceRestaurant);
+        mListViewRepository.setIdPlaceRestaurant(idPlaceRestaurant);
     }
 
     public Task<QuerySnapshot> getUsersDocuments() {
