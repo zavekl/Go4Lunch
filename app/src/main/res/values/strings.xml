@@ -39,5 +39,7 @@
     <string name="tv_person_name_workmate_dont_know_adp">%1$s doesn\'t decided yet</string>
     <string name="notif_title">D\'ont forgot your restaurant meeting!</string>
     <string name="enter_name_min_3_letters">Enter name (min 3 letters)</string>
+    <string name="enter_name_restaurant">Enter restaurant name</string>
+    <string name="enter_name_workmate">Enter workmate name</string>
 
 </resources>

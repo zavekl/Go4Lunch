@@ -2,6 +2,7 @@ package com.brice_corp.go4lunch.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -38,7 +39,9 @@ public class ListViewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ListViewViewModel mListViewViewModel = new ViewModelProvider(requireActivity()).get(ListViewViewModel.class);
 
-        final ListViewRestaurantRecyclerViewAdapter adapter = new ListViewRestaurantRecyclerViewAdapter(requireContext());
+        final ListViewRestaurantRecyclerViewAdapter adapter = new ListViewRestaurantRecyclerViewAdapter(requireContext(), mListViewViewModel);
+        mListViewViewModel.setListViewAdapter(adapter);
+
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
@@ -55,5 +58,6 @@ public class ListViewFragment extends Fragment {
                         }
                     });
         }
+
     }
 }
