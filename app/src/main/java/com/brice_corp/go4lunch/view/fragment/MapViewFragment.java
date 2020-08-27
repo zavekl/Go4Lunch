@@ -56,6 +56,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -75,6 +76,7 @@ public class MapViewFragment extends Fragment {
     private ArrayList<String> mIdPlaceRestaurant = new ArrayList<>();
     private Boolean iconMarker = false;
 
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.bottom_menu_fragment_map_view, container, false);
@@ -85,6 +87,7 @@ public class MapViewFragment extends Fragment {
 
         //Create the map
         mMapView.onCreate(savedInstanceState);
+
 
         //Display the map immediately
         mMapView.onResume();
@@ -133,6 +136,16 @@ public class MapViewFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==10){
+            Log.d(TAG, "onActivityResult : 10");
+            createLocationCallback();
+        }
+    }
+
+
     //Create callback to get the location
     private void createLocationCallback() {
         mLocationCallback = new LocationCallback() {
@@ -141,12 +154,13 @@ public class MapViewFragment extends Fragment {
                 super.onLocationResult(locationResult);
                 mLatLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
                 if (!mIsCenter) {
+                    Log.d(TAG, "onLocationResult: center camera");
                     setCameraPosition();
                     //Set this boolean to true in the order not to center the map on the user's position a second time
                     mIsCenter = true;
+                    getUserTodayRestaurant();
+                    setMarkerOnCLick();
                 }
-                getUserTodayRestaurant();
-                setMarkerOnCLick();
             }
         };
     }
@@ -173,10 +187,11 @@ public class MapViewFragment extends Fragment {
 
     //Get the id of restaurant if workmates eat in today
     private void getUserTodayRestaurant() {
+        mGoogleMap.clear();
+        Log.i(TAG, "getUserTodayRestaurant: start display");
         mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                ArrayList<String> workmates = new ArrayList<>();
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     if (document != null) {
                         if (document.get("eatToday") != null) {
@@ -188,7 +203,6 @@ public class MapViewFragment extends Fragment {
                         Log.d(TAG, "onSuccess: document = null");
                     }
                 }
-
             }
         });
         getRestaurantListAroundUser();
@@ -196,6 +210,8 @@ public class MapViewFragment extends Fragment {
 
     //Display markers of the restaurant which are around the user position
     private void getRestaurantListAroundUser() {
+        Log.d(TAG, "getRestaurantListAroundUser: start");
+        //TODO Extraire methode de creation de marqueur car le live data n'est pas rafrachi --> meme resto + regarder liste.
         mMapViewModel.getRestaurantListAroundUser(mLatLng).observe(MapViewFragment.this, new Observer<NearByPlaceResults>() {
             @Override
             public void onChanged(NearByPlaceResults nearByPlaceResults) {
@@ -259,6 +275,7 @@ public class MapViewFragment extends Fragment {
 
     //If map was saved before, load it
     private void setupMapIfNeeded() {
+        Log.d(TAG, "setupMapIfNeeded: start");
         try {
             MapsInitializer.initialize(requireContext());
         } catch (Exception e) {
@@ -289,7 +306,9 @@ public class MapViewFragment extends Fragment {
 
                 MapStateManager mMapStateManager = new MapStateManager(requireContext());
                 CameraPosition mPosition = mMapStateManager.getSavedCameraPosition();
+                Log.d(TAG, "onMapReady: map saved");
                 if (mPosition != null) {
+                    Log.d(TAG, "onMapReady: in if : set camera position");
                     CameraUpdate update = CameraUpdateFactory.newCameraPosition(mPosition);
                     mGoogleMap.moveCamera(update);
                     mGoogleMap.setMapType(mMapStateManager.getSavedMapType());
