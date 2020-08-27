@@ -1,6 +1,6 @@
 package com.brice_corp.go4lunch.repository;
 
-import com.brice_corp.go4lunch.model.projo.Restaurant;
+import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
@@ -9,12 +9,21 @@ import java.util.ArrayList;
  */
 public class ListViewRepository {
     private ArrayList<String> idPlaceRestaurant = new ArrayList<>();
+    private ListViewRestaurantRecyclerViewAdapter mAdapter;
 
-    public void setRestaurant(ArrayList<String> idPlaceRestaurant) {
+    public void setIdPlaceRestaurant(ArrayList<String> idPlaceRestaurant) {
         this.idPlaceRestaurant = idPlaceRestaurant;
     }
 
     public ArrayList<String> getIdPlaceRestaurant() {
         return idPlaceRestaurant;
+    }
+
+    public ListViewRestaurantRecyclerViewAdapter getListViewAdapter() {
+        return mAdapter;
+    }
+
+    public void setListViewAdapter(ListViewRestaurantRecyclerViewAdapter mAdapter) {
+        this.mAdapter = mAdapter;
     }
 }

@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
+import com.brice_corp.go4lunch.modelview.ListViewViewModel;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -21,15 +24,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by <NIATEL Brice> on <11/05/2020>.
  */
-public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRestaurantRecyclerViewAdapter.ViewHolder> {
+public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRestaurantRecyclerViewAdapter.ViewHolder> implements Filterable {
 
     private static final String TAG = "ListViewRVAdapter";
-    private ArrayList<Restaurant> itemRestaurants;
+    private ArrayList<Restaurant> mItemRestaurants;
     private Context mContext;
+    private ListViewViewModel mListViewViewModel;
+    private ArrayList<Restaurant> mSavedRestaurant = new ArrayList<>();
 
-    public ListViewRestaurantRecyclerViewAdapter(Context context) {
-        itemRestaurants = new ArrayList<>();
+    public ListViewRestaurantRecyclerViewAdapter(Context context, ListViewViewModel listViewViewModel) {
+        mItemRestaurants = new ArrayList<>();
         mContext = context;
+        mListViewViewModel = listViewViewModel;
     }
 
     @NonNull
@@ -43,18 +49,18 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull ListViewRestaurantRecyclerViewAdapter.ViewHolder holder, int position) {
         //Name
-        StringBuilder sb = new StringBuilder(itemRestaurants.get(position).getName());
+        StringBuilder sb = new StringBuilder(mItemRestaurants.get(position).getName());
         sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
         holder.nameRestaurant.setText(sb.toString());
 
         //Address
-        holder.addressRestaurant.setText(itemRestaurants.get(position).getAdrAddress());
+        holder.addressRestaurant.setText(mItemRestaurants.get(position).getAdrAddress());
 
         //PHOTO
-        if (itemRestaurants.get(position).getPhotos() != null) {
+        if (mItemRestaurants.get(position).getPhotos() != null) {
             Glide.with(mContext)
                     .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="
-                            + itemRestaurants.get(position).getPhotos().get(0).getPhotoReference() + "&key="
+                            + mItemRestaurants.get(position).getPhotos().get(0).getPhotoReference() + "&key="
                             + "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA")
                     .centerCrop()
                     .into(holder.imageRestaurant);
@@ -71,23 +77,73 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
 
     public void addItems(Restaurant restaurant) {
         Log.i(TAG, "addItems: " + restaurant);
-        itemRestaurants.add(restaurant);
+        mItemRestaurants.add(restaurant);
         notifyItemInserted(getItemCount() - 1);
         notifyDataSetChanged();
+
+        mSavedRestaurant.add(restaurant);
     }
 
     @Override
     public int getItemCount() {
-        if (itemRestaurants != null) {
-            if (itemRestaurants.size() == 0) {
+        if (mItemRestaurants != null) {
+            if (mItemRestaurants.size() == 0) {
                 return 0;
             } else {
-                return itemRestaurants.size();
+                return mItemRestaurants.size();
             }
         } else {
             return 0;
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+
+                FilterResults results = new FilterResults();
+                if (constraint != null) {
+                    // Query the autocomplete API for the entered constraint
+                    Log.d(TAG, "performFiltering: Before Prediction");
+                    String wordFilter = (String) constraint;
+                    if (mItemRestaurants != null) {
+                        if (!wordFilter.isEmpty()) {
+                            mItemRestaurants = mListViewViewModel.sortRestaurantList(mSavedRestaurant, wordFilter);
+                            Log.d(TAG, "performFiltering: " + mItemRestaurants.size());
+                        } else {
+                            if (mSavedRestaurant.size() != 0) {
+                                Log.d(TAG, "performFiltering: if saved restaurants : " + mSavedRestaurant.size() );
+                                mItemRestaurants = mSavedRestaurant;
+                            }
+                        }
+                        // Results
+                        Log.d(TAG, "performFiltering: After Prediction filtered");
+                        results.values = mItemRestaurants;
+                        results.count = mItemRestaurants.size();
+                    }
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                Log.d(TAG, "Enter in publishResults method");
+                if (results != null) {
+                    // The API returned at least one result, update the data.
+                    Log.d(TAG, "publishResults:  if condition");
+                    notifyDataSetChanged();
+                } else {
+                    // The API did not return any results, invalidate the data set.
+                    Log.e(TAG, "publishResults: zero results from the API");
+                }
+            }
+        }
+
+                ;
+    }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView nameRestaurant;
