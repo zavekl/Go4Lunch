@@ -38,7 +38,7 @@ public class ListViewViewModel extends AndroidViewModel {
         return mRetrofitRepository.getRestaurantDetails(idRestaurant);
     }
 
-    public ArrayList<Restaurant> sortRestaurantList(ArrayList<Restaurant> restaurants, final String word) {
+    public ArrayList<Restaurant> filterRestaurantList(ArrayList<Restaurant> restaurants, final String word) {
         mRestaurantList.clear();
         if (restaurants.size() != 0) {
             for (Restaurant restaurant : restaurants) {

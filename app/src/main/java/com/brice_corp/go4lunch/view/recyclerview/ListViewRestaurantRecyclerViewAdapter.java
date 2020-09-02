@@ -102,19 +102,18 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-
                 FilterResults results = new FilterResults();
                 if (constraint != null) {
                     // Query the autocomplete API for the entered constraint
                     Log.d(TAG, "performFiltering: Before Prediction");
                     String wordFilter = (String) constraint;
-                    if (mItemRestaurants != null) {
+                    if (mItemRestaurants != null && mItemRestaurants.size() != 0) {
                         if (!wordFilter.isEmpty()) {
-                            mItemRestaurants = mListViewViewModel.sortRestaurantList(mSavedRestaurant, wordFilter);
+                            mItemRestaurants = mListViewViewModel.filterRestaurantList(mSavedRestaurant, wordFilter);
                             Log.d(TAG, "performFiltering: " + mItemRestaurants.size());
                         } else {
                             if (mSavedRestaurant.size() != 0) {
-                                Log.d(TAG, "performFiltering: if saved restaurants : " + mSavedRestaurant.size() );
+                                Log.d(TAG, "performFiltering: if saved restaurants : " + mSavedRestaurant.size());
                                 mItemRestaurants = mSavedRestaurant;
                             }
                         }
