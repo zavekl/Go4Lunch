@@ -1,7 +1,9 @@
 package com.brice_corp.go4lunch.view.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
+import com.brice_corp.go4lunch.modelview.DescriptionRestaurantViewModel;
 import com.brice_corp.go4lunch.modelview.MainActivityViewModel;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
@@ -51,6 +54,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.brice_corp.go4lunch.utils.ApplicationPreferences.PREF_ID;
+import static com.brice_corp.go4lunch.utils.Constants.DESCRIPTION_RESTAURANT_REQUESTCODE;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -121,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "onActivityResult: " + requestCode);
-        if (requestCode == Constants.DESCRIPTION_RESTAURANT_REQUESTCODE) {
+        if (requestCode == DESCRIPTION_RESTAURANT_REQUESTCODE) {
             Log.i(TAG, "onActivityResult: hide RV");
             hideRecyclerview();
         }
@@ -191,11 +197,16 @@ public class MainActivity extends AppCompatActivity {
                         buildAlertMessageLogout();
                         return false;
                     case R.id.settings:
+                        Intent settingIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivityForResult(settingIntent, DESCRIPTION_RESTAURANT_REQUESTCODE);
                         return false;
-                    //TODO lancer l'activité settings
+
                     case R.id.lunch:
+                        Intent descActivityIntent = new Intent(MainActivity.this, DescriptionRestaurantActivity.class);
+                        Log.i(TAG, "onNavigationItemSelected: " + getSharedPrefs());
+                        descActivityIntent.putExtra("id", getSharedPrefs());
+                        startActivityForResult(descActivityIntent, DESCRIPTION_RESTAURANT_REQUESTCODE);
                         return false;
-                    //TODO lancer l'activité description restaurant
                     default:
                         break;
                 }
@@ -204,6 +215,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         toolbarButtonNavDrawer();
+    }
+
+    private String getSharedPrefs() {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(PREF_ID, Context.MODE_PRIVATE);
+        return sharedPref.getString("restaurant_id", null);
     }
 
     //Set the listener for the button
@@ -372,7 +388,6 @@ public class MainActivity extends AppCompatActivity {
                     if (s.length() > 2) {
                         mAutoCompleteAdapter.getFilter().filter(s.toString());
                     }
-
                 }
             };
             mEditText.addTextChangedListener(mTextWatcher);
@@ -392,7 +407,6 @@ public class MainActivity extends AppCompatActivity {
                 if (location != null) {
                     Log.i(TAG, "GPS " + location.getLatitude() + " / " + location.getLongitude());
                     mLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-//                    setTextEditText();
                 } else {
                     mLatLng = null;
                     getLocation();

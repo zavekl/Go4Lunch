@@ -45,6 +45,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize"
             tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".view.activity.SettingsActivity" />
     </application>
 
 </manifest>
