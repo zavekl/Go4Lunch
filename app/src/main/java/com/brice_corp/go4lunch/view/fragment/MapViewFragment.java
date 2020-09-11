@@ -14,6 +14,7 @@ import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -76,7 +78,6 @@ public class MapViewFragment extends Fragment {
     private ArrayList<String> mIdPlaceRestaurant = new ArrayList<>();
     private Boolean iconMarker = false;
 
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.bottom_menu_fragment_map_view, container, false);
@@ -87,7 +88,6 @@ public class MapViewFragment extends Fragment {
 
         //Create the map
         mMapView.onCreate(savedInstanceState);
-
 
         //Display the map immediately
         mMapView.onResume();
@@ -139,12 +139,11 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==10){
+        if (resultCode == 10) {
             Log.d(TAG, "onActivityResult : 10");
             createLocationCallback();
         }
     }
-
 
     //Create callback to get the location
     private void createLocationCallback() {
@@ -158,7 +157,8 @@ public class MapViewFragment extends Fragment {
                     setCameraPosition();
                     //Set this boolean to true in the order not to center the map on the user's position a second time
                     mIsCenter = true;
-                    getUserTodayRestaurant();
+                    new GetTasks(MapViewFragment.this).execute();
+                    //getUserTodayRestaurant();
                     setMarkerOnCLick();
                 }
             }
@@ -187,17 +187,18 @@ public class MapViewFragment extends Fragment {
 
     //Get the id of restaurant if workmates eat in today
     private void getUserTodayRestaurant() {
-        mGoogleMap.clear();
-        Log.i(TAG, "getUserTodayRestaurant: start display");
+
+        Log.d(TAG, "getUserTodayRestaurant: start display");
         mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     if (document != null) {
-                        if (document.get("eatToday") != null) {
+                        if (document.get("eatToday") != null && !Objects.requireNonNull(document.get("eatToday")).equals("")) {
                             mIdPlaceRestaurant.add(Objects.requireNonNull(document.get("eatToday")).toString());
+                            Log.d(TAG, "onSuccess: element list :  " + Objects.requireNonNull(document.get("eatToday")).toString());
                         } else {
-                            Log.d(TAG, "onSuccess: document.get(\"eatToday\") = null");
+                            Log.d(TAG, "onSuccess: document.get(\"eatToday\") = null or empty");
                         }
                     } else {
                         Log.d(TAG, "onSuccess: document = null");
@@ -205,22 +206,22 @@ public class MapViewFragment extends Fragment {
                 }
             }
         });
-        getRestaurantListAroundUser();
     }
 
     //Display markers of the restaurant which are around the user position
     private void getRestaurantListAroundUser() {
         Log.d(TAG, "getRestaurantListAroundUser: start");
-        //TODO Extraire methode de creation de marqueur car le live data n'est pas rafrachi --> meme resto + regarder liste.
         mMapViewModel.getRestaurantListAroundUser(mLatLng).observe(MapViewFragment.this, new Observer<NearByPlaceResults>() {
             @Override
             public void onChanged(NearByPlaceResults nearByPlaceResults) {
-                Log.d(TAG, "onChanged: start" + nearByPlaceResults.toString());
+                Log.d(TAG, "onChanged: start :" + nearByPlaceResults.toString());
                 ArrayList<String> idPlaceRestaurant = new ArrayList<>();
 
+                Log.d(TAG, "getRestaurantListAroundUser : onChanged: list : " + mIdPlaceRestaurant);
                 for (Restaurant result : nearByPlaceResults.getResults()) {
                     for (String idPlace : mIdPlaceRestaurant) {
                         if (idPlace.equals(result.getPlaceId())) {
+                            Log.d(TAG, "getRestaurantListAroundUser: onChanged restaurant green : " + idPlace);
                             iconMarker = true;
                             break;
                         }
@@ -306,6 +307,9 @@ public class MapViewFragment extends Fragment {
 
                 MapStateManager mMapStateManager = new MapStateManager(requireContext());
                 CameraPosition mPosition = mMapStateManager.getSavedCameraPosition();
+
+                //Clear the icons at each start of map
+                mGoogleMap.clear();
                 Log.d(TAG, "onMapReady: map saved");
                 if (mPosition != null) {
                     Log.d(TAG, "onMapReady: in if : set camera position");
@@ -333,13 +337,15 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause: ");
         MapStateManager mMapStateManager = new MapStateManager(requireContext());
         mMapStateManager.saveMapState(mGoogleMap);
 
         mMapView.onPause();
         mMapViewModel.stopLocationUpdates(mLocationCallback);
         mIsCenter = false;
-        Log.d(TAG, "onPause: ");
+
+        mIdPlaceRestaurant.clear();
     }
 
     @Override
@@ -352,5 +358,31 @@ public class MapViewFragment extends Fragment {
     public void onLowMemory() {
         super.onLowMemory();
         mMapView.onLowMemory();
+    }
+
+    private static class GetTasks extends AsyncTask<Void, Void, Void> {
+        private WeakReference<MapViewFragment> activityReference;
+
+        GetTasks(MapViewFragment mapViewFragment) {
+            activityReference = new WeakReference<>(mapViewFragment);
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            MapViewFragment mapViewFragment = activityReference.get();
+            if (mapViewFragment != null) {
+                mapViewFragment.getUserTodayRestaurant();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            MapViewFragment mapViewFragment = activityReference.get();
+            if (mapViewFragment != null) {
+                mapViewFragment.getRestaurantListAroundUser();
+            }
+        }
     }
 }
