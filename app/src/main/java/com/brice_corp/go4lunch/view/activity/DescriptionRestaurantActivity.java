@@ -33,6 +33,7 @@ import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.DescriptionRestaurantViewModel;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.repository.RetrofitRepository;
+import com.brice_corp.go4lunch.utils.ApplicationPreferences;
 import com.brice_corp.go4lunch.utils.NotificationWorker;
 import com.brice_corp.go4lunch.view.recyclerview.DescriptionRestaurantRecyclerViewAdapter;
 import com.bumptech.glide.Glide;
@@ -42,6 +43,8 @@ import com.google.firebase.firestore.Query;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static com.brice_corp.go4lunch.utils.ApplicationPreferences.PREF_ID;
 
 public class DescriptionRestaurantActivity extends AppCompatActivity {
     private static final String TAG = "DescRestaurantActivity";
@@ -69,6 +72,8 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     private DescriptionRestaurantViewModel mViewModel;
     private Query query;
 
+    private ApplicationPreferences applicationPreferences;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,20 +93,6 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle mySavedInstanceState) {
-        super.onSaveInstanceState(mySavedInstanceState);
-        mySavedInstanceState.putString("restaurant_id", mRestaurantId);
-        Log.i(TAG, "onSaveInstanceState: ");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mRestaurantId = savedInstanceState.getString("restaurant_id");
-        Log.i(TAG, "onRestoreInstanceState: " + mRestaurantId);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         Log.i(TAG, "onResume: ");
@@ -113,18 +104,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
         Log.d(TAG, "onStop: ");
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("restaurant_id", mRestaurantId);
-        editor.apply();
-    }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.clear().apply();
     }
 
     //Get id of restaurant from intent
@@ -135,6 +115,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
         ftUserRepository = ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository();
 
         mRestaurantId = intentValue.getStringExtra("id");
+        Log.i(TAG, "setInformations: " + mRestaurantId);
 
         retrofitRepo.getRestaurantDetails(Objects.requireNonNull(mRestaurantId)).observe(DescriptionRestaurantActivity.this,
                 new Observer<Restaurant>() {
@@ -203,7 +184,6 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
     //Set the OnClickListener on call image and open the call manager of the phone
     private void setOnClickCallPhone(final String phone) {
-        //TODO ajouter couleur différente si indisponible
         mPhone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -287,6 +267,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
     //Set the eat today button
     private void getEatToday() {
+        applicationPreferences = new ApplicationPreferences(getApplicationContext());
         ftUserRepository.getTheEatToday().observe(DescriptionRestaurantActivity.this, new Observer<String>() {
             @Override
             public void onChanged(String aString) {
@@ -298,15 +279,17 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                             mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorFalse));
                             Log.i(TAG, "getEatToday : no : " + aString);
                             stopWorkRequest(DescriptionRestaurantActivity.this);
+                            applicationPreferences.deleteSharedPrefs();
                         } else {
                             mEatTodayButton.setImageResource(R.drawable.ic_check_circle_black_24dp);
                             mEatTodayButton.setTag(R.drawable.ic_check_circle_black_24dp);
                             mEatTodayButton.setColorFilter(getResources().getColor(R.color.colorTrue));
                             Log.i(TAG, "getEatToday : yes : " + aString);
                             buildNotification();
+                            applicationPreferences.setSharedPrefs(mRestaurantId);
                         }
                     } else {
-                        Log.i(TAG, "aString = " + aString + " / mRestaurantId = " + mRestaurantId);
+                        Log.d(TAG, "aString = " + aString + " / mRestaurantId = " + mRestaurantId);
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "onChanged:getEatToday :  ", e);
@@ -339,7 +322,6 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
     //Set the recyclerview
     private void setUpRecyclerView() {
         Log.i(TAG, "Enter in setRecyclerview");
-
         mRecyclerView.addItemDecoration(new DividerItemDecoration(DescriptionRestaurantActivity.this, DividerItemDecoration.VERTICAL));
 
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>().setQuery(query, User.class)
