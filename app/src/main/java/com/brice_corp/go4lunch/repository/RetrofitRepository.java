@@ -1,11 +1,13 @@
 package com.brice_corp.go4lunch.repository;
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 
@@ -28,13 +30,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitRepository {
     private static final String TAG = "RetrofitRepository";
 
-    public static final int RADIUS = 2500;
-    public static final boolean SENSOR = true;
-    public static final String TYPESEARCH = "restaurant";
+    private Context mContext;
+
+    private static final int RADIUS = 2500;
+    private static final boolean SENSOR = true;
+    private static final String TYPESEARCH = "restaurant";
 
     private ApiGoogleMapRetrofit mApiService;
 
-    public RetrofitRepository() {
+    public RetrofitRepository(Context context) {
+        mContext = context;
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -76,7 +81,7 @@ public class RetrofitRepository {
     public LiveData<NearByPlaceResults> getRestaurantListAroundUser(String latLng) {
         final MutableLiveData<NearByPlaceResults> liveData = new MutableLiveData<>();
         //TODO KEY
-        final Call<NearByPlaceResults> call = mApiService.getRestaurantListAroundUser(latLng, RADIUS, TYPESEARCH, SENSOR, "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA");
+        final Call<NearByPlaceResults> call = mApiService.getRestaurantListAroundUser(latLng, RADIUS, TYPESEARCH, SENSOR, mContext.getResources().getString(R.string.map_api_key));
 
         call.enqueue(new Callback<NearByPlaceResults>() {
             @Override

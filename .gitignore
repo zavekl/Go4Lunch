@@ -96,3 +96,4 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 .cxx
+/gradle.properties
