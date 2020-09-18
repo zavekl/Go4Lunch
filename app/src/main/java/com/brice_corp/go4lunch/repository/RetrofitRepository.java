@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.brice_corp.go4lunch.BuildConfig;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
@@ -59,7 +60,7 @@ public class RetrofitRepository {
     //Get the restaurant information with Place API
     public LiveData<Restaurant> getRestaurantDetails(@NonNull String idRestaurant) {
         final MutableLiveData<Restaurant> restaurantDetailsResults = new MutableLiveData<>();
-        mApiService.getRestaurantDetails(idRestaurant, "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA").enqueue(
+        mApiService.getRestaurantDetails(idRestaurant, mContext.getResources().getString(R.string.map_api_key)).enqueue(
                 new Callback<Restaurant>() {
                     @Override
                     public void onResponse(@NotNull Call<Restaurant> call, @NotNull Response<Restaurant> response) {
@@ -80,7 +81,6 @@ public class RetrofitRepository {
 
     public LiveData<NearByPlaceResults> getRestaurantListAroundUser(String latLng) {
         final MutableLiveData<NearByPlaceResults> liveData = new MutableLiveData<>();
-        //TODO KEY
         final Call<NearByPlaceResults> call = mApiService.getRestaurantListAroundUser(latLng, RADIUS, TYPESEARCH, SENSOR, mContext.getResources().getString(R.string.map_api_key));
 
         call.enqueue(new Callback<NearByPlaceResults>() {

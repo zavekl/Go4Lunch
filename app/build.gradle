@@ -20,14 +20,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
-
-//            buildConfigField ("String", "MapApiKey", go4lunch_mapAPIKey)
-            resValue ("string", "map_api_key", go4lunch_mapAPIKey)
-            resValue ("string", "map_api_key", go4lunch_placeAPIKey)
+//            resValue ("string", "map_api_key", go4lunch_mapAPIKey)
+//            resValue ("string", "place_api_key", go4lunch_placeAPIKey)
         }
         debug {
 //            buildConfigField ("String", "MapApiKey", go4lunch_mapAPIKey)
-            resValue ("string", "map_api_key", go4lunch_mapAPIKey)
+//            resValue ("string", "map_api_key", go4lunch_mapAPIKey)
             resValue ("string", "map_api_key", go4lunch_placeAPIKey)
         }
     }
@@ -83,9 +81,10 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:4.4.0"
 
     //WorkManager
-//    implementation "androidx.work:work-runtime:2.4.0"
     implementation("androidx.work:work-runtime:2.4.0") {
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
-//    implementation 'com.google.guava:guava:27.0.1-android'
+
+    //Date
+    implementation 'org.threeten:threetenbp:1.4.4'
 }
