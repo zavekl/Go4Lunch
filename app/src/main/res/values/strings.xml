@@ -42,4 +42,6 @@
     <string name="enter_name_restaurant">Enter restaurant name</string>
     <string name="enter_name_workmate">Enter workmate name</string>
 
+
+    <string name="no_hour">No information</string>
 </resources>
