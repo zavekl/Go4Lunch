@@ -53,7 +53,7 @@ public class ListViewFragment extends Fragment {
                             Restaurant currentRestaurant = restaurant.getResult();
                             if (currentRestaurant != null) {
                                 adapter.addItems(new Restaurant(currentRestaurant.getName(), currentRestaurant.getFormattedAddress(), currentRestaurant.getRating(),
-                                        currentRestaurant.getOpeningHours(), currentRestaurant.getPhotos()));
+                                        currentRestaurant.getOpeningHours(), currentRestaurant.getPhotos(), currentRestaurant.getPlaceId()));
                             }
                         }
                     });
