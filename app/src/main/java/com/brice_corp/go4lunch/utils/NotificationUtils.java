@@ -38,7 +38,7 @@ class NotificationUtils {
         StringBuilder workmateNames = new StringBuilder(context.getString(R.string.stg_workmates) + " ");
         for (int i = 0; i < workmates.size(); i++) {
             workmateNames.append(workmates.get(i));
-            if (i != workmates.size()-1) {
+            if (i != workmates.size() - 1) {
                 workmateNames.append(" / ");
             }
         }
