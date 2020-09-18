@@ -21,7 +21,7 @@ public class ContainerDependencies {
         this.mContext = mContext;
         mMapRepository = new MapRepository(mContext);
         mFirestoreUserRepository = new FirestoreUserRepository();
-        mRetrofitRepository = new RetrofitRepository();
+        mRetrofitRepository = new RetrofitRepository(mContext);
         mListViewRepository= new ListViewRepository();
     }
 

@@ -1,6 +1,8 @@
 package com.brice_corp.go4lunch.view.recyclerview;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +15,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.model.projo.Period;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.ListViewViewModel;
+import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -47,7 +52,8 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListViewRestaurantRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListViewRestaurantRecyclerViewAdapter.ViewHolder holder, final int position) {
+        Log.d(TAG, "onBindViewHolder: all : " + mItemRestaurants.get(position).toString());
         //Name
         StringBuilder sb = new StringBuilder(mItemRestaurants.get(position).getName());
         sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
@@ -61,7 +67,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
             Glide.with(mContext)
                     .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="
                             + mItemRestaurants.get(position).getPhotos().get(0).getPhotoReference() + "&key="
-                            + "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA")
+                            + mContext.getResources().getString(R.string.map_api_key))
                     .centerCrop()
                     .into(holder.imageRestaurant);
         } else {
@@ -71,8 +77,22 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
                     .into(holder.imageRestaurant);
         }
 
-        //TODO Set HOUR
-        holder.scheduleRestaurant.setText("A FAIRE HEURE");
+        if (mItemRestaurants.get(position).getOpeningHours() != null) {
+            holder.scheduleRestaurant.setText(mListViewViewModel.getOpeningHoursSorted(mItemRestaurants.get(position).getOpeningHours().getPeriods(), mItemRestaurants.get(position).getOpeningHours().getOpenNow()));
+        } else {
+            holder.scheduleRestaurant.setText(mContext.getResources().getString(R.string.no_hour));
+            Log.d(TAG, "onBindViewHolder: periods is null, no information with the API");
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, DescriptionRestaurantActivity.class);
+                Log.i(TAG, "onClick: " + mItemRestaurants.get(position).getPlaceId());
+                intent.putExtra("id", mItemRestaurants.get(position).getPlaceId());
+                ((Activity) mContext).startActivityForResult(intent, 10);
+            }
+        });
+
     }
 
     public void addItems(Restaurant restaurant) {

@@ -91,12 +91,13 @@ public class Restaurant {
         this.adrAddress = address;
     }
 
-    public Restaurant(String name, String address, Double rating, OpeningHours openingHours, List<Photo> photos) {
+    public Restaurant(String name, String address, Double rating, OpeningHours openingHours, List<Photo> photos,String id) {
         this.name = name;
         this.adrAddress = address;
         this.rating = rating;
         this.openingHours = openingHours;
         this.photos=photos;
+        this.placeId=id;
     }
 
 

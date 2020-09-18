@@ -1,16 +1,12 @@
 package com.brice_corp.go4lunch.view.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -58,7 +54,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Objects;
 
 import static com.brice_corp.go4lunch.utils.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;

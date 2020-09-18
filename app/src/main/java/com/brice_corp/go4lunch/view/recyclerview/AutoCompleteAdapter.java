@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.brice_corp.go4lunch.BuildConfig;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
@@ -56,8 +57,8 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
         this.mBounds = bounds;
         this.mLatLng = latLng;
         this.mContext = context;
-        //TODO Clef
-        Places.initialize(context, "AIzaSyC_1zEF7WGkg-FRO7ATSoX1Y32VY3wzvqM");
+        Places.initialize(context, context.getResources().getString(R.string.map_api_key));
+
         placesClient = com.google.android.libraries.places.api.Places.createClient(context);
     }
 
