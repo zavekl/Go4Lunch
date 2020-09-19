@@ -1,7 +1,5 @@
 package com.brice_corp.go4lunch.view.activity;
 
-import android.app.TimePickerDialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.modelview.SettingsViewModel;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.brice_corp.go4lunch.utils.WorkerManager.stopWorkRequest;
 
@@ -58,12 +58,11 @@ public class SettingsActivity extends AppCompatActivity {
         mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                timeNotification = (hourOfDay * 60 * 1000) + (minute * 1000);
+                timeNotification = TimeUnit.HOURS.toMillis(hourOfDay) + TimeUnit.MINUTES.toMillis(minute);
                 Log.d(TAG, "onTimeChanged: " + timeNotification);
                 stopWorkRequest(getApplicationContext());
                 mViewModel.setWorker(timeNotification);
             }
         });
     }
-
 }

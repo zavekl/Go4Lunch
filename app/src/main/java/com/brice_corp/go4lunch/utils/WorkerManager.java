@@ -10,6 +10,9 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalTime;
+
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -42,10 +45,12 @@ public class WorkerManager {
         Calendar notificationDate = Calendar.getInstance();
         long nowTimeInMillis = actualDate.getTimeInMillis();
 
+        long actualTime = TimeUnit.HOURS.toMillis(actualDate.get(Calendar.HOUR_OF_DAY)) + TimeUnit.MINUTES.toMillis(actualDate.get(Calendar.MINUTE)) +
+                TimeUnit.SECONDS.toMillis(actualDate.get(Calendar.SECOND));
+
         if (mNotifTime != null) {
             Log.d(TAG, "setWorker: time from picker : " + mNotifTime);
-            Log.d(TAG, "setWorker: now time  : " + nowTimeInMillis);
-            delay = mNotifTime - nowTimeInMillis;
+            delay = mNotifTime - actualTime;
             Log.d(TAG, "setWorker: notif time " + delay);
         } else {
             notificationDate.set(Calendar.HOUR_OF_DAY, 12);
