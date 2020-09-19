@@ -253,7 +253,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
     //Set the eat today button
     private void getEatToday() {
-        applicationPreferences = new ApplicationPreferences(getApplicationContext());
+        applicationPreferences = new ApplicationPreferences(this);
         ftUserRepository.getTheEatToday().observe(DescriptionRestaurantActivity.this, new Observer<String>() {
             @Override
             public void onChanged(String aString) {

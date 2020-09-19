@@ -42,9 +42,25 @@ public class ApplicationPreferences {
 
     public void setSharedPrefsID(String idRestaurant) {
         Log.d(TAG, "setSharedPrefsID: ");
-        SharedPreferences sharedPref = mContext.getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = mContext.getSharedPreferences(PREF_ID, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("restaurant_id", idRestaurant);
+        editor.apply();
+    }
+
+    public String getSharedPrefsID() {
+        SharedPreferences sharedPref = mContext.getApplicationContext().getSharedPreferences(PREF_ID, Context.MODE_PRIVATE);
+        return sharedPref.getString("restaurant_id", null);
+    }
+
+    void setSharedPrefsData(Data data) {
+        Log.d(TAG, "setSharedPrefsData: ");
+        SharedPreferences sharedPref = mContext.getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("rname", data.getString(RNAME));
+        editor.putString("raddress", data.getString(RADDRESS));
+        editor.putString("rid", data.getString(RID));
+
         editor.apply();
     }
 
@@ -54,25 +70,9 @@ public class ApplicationPreferences {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear().apply();
     }
-
-    void setSharedPrefsData(Data data) {
-        Log.d(TAG, "setSharedPrefsData: ");
-        SharedPreferences sharedPref = mContext.getSharedPreferences(PREF_ID, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("rname", data.getString(RNAME));
-        editor.putString("raddress", data.getString(RADDRESS));
-        editor.putString("rid", data.getString(RID));
-
-        editor.apply();
-    }
-
-    public String getSharedPrefsID() {
-        SharedPreferences sharedPref = mContext.getApplicationContext().getSharedPreferences(PREF_ID, Context.MODE_PRIVATE);
-        return sharedPref.getString("restaurant_id", null);
-    }
-
-    public ArrayList<String> getSharedPrefsDATA() {
-        SharedPreferences sharedPref = mContext.getApplicationContext().getSharedPreferences(PREF_ID, Context.MODE_PRIVATE);
+    
+    ArrayList<String> getSharedPrefsDATA() {
+        SharedPreferences sharedPref = mContext.getApplicationContext().getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE);
         return new ArrayList<>(Arrays.asList(sharedPref.getString("rname", null), sharedPref.getString("rname", null),
                 sharedPref.getString("rname", null)));
     }
