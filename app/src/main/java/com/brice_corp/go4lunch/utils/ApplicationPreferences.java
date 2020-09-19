@@ -70,7 +70,7 @@ public class ApplicationPreferences {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear().apply();
     }
-    
+
     ArrayList<String> getSharedPrefsDATA() {
         SharedPreferences sharedPref = mContext.getApplicationContext().getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE);
         return new ArrayList<>(Arrays.asList(sharedPref.getString("rname", null), sharedPref.getString("rname", null),

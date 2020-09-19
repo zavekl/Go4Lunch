@@ -63,7 +63,6 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         holder.addressRestaurant.setText(mItemRestaurants.get(position).getAdrAddress());
 
         //PHOTO
-        //TODO
         if (mItemRestaurants.get(position).getPhotos() != null) {
             Glide.with(mContext)
                     .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="

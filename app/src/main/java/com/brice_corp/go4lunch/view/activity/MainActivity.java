@@ -200,7 +200,6 @@ public class MainActivity extends AppCompatActivity {
                         Intent settingIntent = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivityForResult(settingIntent, DESCRIPTION_RESTAURANT_REQUESTCODE);
                         return false;
-
                     case R.id.lunch:
                         Intent descActivityIntent = new Intent(MainActivity.this, DescriptionRestaurantActivity.class);
                         Log.d(TAG, "onNavigationItemSelected: " + mMainActivityViewModel.getSharedPrefsID());
