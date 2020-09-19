@@ -60,6 +60,7 @@ public class RetrofitRepository {
     //Get the restaurant information with Place API
     public LiveData<Restaurant> getRestaurantDetails(@NonNull String idRestaurant) {
         final MutableLiveData<Restaurant> restaurantDetailsResults = new MutableLiveData<>();
+        //TODO
         mApiService.getRestaurantDetails(idRestaurant, mContext.getResources().getString(R.string.map_api_key)).enqueue(
                 new Callback<Restaurant>() {
                     @Override
@@ -81,6 +82,7 @@ public class RetrofitRepository {
 
     public LiveData<NearByPlaceResults> getRestaurantListAroundUser(String latLng) {
         final MutableLiveData<NearByPlaceResults> liveData = new MutableLiveData<>();
+        //TODO
         final Call<NearByPlaceResults> call = mApiService.getRestaurantListAroundUser(latLng, RADIUS, TYPESEARCH, SENSOR, mContext.getResources().getString(R.string.map_api_key));
 
         call.enqueue(new Callback<NearByPlaceResults>() {
