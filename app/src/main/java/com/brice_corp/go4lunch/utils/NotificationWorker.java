@@ -18,15 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.brice_corp.go4lunch.utils.Constants.RADDRESS;
+import static com.brice_corp.go4lunch.utils.Constants.RID;
+import static com.brice_corp.go4lunch.utils.Constants.RNAME;
+
 
 /**
  * Created by <NIATEL Brice> on <31/07/2020>.
  */
 public class NotificationWorker extends Worker {
     private static final String TAG = "NotificationWorker";
-    private static final String RNAME = "restaurant_name";
-    private static final String RID = "restaurant_id";
-    private static final String RADDRESS = "restaurant_address";
+
 
     private FirestoreUserRepository mFirestoreUserRepository;
 

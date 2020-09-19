@@ -40,4 +40,7 @@
 
 
     <string name="no_hour">Aucune information</string>
+
+
+    <string name="change_hour_of_notification">Changer l\'heure des notifications</string>
 </resources>

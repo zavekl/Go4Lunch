@@ -67,7 +67,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
             Glide.with(mContext)
                     .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="
                             + mItemRestaurants.get(position).getPhotos().get(0).getPhotoReference() + "&key="
-                            + mContext.getResources().getString(R.string.map_api_key))
+                            + mContext.getResources().getString(R.string.place_api_key))
                     .centerCrop()
                     .into(holder.imageRestaurant);
         } else {
