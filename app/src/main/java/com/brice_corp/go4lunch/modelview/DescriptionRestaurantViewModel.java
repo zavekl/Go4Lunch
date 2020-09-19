@@ -5,9 +5,11 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.work.Data;
 
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
+import com.brice_corp.go4lunch.utils.WorkerManager;
 import com.google.firebase.firestore.Query;
 
 import javax.annotation.Nonnull;
@@ -30,5 +32,11 @@ public class DescriptionRestaurantViewModel extends AndroidViewModel {
 
     public MutableLiveData<Boolean> getTheLikeRestaurant(final String id) {
         return mFirestoreUserRepository.getTheLikeRestaurant(id);
+    }
+
+    public void setWorker(Data data) {
+        WorkerManager workerManager = new WorkerManager(getApplication().getApplicationContext());
+        workerManager.setData(data);
+        workerManager.setWorker();
     }
 }

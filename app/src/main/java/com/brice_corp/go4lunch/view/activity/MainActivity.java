@@ -203,8 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.lunch:
                         Intent descActivityIntent = new Intent(MainActivity.this, DescriptionRestaurantActivity.class);
-                        Log.i(TAG, "onNavigationItemSelected: " + getSharedPrefs());
-                        descActivityIntent.putExtra("id", getSharedPrefs());
+                        descActivityIntent.putExtra("id", mMainActivityViewModel .getSharedPrefsID());
                         startActivityForResult(descActivityIntent, DESCRIPTION_RESTAURANT_REQUESTCODE);
                         return false;
                     default:
@@ -215,11 +214,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         toolbarButtonNavDrawer();
-    }
-
-    private String getSharedPrefs() {
-        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(PREF_ID, Context.MODE_PRIVATE);
-        return sharedPref.getString("restaurant_id", null);
     }
 
     //Set the listener for the button

@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.repository.ListViewRepository;
+import com.brice_corp.go4lunch.utils.ApplicationPreferences;
 import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
 
 /**
@@ -22,5 +23,10 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public ListViewRestaurantRecyclerViewAdapter getListViewAdapter() {
         return mListViewRepository.getListViewAdapter();
+    }
+
+    public String getSharedPrefsID(){
+        ApplicationPreferences applicationPreferences = new ApplicationPreferences(getApplication().getApplicationContext());
+        return  applicationPreferences.getSharedPrefsID();
     }
 }
