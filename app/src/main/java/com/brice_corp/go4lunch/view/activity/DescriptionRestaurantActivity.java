@@ -102,13 +102,12 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
         ftUserRepository = ((MyApplication) getApplication()).getContainerDependencies().getFirestoreUserRepository();
 
         mRestaurantId = intentValue.getStringExtra("id");
-        Log.i(TAG, "setInformations: " + mRestaurantId);
+        Log.d(TAG, "setInformations: " + mRestaurantId);
 
         retrofitRepo.getRestaurantDetails(Objects.requireNonNull(mRestaurantId)).observe(DescriptionRestaurantActivity.this,
                 new Observer<Restaurant>() {
                     @Override
                     public void onChanged(Restaurant restaurant) {
-
                         Restaurant currentRestaurant = restaurant.getResult();
                         Log.i(TAG, "onChanged: " + restaurant.getResult().toString());
                         if (currentRestaurant != null) {
@@ -117,7 +116,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                                 Glide.with(DescriptionRestaurantActivity.this)
                                         .load("https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference="
                                                 + currentRestaurant.getPhotos().get(0).getPhotoReference() + "&key="
-                                                + "AIzaSyAz_L90GbDp0Hzy_GHjnmxsqPjc1sARRYA")
+                                                + getResources().getString(R.string.place_api_key))
                                         .centerCrop()
                                         .into(mImage);
                             } else {
