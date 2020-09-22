@@ -212,15 +212,15 @@ public class MapViewFragment extends Fragment {
                 Log.d(TAG, "onChanged: start :" + nearByPlaceResults.toString());
                 ArrayList<String> idPlaceRestaurant = new ArrayList<>();
 
-                Log.d(TAG, "getRestaurantListAroundUser : onChanged: list : " + mIdPlaceRestaurant);
+                Log.d(TAG, "getRestaurantListAroundUser : get list today restaurant : " + mIdPlaceRestaurant);
                 for (Restaurant result : nearByPlaceResults.getResults()) {
                     for (String idPlace : mIdPlaceRestaurant) {
+                        Log.d(TAG, "get  nearby restaurant : " + result.getPlaceId());
                         if (idPlace.equals(result.getPlaceId())) {
                             Log.d(TAG, "getRestaurantListAroundUser: onChanged restaurant green : " + idPlace);
                             iconMarker = true;
                             break;
                         }
-                        break;
                     }
                     LatLng latLngRestaurant = new LatLng(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng());
                     mGoogleMap.addMarker(new MarkerOptions().position(latLngRestaurant).title(result.getName()).icon(bitmapDescriptorFromVector())).setTag(result.getPlaceId());
@@ -366,6 +366,7 @@ public class MapViewFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             MapViewFragment mapViewFragment = activityReference.get();
             if (mapViewFragment != null) {
+                Log.d(TAG, "doInBackground:  get user today restaurant");
                 mapViewFragment.getUserTodayRestaurant();
             }
             return null;
@@ -376,6 +377,7 @@ public class MapViewFragment extends Fragment {
             super.onPostExecute(aVoid);
             MapViewFragment mapViewFragment = activityReference.get();
             if (mapViewFragment != null) {
+                Log.d(TAG, "onPostExecute: get restaurant list around user");
                 mapViewFragment.getRestaurantListAroundUser();
             }
         }
