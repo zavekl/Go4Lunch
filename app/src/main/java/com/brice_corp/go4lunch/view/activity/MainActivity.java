@@ -1,9 +1,7 @@
 package com.brice_corp.go4lunch.view.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
@@ -32,11 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
-import com.brice_corp.go4lunch.modelview.DescriptionRestaurantViewModel;
 import com.brice_corp.go4lunch.modelview.MainActivityViewModel;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.AuthenticationUtils;
-import com.brice_corp.go4lunch.utils.Constants;
 import com.brice_corp.go4lunch.view.fragment.ListViewFragment;
 import com.brice_corp.go4lunch.view.fragment.MapViewFragment;
 import com.brice_corp.go4lunch.view.fragment.WorkmatesFragment;
@@ -55,7 +51,6 @@ import com.google.android.material.navigation.NavigationView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static com.brice_corp.go4lunch.utils.ApplicationPreferences.PREF_ID;
 import static com.brice_corp.go4lunch.utils.Constants.DESCRIPTION_RESTAURANT_REQUESTCODE;
 
 

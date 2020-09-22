@@ -10,9 +10,6 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.LocalTime;
-
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -28,19 +25,20 @@ public class WorkerManager {
     private static final String WORK_NAME = "work_name";
     private static final String NOTIF = "notification";
 
-    private Long mNotifTime;
-
+    private long mOneDay = 86400000;
     private Data mData;
+
     private Context mApplicationContext;
-    private ApplicationPreferences applicationPreferences;
+    private ApplicationPreferences mApplicationPreferences;
 
     public WorkerManager(Context applicationContext) {
         mApplicationContext = applicationContext;
-        applicationPreferences = new ApplicationPreferences(mApplicationContext);
+        mApplicationPreferences = new ApplicationPreferences(mApplicationContext);
     }
 
     public void setWorker() {
-        final long delay;
+        stopWorkRequest(mApplicationContext);
+        long delay;
         Calendar actualDate = Calendar.getInstance();
         Calendar notificationDate = Calendar.getInstance();
         long nowTimeInMillis = actualDate.getTimeInMillis();
@@ -48,10 +46,9 @@ public class WorkerManager {
         long actualTime = TimeUnit.HOURS.toMillis(actualDate.get(Calendar.HOUR_OF_DAY)) + TimeUnit.MINUTES.toMillis(actualDate.get(Calendar.MINUTE)) +
                 TimeUnit.SECONDS.toMillis(actualDate.get(Calendar.SECOND));
 
-        if (mNotifTime != null) {
-            Log.d(TAG, "setWorker: time from picker : " + mNotifTime);
-            delay = mNotifTime - actualTime;
-            Log.d(TAG, "setWorker: notif time " + delay);
+        if (mApplicationPreferences.getSharedPrefsTime() != 0) {
+            delay = mApplicationPreferences.getSharedPrefsTime() - actualTime;
+            Log.d(TAG, "setWorker: delay of  shared pref : " + delay);
         } else {
             notificationDate.set(Calendar.HOUR_OF_DAY, 12);
             notificationDate.set(Calendar.MINUTE, 0);
@@ -62,12 +59,9 @@ public class WorkerManager {
             Log.d(TAG, "setWorker: actual time" + delay);
         }
 
-        //TODO A mettre au dernier moment pour repousser la date de un jour si l'heure est passé
-//        if (notificationDate.before(actualDate)) {
-//            Log.d(TAG, "setWorker if date : add one day");
-//            //It's 12PM past, set it for tomorrow then
-//            notificationDate.add(Calendar.HOUR_OF_DAY, 24);
-//        }
+        if (delay < 0) {
+            delay = delay + mOneDay;
+        }
 
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
 
@@ -88,18 +82,17 @@ public class WorkerManager {
     public void setData(Data data) {
         if (mData == null) {
             mData = new Data.Builder()
-                    .putString(RNAME, applicationPreferences.getSharedPrefsDATA().get(0))
-                    .putString(RID, applicationPreferences.getSharedPrefsDATA().get(1))
-                    .putString(RADDRESS, applicationPreferences.getSharedPrefsDATA().get(2))
+                    .putString(RNAME, mApplicationPreferences.getSharedPrefsDATA().get(0))
+                    .putString(RID, mApplicationPreferences.getSharedPrefsDATA().get(1))
+                    .putString(RADDRESS, mApplicationPreferences.getSharedPrefsDATA().get(2))
                     .build();
         } else {
-            applicationPreferences.setSharedPrefsData(mData);
+            mApplicationPreferences.setSharedPrefsData(mData);
             this.mData = data;
         }
     }
 
     //TODO Faire en sorte que ce soit sauvegarder et non qu'à chaque fois que desc resto est ouvert que ce soit reset et mit pour midi
     public void setTime(long timeNotification) {
-        mNotifTime = timeNotification;
     }
 }

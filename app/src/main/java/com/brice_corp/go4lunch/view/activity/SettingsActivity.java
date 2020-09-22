@@ -53,7 +53,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    //TODO SAVE HEURE
     private void getHourModification() {
         mTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override

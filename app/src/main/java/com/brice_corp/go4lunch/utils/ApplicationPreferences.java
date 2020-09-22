@@ -4,16 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.work.Data;
-import androidx.work.WorkerParameters;
 
-import com.brice_corp.go4lunch.di.MyApplication;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import static com.brice_corp.go4lunch.utils.Constants.RADDRESS;
 import static com.brice_corp.go4lunch.utils.Constants.RID;
@@ -24,8 +18,9 @@ import static com.brice_corp.go4lunch.utils.Constants.RNAME;
  */
 public class ApplicationPreferences {
     private static final String TAG = "ApplicationPreferences";
-    public static final String PREF_ID = "GO4LUNCH_ID";
-    public static final String PREF_DATA = "GO4LUNCH_DATA";
+    private static final String PREF_ID = "GO4LUNCH_ID";
+    private static final String PREF_DATA = "GO4LUNCH_DATA";
+    private static final String PREF_TIME = "GO4LUNCH_TIME";
 
     private Context mContext;
 
@@ -76,4 +71,26 @@ public class ApplicationPreferences {
         return new ArrayList<>(Arrays.asList(sharedPref.getString("rname", null), sharedPref.getString("rname", null),
                 sharedPref.getString("rname", null)));
     }
+
+    public void deleteSharedPrefsTime() {
+        Log.d(TAG, "deleteSharedPrefsTime: ");
+        SharedPreferences sharedPref = mContext.getSharedPreferences(PREF_TIME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear().apply();
+    }
+
+    public void setSharedPrefsTime(long time) {
+        Log.d(TAG, "setSharedPrefsTime: ");
+        SharedPreferences sharedPref = mContext.getSharedPreferences(PREF_TIME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong("time", time);
+        editor.apply();
+    }
+
+    public long getSharedPrefsTime() {
+        SharedPreferences sharedPref = mContext.getApplicationContext().getSharedPreferences(PREF_TIME, Context.MODE_PRIVATE);
+        return sharedPref.getLong("time", 0);
+    }
+
+
 }
