@@ -20,6 +20,7 @@
     <string name="logout">DECONNEXION</string>
 
 
+    <string name="toast_nolunch">Vous n\'avez pas choisi de restaurant</string>
     <string name="search_image">image recherche</string>
     <string name="restaurant_image">image restaurant </string>
     <string name="phone_description">description phone</string>

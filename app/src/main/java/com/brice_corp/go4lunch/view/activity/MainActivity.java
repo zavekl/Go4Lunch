@@ -202,10 +202,14 @@ public class MainActivity extends AppCompatActivity {
                         return false;
                     case R.id.lunch:
                         Intent descActivityIntent = new Intent(MainActivity.this, DescriptionRestaurantActivity.class);
-                        Log.d(TAG, "onNavigationItemSelected: " + mMainActivityViewModel.getSharedPrefsID());
-                        descActivityIntent.putExtra("id", mMainActivityViewModel.getSharedPrefsID());
-                        startActivityForResult(descActivityIntent, DESCRIPTION_RESTAURANT_REQUESTCODE);
+                        if (mMainActivityViewModel.getSharedPrefsID() == null) {
+                            Toast.makeText(MainActivity.this, getResources().getString(R.string.toast_nolunch), Toast.LENGTH_LONG).show();
+                        } else {
+                            descActivityIntent.putExtra("id", mMainActivityViewModel.getSharedPrefsID());
+                            startActivityForResult(descActivityIntent, DESCRIPTION_RESTAURANT_REQUESTCODE);
+                        }
                         return false;
+
                     default:
                         break;
                 }

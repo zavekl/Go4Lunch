@@ -24,6 +24,7 @@
     <string name="logout">LOGOUT</string>
 
 
+    <string name="toast_nolunch">You didn\'t choose a restaurant</string>
     <string name="search_image">search image</string>
     <string name="restaurant_image">restaurant image</string>
     <string name="phone_description">phone_description</string>
