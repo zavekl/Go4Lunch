@@ -25,7 +25,6 @@ public class WorkerManager {
     private static final String WORK_NAME = "work_name";
     private static final String NOTIF = "notification";
 
-    private long mOneDay = 86400000;
     private Data mData;
 
     private Context mApplicationContext;
@@ -60,6 +59,7 @@ public class WorkerManager {
         }
 
         if (delay < 0) {
+            long mOneDay = 86400000;
             delay = delay + mOneDay;
         }
 
@@ -90,9 +90,5 @@ public class WorkerManager {
             mApplicationPreferences.setSharedPrefsData(mData);
             this.mData = data;
         }
-    }
-
-    //TODO Faire en sorte que ce soit sauvegarder et non qu'à chaque fois que desc resto est ouvert que ce soit reset et mit pour midi
-    public void setTime(long timeNotification) {
     }
 }

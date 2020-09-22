@@ -21,7 +21,6 @@ public class SettingsViewModel extends AndroidViewModel {
     public void setWorker(long timeNotification) {
         WorkerManager workerManager = new WorkerManager(getApplication().getApplicationContext());
         workerManager.setData(null);
-        workerManager.setTime(timeNotification);
         workerManager.setWorker();
         mApplicationPreferences.setSharedPrefsTime(timeNotification);
     }
