@@ -9,6 +9,7 @@ import androidx.work.Data;
 
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
+import com.brice_corp.go4lunch.utils.ApplicationPreferences;
 import com.brice_corp.go4lunch.utils.WorkerManager;
 import com.google.firebase.firestore.Query;
 
@@ -20,10 +21,12 @@ import javax.annotation.Nonnull;
 
 public class DescriptionRestaurantViewModel extends AndroidViewModel {
     private FirestoreUserRepository mFirestoreUserRepository;
+    private ApplicationPreferences mApplicationPreferences;
 
     public DescriptionRestaurantViewModel(@NonNull Application application) {
         super(application);
         mFirestoreUserRepository = ((MyApplication) application).getContainerDependencies().getFirestoreUserRepository();
+        mApplicationPreferences = new ApplicationPreferences(application.getApplicationContext());
     }
 
     public Query getQuery(@Nonnull String idRestaurant) {
@@ -34,9 +37,9 @@ public class DescriptionRestaurantViewModel extends AndroidViewModel {
         return mFirestoreUserRepository.getTheLikeRestaurant(id);
     }
 
-    public void setWorker(Data data) {
+    public void setWorker(String name, String id, String address) {
         WorkerManager workerManager = new WorkerManager(getApplication().getApplicationContext());
-        workerManager.setData(data);
+        mApplicationPreferences.setSharedPrefsData(name, id, address);
         workerManager.setWorker();
     }
 }

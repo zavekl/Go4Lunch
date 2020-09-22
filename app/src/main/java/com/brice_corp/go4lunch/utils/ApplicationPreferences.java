@@ -48,13 +48,13 @@ public class ApplicationPreferences {
         return sharedPref.getString("restaurant_id", null);
     }
 
-    void setSharedPrefsData(Data data) {
+    public void setSharedPrefsData(String name, String id, String address) {
         Log.d(TAG, "setSharedPrefsData: ");
         SharedPreferences sharedPref = mContext.getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("rname", data.getString(RNAME));
-        editor.putString("raddress", data.getString(RADDRESS));
-        editor.putString("rid", data.getString(RID));
+        editor.putString("rname", name);
+        editor.putString("raddress", id);
+        editor.putString("rid", address);
 
         editor.apply();
     }
@@ -68,8 +68,8 @@ public class ApplicationPreferences {
 
     ArrayList<String> getSharedPrefsDATA() {
         SharedPreferences sharedPref = mContext.getApplicationContext().getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE);
-        return new ArrayList<>(Arrays.asList(sharedPref.getString("rname", null), sharedPref.getString("rname", null),
-                sharedPref.getString("rname", null)));
+        return new ArrayList<>(Arrays.asList(sharedPref.getString("rname", null), sharedPref.getString("raddress", null),
+                sharedPref.getString("rid", null)));
     }
 
     public void deleteSharedPrefsTime() {

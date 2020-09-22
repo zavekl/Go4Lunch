@@ -31,6 +31,7 @@ public class NotificationWorker extends Worker {
 
 
     private FirestoreUserRepository mFirestoreUserRepository;
+    private ApplicationPreferences mApplicationPreferences;
 
     private NotificationUtils notificationUtils;
     private String mName;
@@ -42,10 +43,14 @@ public class NotificationWorker extends Worker {
         notificationUtils = new NotificationUtils(context);
 
         mFirestoreUserRepository = ((MyApplication) context).getContainerDependencies().getFirestoreUserRepository();
+        mApplicationPreferences = new ApplicationPreferences(context);
+        setData();
+    }
 
-        mName = getInputData().getString(RNAME);
-        mAddress = getInputData().getString(RADDRESS);
-        mId = getInputData().getString(RID);
+    private void setData() {
+        mName = mApplicationPreferences.getSharedPrefsDATA().get(0);
+        mId = mApplicationPreferences.getSharedPrefsDATA().get(1);
+        mAddress = mApplicationPreferences.getSharedPrefsDATA().get(2);
     }
 
     @NonNull

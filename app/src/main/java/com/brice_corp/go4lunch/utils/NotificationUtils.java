@@ -34,14 +34,20 @@ class NotificationUtils {
         Intent intent = new Intent(context, AuthenticationActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
+        StringBuilder workmateNames;
         //Build String with all the workmates
-        StringBuilder workmateNames = new StringBuilder(context.getString(R.string.stg_workmates) + " ");
-        for (int i = 0; i < workmates.size(); i++) {
-            workmateNames.append(workmates.get(i));
-            if (i != workmates.size() - 1) {
-                workmateNames.append(" / ");
+        if(workmates!=null){
+            workmateNames = new StringBuilder(context.getString(R.string.stg_workmates) + " ");
+            for (int i = 0; i < workmates.size(); i++) {
+                workmateNames.append(workmates.get(i));
+                if (i != workmates.size() - 1) {
+                    workmateNames.append(" / ");
+                }
             }
+        } else{
+            workmateNames = new StringBuilder(context.getString(R.string.stg_no_workmates));
         }
+
 
         //Create a Style for the Notification
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();

@@ -25,8 +25,6 @@ public class WorkerManager {
     private static final String WORK_NAME = "work_name";
     private static final String NOTIF = "notification";
 
-    private Data mData;
-
     private Context mApplicationContext;
     private ApplicationPreferences mApplicationPreferences;
 
@@ -59,6 +57,7 @@ public class WorkerManager {
         }
 
         if (delay < 0) {
+            Log.d(TAG, "setWorker: add one day");
             long mOneDay = 86400000;
             delay = delay + mOneDay;
         }
@@ -66,7 +65,6 @@ public class WorkerManager {
         Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
 
         PeriodicWorkRequest notifRequest = new PeriodicWorkRequest.Builder(NotificationWorker.class, 1, TimeUnit.DAYS)
-                .setInputData(mData)
                 .setConstraints(constraints)
                 .setInitialDelay(delay, TimeUnit.MILLISECONDS)
                 .addTag(NOTIF)
@@ -77,18 +75,5 @@ public class WorkerManager {
 
     public static void stopWorkRequest(Context context) {
         WorkManager.getInstance(context).cancelAllWorkByTag(NOTIF);
-    }
-
-    public void setData(Data data) {
-        if (mData == null) {
-            mData = new Data.Builder()
-                    .putString(RNAME, mApplicationPreferences.getSharedPrefsDATA().get(0))
-                    .putString(RID, mApplicationPreferences.getSharedPrefsDATA().get(1))
-                    .putString(RADDRESS, mApplicationPreferences.getSharedPrefsDATA().get(2))
-                    .build();
-        } else {
-            mApplicationPreferences.setSharedPrefsData(mData);
-            this.mData = data;
-        }
     }
 }

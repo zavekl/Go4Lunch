@@ -321,11 +321,6 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
     //Notification builder
     private void buildNotification() {
-        Data data = new Data.Builder()
-                .putString(RNAME, mRestaurantName)
-                .putString(RID, mRestaurantId)
-                .putString(RADDRESS, mRestaurantAddress)
-                .build();
-        mViewModel.setWorker(data);
+        mViewModel.setWorker(mRestaurantName, mRestaurantId, mRestaurantAddress);
     }
 }

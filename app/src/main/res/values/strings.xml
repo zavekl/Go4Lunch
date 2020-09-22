@@ -34,6 +34,7 @@
 
 
     <string name="stg_workmates">Workmates : </string>
+    <string name="stg_no_workmates">There is no workmate with you.</string>
 
 
     <string name="tv_person_name_workmate_adp">%1$s is eating at %2$s</string>
