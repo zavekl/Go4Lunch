@@ -362,32 +362,4 @@ public class MapViewFragment extends Fragment {
         super.onLowMemory();
         mMapView.onLowMemory();
     }
-
-    private static class GetTasks extends AsyncTask<Void, Void, Void> {
-        private WeakReference<MapViewFragment> activityReference;
-
-        GetTasks(MapViewFragment mapViewFragment) {
-            activityReference = new WeakReference<>(mapViewFragment);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            MapViewFragment mapViewFragment = activityReference.get();
-            if (mapViewFragment != null) {
-                Log.d(TAG, "doInBackground:  get user today restaurant");
-                mapViewFragment.getUserTodayRestaurant();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            MapViewFragment mapViewFragment = activityReference.get();
-            if (mapViewFragment != null) {
-                Log.d(TAG, "onPostExecute: get restaurant list around user");
-                mapViewFragment.getRestaurantListAroundUser();
-            }
-        }
-    }
 }
