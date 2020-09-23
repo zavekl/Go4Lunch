@@ -47,7 +47,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -152,8 +155,8 @@ public class MapViewFragment extends Fragment {
                     setCameraPosition();
                     //Set this boolean to true in the order not to center the map on the user's position a second time
                     mIsCenter = true;
-                    new GetTasks(MapViewFragment.this).execute();
-                    //getUserTodayRestaurant();
+                    getUserTodayRestaurant();
+//                    new GetTasks(MapViewFragment.this).execute();
                     setMarkerOnCLick();
                 }
             }
@@ -182,9 +185,8 @@ public class MapViewFragment extends Fragment {
 
     //Get the id of restaurant if workmates eat in today
     private void getUserTodayRestaurant() {
-
         Log.d(TAG, "getUserTodayRestaurant: start display");
-        mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        Task task = mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
@@ -199,6 +201,12 @@ public class MapViewFragment extends Fragment {
                         Log.d(TAG, "onSuccess: document = null");
                     }
                 }
+                getRestaurantListAroundUser();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "onFailure: " + e);
             }
         });
     }
