@@ -19,7 +19,6 @@ import static com.brice_corp.go4lunch.utils.WorkerManager.stopWorkRequest;
 /**
  * Created by <NIATEL Brice> on <02/09/2020>.
  */
-//TODO Changer l'heure de rappel pourquoi pas ou chercher d'autres paramètres
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "SettingsActivity";
     private ImageView mImageView;

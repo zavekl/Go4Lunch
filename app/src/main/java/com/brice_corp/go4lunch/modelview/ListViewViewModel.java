@@ -64,48 +64,77 @@ public class ListViewViewModel extends AndroidViewModel {
         mListViewRepository.setListViewAdapter(adapter);
     }
 
+    //TODO FAIRE UN FR / ENG SEPARé
     public String getOpeningHoursSorted(List<Period> periodArrayList, Boolean openNow) {
-        String returnString = null;
+        String opening = null;
+
         int actualNumberDay = LocalDate.now().getDayOfWeek().getValue();
+        Log.d(TAG, "getOpeningHoursSorted: actualNumberDay : " + actualNumberDay);
+
         LocalTime actualTime = LocalTime.now();
+
         int i = -1;
+
         for (Period period : periodArrayList) {
             i++;
-            if (period.getClose().getDay().equals(actualNumberDay)) {
-                Log.d(TAG, "getOpeningHoursSorted: in if acutal date");
+            int day = period.getOpen().getDay();
+            if (actualNumberDay == 7) {
+                actualNumberDay = 0;
+            }
+            if (period.getOpen().getDay() == 0 && period.getOpen().getTime().equals("0000")) {
+                Log.d(TAG, "getOpeningHoursSorted: 24/7");
+                opening = "Open 24/7";
+                break;
+            }
+
+            if (day == actualNumberDay) {
                 //Get close time
-                LocalTime close = buildTime(period.getClose().getTime());
-                Log.d(TAG, "getOpeningHoursSorted: in if acutal date : close : " + close);
+                LocalTime closeTime = buildTime(period.getClose().getTime());
+                Log.d(TAG, "getOpeningHoursSorted close : " + closeTime);
 
                 //Get open time
-                LocalTime open = buildTime(period.getOpen().getTime());
-                Log.d(TAG, "getOpeningHoursSorted: in if acutal date : open : " + open);
+                LocalTime openTime = buildTime(period.getOpen().getTime());
+                Log.d(TAG, "getOpeningHoursSorted open : " + openTime);
 
-                //TODO GERER LES DEUX OUVERTURES PAR JOUR
-                //If close
-                if (!openNow) {
-                    //If time is before open hour
-                    if (actualTime.isBefore(open)) {
-                        returnString = "Open at " + open;
+                //If already open with openNow
+                if (openNow) {
+                    Log.d(TAG, "getOpeningHoursSorted openNow");
+                    //Open for less than hour hour left
+                    if (Duration.between(actualTime, closeTime).abs().getSeconds() < 3600) {
+                        Log.d(TAG, "getOpeningHoursSorted: openNow : Close soon");
+                        opening = "Close soon";
                     }
-                    //If time is after close hour
+                    //Open and it will close at closeTime
                     else {
-                        //TODO i + 1? / gerer le passage de dimanche à lundi
-                        LocalTime tomorrowOpenTime = buildTime(periodArrayList.get(i).getOpen().getTime());
-                        returnString = "Open tomorrow at " + tomorrowOpenTime;
+                        Log.d(TAG, "getOpeningHoursSorted: openNow : Open until");
+                        opening = "Open until " + closeTime;
                     }
-                    //If Open
-                } else {
-                    //
-                    if (Duration.between(actualTime, close).abs().getSeconds() < 3600) {
-                        returnString = "Close soon";
-                    } else {
-                        returnString = "Close at " + close;
+                }
+                //If it is not open with openNow
+                else {
+                    Log.d(TAG, "getOpeningHoursSorted: no openNow ");
+                    //Will open after the actual time
+                    if (actualTime.isBefore(openTime)) {
+                        Log.d(TAG, "getOpeningHoursSorted: no openNow : Open at");
+                        opening = "Open at " + openTime;
+                    }
+                    //Will open tomorrow or the second time today
+                    else {
+                        Log.d(TAG, "getOpeningHoursSorted: no openNow : i+ or tomorrow");
+                        //If i+ is the same day break for the second iteration of the list (same day)
+                        if (periodArrayList.get(i + 1).getOpen().getDay() == actualNumberDay) {
+                            Log.d(TAG, "getOpeningHoursSorted: no openNow : i+ or tomorrow : i+");
+                        }
+                        //Open tomorrow
+                        else {
+                            Log.d(TAG, "getOpeningHoursSorted: no openNow : i+ or tomorrow : tomorrow");
+                            opening = "Open tomorrow";
+                        }
                     }
                 }
             }
         }
-        return returnString;
+        return opening;
     }
 
     //TODO METTRE DANS UNE CLASSE AVEC LE RATING
