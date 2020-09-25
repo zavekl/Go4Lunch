@@ -24,8 +24,8 @@
         android:id="@+id/addressRestaurant"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textSize="19sp"
+        android:layout_marginTop="15dp"
+        android:textSize="15sp"
 
         app:layout_constraintEnd_toStartOf="@id/imageRestaurant"
         app:layout_constraintStart_toStartOf="@id/nameRestaurant"
@@ -37,13 +37,24 @@
         android:id="@+id/scheduleRestaurant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:singleLine="true"
-        android:textSize="19sp"
+        android:textSize="15sp"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="@id/addressRestaurant"
         app:layout_constraintTop_toBottomOf="@id/addressRestaurant"
-        tools:text="Open XXX / Close XXX / Close soon" />
+        tools:text="Open until XXX " />
+
+    <RatingBar
+        android:id="@+id/ratingbar_restaurant_listview"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="3"
+        android:stepSize="0.01"
+        android:theme="@style/RatingBar"
+        app:layout_constraintTop_toBottomOf="@id/imageRestaurant"
+        app:layout_constraintEnd_toEndOf="@id/imageRestaurant"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageRestaurant"

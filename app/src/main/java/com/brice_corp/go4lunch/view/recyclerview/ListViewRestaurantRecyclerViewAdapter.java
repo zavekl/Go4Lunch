@@ -9,20 +9,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
-import com.brice_corp.go4lunch.model.projo.Period;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.ListViewViewModel;
 import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -57,10 +56,10 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         //Name
         StringBuilder sb = new StringBuilder(mItemRestaurants.get(position).getName());
         sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
-        holder.nameRestaurant.setText(sb.toString());
+        holder.mNameRestaurant.setText(sb.toString());
 
         //Address
-        holder.addressRestaurant.setText(mItemRestaurants.get(position).getAdrAddress());
+        holder.mAddressRestaurant.setText(mItemRestaurants.get(position).getAdrAddress());
 
         //PHOTO
         if (mItemRestaurants.get(position).getPhotos() != null) {
@@ -69,18 +68,18 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
                             + mItemRestaurants.get(position).getPhotos().get(0).getPhotoReference() + "&key="
                             + mContext.getResources().getString(R.string.place_api_key))
                     .centerCrop()
-                    .into(holder.imageRestaurant);
+                    .into(holder.mImageRestaurant);
         } else {
             Glide.with(mContext)
                     .load(R.drawable.no_image_restaurant)
                     .centerCrop()
-                    .into(holder.imageRestaurant);
+                    .into(holder.mImageRestaurant);
         }
 
         if (mItemRestaurants.get(position).getOpeningHours() != null) {
-            holder.scheduleRestaurant.setText(mListViewViewModel.getOpeningHoursSorted(mItemRestaurants.get(position).getOpeningHours().getPeriods(), mItemRestaurants.get(position).getOpeningHours().getOpenNow()));
+            holder.mScheduleRestaurant.setText(mListViewViewModel.getOpeningHoursSorted(mItemRestaurants.get(position).getOpeningHours().getPeriods(), mItemRestaurants.get(position).getOpeningHours().getOpenNow()));
         } else {
-            holder.scheduleRestaurant.setText(mContext.getResources().getString(R.string.no_hour));
+            holder.mScheduleRestaurant.setText(mContext.getResources().getString(R.string.no_hour));
             Log.d(TAG, "onBindViewHolder: periods is null, no information with the API");
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +92,15 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
             }
         });
 
+        //RATING BAR
+        float rate = mItemRestaurants.get(position).getRating().floatValue();
+        if (rate != 0.0f) {
+            //Convert 5 stars to 3 stars
+            rate = (rate * 3) / 5;
+            holder.mRatingBar.setRating(rate);
+        } else {
+            Log.e(TAG, "setTheRatingBar: no rate from API Place");
+        }
     }
 
     public void addItems(Restaurant restaurant) {
@@ -165,19 +173,21 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView nameRestaurant;
-        final TextView addressRestaurant;
-        final TextView scheduleRestaurant;
-        final CircleImageView imageRestaurant;
-        final View itemList;
+        final TextView mNameRestaurant;
+        final TextView mAddressRestaurant;
+        final TextView mScheduleRestaurant;
+        final CircleImageView mImageRestaurant;
+        final View mItemList;
+        final RatingBar mRatingBar;
 
         ViewHolder(View view) {
             super(view);
-            nameRestaurant = view.findViewById(R.id.nameRestaurant);
-            addressRestaurant = view.findViewById(R.id.addressRestaurant);
-            scheduleRestaurant = view.findViewById(R.id.scheduleRestaurant);
-            imageRestaurant = view.findViewById(R.id.imageRestaurant);
-            itemList = view.findViewById(R.id.item_list_listview);
+            mNameRestaurant = view.findViewById(R.id.nameRestaurant);
+            mAddressRestaurant = view.findViewById(R.id.addressRestaurant);
+            mScheduleRestaurant = view.findViewById(R.id.scheduleRestaurant);
+            mImageRestaurant = view.findViewById(R.id.imageRestaurant);
+            mItemList = view.findViewById(R.id.item_list_listview);
+            mRatingBar = view.findViewById(R.id.ratingbar_restaurant_listview);
         }
     }
 }
