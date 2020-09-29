@@ -26,12 +26,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:textSize="15sp"
-
-        app:layout_constraintEnd_toStartOf="@id/imageRestaurant"
+        android:maxLines="2"
+        app:layout_constraintEnd_toStartOf="@id/distance"
         app:layout_constraintStart_toStartOf="@id/nameRestaurant"
         app:layout_constraintTop_toBottomOf="@id/nameRestaurant"
         tools:text="12 rue du Faubourg Poissonnière" />
 
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/imageRestaurant"
+        app:layout_constraintTop_toBottomOf="@id/nameRestaurant"
+        app:layout_constraintTop_toTopOf="@id/addressRestaurant"
+        tools:text="100m" />
 
     <TextView
         android:id="@+id/scheduleRestaurant"
@@ -53,8 +63,8 @@
         android:numStars="3"
         android:stepSize="0.01"
         android:theme="@style/RatingBar"
-        app:layout_constraintTop_toBottomOf="@id/imageRestaurant"
-        app:layout_constraintEnd_toEndOf="@id/imageRestaurant"/>
+        app:layout_constraintEnd_toEndOf="@id/imageRestaurant"
+        app:layout_constraintTop_toBottomOf="@id/imageRestaurant" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageRestaurant"
@@ -62,9 +72,9 @@
         android:layout_height="90dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        tools:background="@color/quantum_yellow"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/quantum_yellow" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

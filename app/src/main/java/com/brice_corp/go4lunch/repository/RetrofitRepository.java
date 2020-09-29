@@ -9,8 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.brice_corp.go4lunch.BuildConfig;
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.model.projo.DistanceMatrix;
 import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -91,6 +93,26 @@ public class RetrofitRepository {
 
             @Override
             public void onFailure(@NotNull Call<NearByPlaceResults> call, @NotNull Throwable t) {
+                t.printStackTrace();
+            }
+        });
+        return liveData;
+    }
+
+    public LiveData<DistanceMatrix> getDistance(LatLng latLng, String placeId) {
+        final MutableLiveData<DistanceMatrix> liveData = new MutableLiveData<>();
+        Log.d(TAG, "getDistance: " + latLng + placeId);
+        final Call<DistanceMatrix> call = mApiService.getDistance(latLng.latitude + "," + latLng.longitude, "place_id:" + placeId, mContext.getResources().getString(R.string.map_api_key));
+
+        call.enqueue(new Callback<DistanceMatrix>() {
+            @Override
+            public void onResponse(@NonNull Call<DistanceMatrix> call, @NonNull Response<DistanceMatrix> response) {
+                liveData.setValue(response.body());
+                Log.d(TAG, "onResponse: " + response.body());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DistanceMatrix> call, @NonNull Throwable t) {
                 t.printStackTrace();
             }
         });

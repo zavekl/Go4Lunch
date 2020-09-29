@@ -84,6 +84,7 @@ public class Restaurant {
     @Expose
     private String status;
 
+    private String mDistanceMeter;
 
     public Restaurant(String id, String name, String address) {
         this.id = id;
@@ -91,13 +92,14 @@ public class Restaurant {
         this.adrAddress = address;
     }
 
-    public Restaurant(String name, String address, Double rating, OpeningHours openingHours, List<Photo> photos,String id) {
+    public Restaurant(String name, String address, Double rating, OpeningHours openingHours, List<Photo> photos,String id, String distance) {
         this.name = name;
         this.adrAddress = address;
         this.rating = rating;
         this.openingHours = openingHours;
         this.photos=photos;
         this.placeId=id;
+        this.mDistanceMeter = distance;
     }
 
 
@@ -202,6 +204,9 @@ public class Restaurant {
         return status;
     }
 
+    public String getDistanceMeter() {
+        return mDistanceMeter;
+    }
     @Override
     public String toString() {
         return "Restaurant{" +

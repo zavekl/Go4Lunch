@@ -1,6 +1,7 @@
 package com.brice_corp.go4lunch.repository;
 
 import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 public class ListViewRepository {
     private ArrayList<String> idPlaceRestaurant = new ArrayList<>();
     private ListViewRestaurantRecyclerViewAdapter mAdapter;
+    private LatLng mLatlng;
 
     public void setIdPlaceRestaurant(ArrayList<String> idPlaceRestaurant) {
         this.idPlaceRestaurant = idPlaceRestaurant;
@@ -25,5 +27,13 @@ public class ListViewRepository {
 
     public void setListViewAdapter(ListViewRestaurantRecyclerViewAdapter mAdapter) {
         this.mAdapter = mAdapter;
+    }
+
+    public void setLatlng(LatLng latlng) {
+        this.mLatlng = latlng;
+    }
+
+    public LatLng getLatlng() {
+        return mLatlng;
     }
 }

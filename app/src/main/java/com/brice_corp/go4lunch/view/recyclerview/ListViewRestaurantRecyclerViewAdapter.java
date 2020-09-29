@@ -58,7 +58,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
         holder.mNameRestaurant.setText(sb.toString());
 
-        //Address
+        //ADDRESS
         holder.mAddressRestaurant.setText(mItemRestaurants.get(position).getAdrAddress());
 
         //PHOTO
@@ -93,14 +93,21 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         });
 
         //RATING BAR
-        float rate = mItemRestaurants.get(position).getRating().floatValue();
-        if (rate != 0.0f) {
+        if (mItemRestaurants.get(position).getRating() != null) {
+            float rate = mItemRestaurants.get(position).getRating().floatValue();
+//            rate != 0.0f
             //Convert 5 stars to 3 stars
             rate = (rate * 3) / 5;
             holder.mRatingBar.setRating(rate);
         } else {
             Log.e(TAG, "setTheRatingBar: no rate from API Place");
         }
+
+        //DISTANCE
+        holder.mDistanceRestaurant.setText(mItemRestaurants.get(position).
+
+                getDistanceMeter());
+
     }
 
     public void addItems(Restaurant restaurant) {
@@ -179,6 +186,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         final CircleImageView mImageRestaurant;
         final View mItemList;
         final RatingBar mRatingBar;
+        final TextView mDistanceRestaurant;
 
         ViewHolder(View view) {
             super(view);
@@ -188,6 +196,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
             mImageRestaurant = view.findViewById(R.id.imageRestaurant);
             mItemList = view.findViewById(R.id.item_list_listview);
             mRatingBar = view.findViewById(R.id.ratingbar_restaurant_listview);
+            mDistanceRestaurant = view.findViewById(R.id.distance);
         }
     }
 }

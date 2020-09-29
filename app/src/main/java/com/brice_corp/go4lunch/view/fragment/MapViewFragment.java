@@ -150,6 +150,8 @@ public class MapViewFragment extends Fragment {
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 mLatLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
+                mMapViewModel.setLatlng(mLatLng);
+
                 if (!mIsCenter) {
                     Log.d(TAG, "onLocationResult: center camera");
                     setCameraPosition();
@@ -186,7 +188,7 @@ public class MapViewFragment extends Fragment {
     //Get the id of restaurant if workmates eat in today
     private void getUserTodayRestaurant() {
         Log.d(TAG, "getUserTodayRestaurant: start display");
-        Task task =mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        Task task = mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {

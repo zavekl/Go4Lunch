@@ -1,6 +1,7 @@
 package com.brice_corp.go4lunch.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.model.projo.DistanceMatrix;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.ListViewViewModel;
 import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
@@ -25,6 +27,7 @@ import java.util.Objects;
  * Created by <NIATEL Brice> on <08/04/2020>.
  */
 public class ListViewFragment extends Fragment {
+    private static final String TAG = "ListViewFragment";
     private RecyclerView mRecyclerView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +40,7 @@ public class ListViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ListViewViewModel mListViewViewModel = new ViewModelProvider(requireActivity()).get(ListViewViewModel.class);
+        final ListViewViewModel mListViewViewModel = new ViewModelProvider(requireActivity()).get(ListViewViewModel.class);
 
         final ListViewRestaurantRecyclerViewAdapter adapter = new ListViewRestaurantRecyclerViewAdapter(requireContext(), mListViewViewModel);
         mListViewViewModel.setListViewAdapter(adapter);
@@ -50,10 +53,16 @@ public class ListViewFragment extends Fragment {
                     new Observer<Restaurant>() {
                         @Override
                         public void onChanged(Restaurant restaurant) {
-                            Restaurant currentRestaurant = restaurant.getResult();
+                            final Restaurant currentRestaurant = restaurant.getResult();
                             if (currentRestaurant != null) {
-                                adapter.addItems(new Restaurant(currentRestaurant.getName(), currentRestaurant.getFormattedAddress(), currentRestaurant.getRating(),
-                                        currentRestaurant.getOpeningHours(), currentRestaurant.getPhotos(), currentRestaurant.getPlaceId()));
+                                mListViewViewModel.getDistance(currentRestaurant.getPlaceId()).observe(getViewLifecycleOwner(), new Observer<DistanceMatrix>() {
+                                    @Override
+                                    public void onChanged(DistanceMatrix distanceMatrix) {
+                                        adapter.addItems(new Restaurant(currentRestaurant.getName(), currentRestaurant.getFormattedAddress(), currentRestaurant.getRating(),
+                                                currentRestaurant.getOpeningHours(), currentRestaurant.getPhotos(), currentRestaurant.getPlaceId(),
+                                                distanceMatrix.getRows().get(0).getElements().get(0).getDistance().getText()));
+                                    }
+                                });
                             }
                         }
                     });
