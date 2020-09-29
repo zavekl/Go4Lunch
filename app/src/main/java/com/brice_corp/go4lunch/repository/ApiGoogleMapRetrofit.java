@@ -1,5 +1,6 @@
 package com.brice_corp.go4lunch.repository;
 
+import com.brice_corp.go4lunch.model.projo.DistanceMatrix;
 import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 
@@ -27,4 +28,10 @@ public interface ApiGoogleMapRetrofit {
             @Query("sensor") boolean isSensor,
             @Query("key") String keyAPI
     );
+
+    @GET("maps/api/distancematrix/json?")
+    Call<DistanceMatrix>getDistance(
+    @Query("origins") String origin,
+    @Query("destinations") String destination,
+    @Query("key") String key);
 }

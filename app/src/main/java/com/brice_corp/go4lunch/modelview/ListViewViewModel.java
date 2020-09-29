@@ -8,11 +8,14 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.brice_corp.go4lunch.di.MyApplication;
+import com.brice_corp.go4lunch.model.projo.DistanceMatrix;
+import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Period;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.repository.ListViewRepository;
 import com.brice_corp.go4lunch.repository.RetrofitRepository;
 import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDate;
@@ -76,8 +79,10 @@ public class ListViewViewModel extends AndroidViewModel {
         int i = -1;
 
         for (Period period : periodArrayList) {
+            Log.d(TAG, "getOpeningHoursSorted: in loop for each");
             i++;
             int day = period.getOpen().getDay();
+            Log.d(TAG, "getOpeningHoursSorted: getDay restaurant : " + day);
             if (actualNumberDay == 7) {
                 actualNumberDay = 0;
             }
@@ -134,7 +139,15 @@ public class ListViewViewModel extends AndroidViewModel {
                 }
             }
         }
-        return opening;
+        if (opening == null) {
+            return "Closed";
+        } else {
+            return opening;
+        }
+    }
+
+    public LiveData<DistanceMatrix> getDistance(String placeId) {
+        return mRetrofitRepository.getDistance(mListViewRepository.getLatlng(), placeId);
     }
 
     //TODO METTRE DANS UNE CLASSE AVEC LE RATING

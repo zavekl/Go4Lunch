@@ -61,4 +61,8 @@ public class MapViewModel extends AndroidViewModel {
     public Task<QuerySnapshot> getUsersDocuments() {
         return mFirestoreRepository.getUsersDocuments();
     }
+
+    public void setLatlng(LatLng latlng) {
+        mListViewRepository.setLatlng(latlng);
+    }
 }
