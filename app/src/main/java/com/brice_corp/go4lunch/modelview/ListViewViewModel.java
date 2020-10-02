@@ -8,14 +8,13 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.brice_corp.go4lunch.di.MyApplication;
+import com.brice_corp.go4lunch.model.IdPlaceNumber;
 import com.brice_corp.go4lunch.model.projo.DistanceMatrix;
-import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Period;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.repository.ListViewRepository;
 import com.brice_corp.go4lunch.repository.RetrofitRepository;
 import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.threeten.bp.Duration;
 import org.threeten.bp.LocalDate;
@@ -39,7 +38,7 @@ public class ListViewViewModel extends AndroidViewModel {
         mRetrofitRepository = ((MyApplication) application).getContainerDependencies().getRestrofitRepository();
     }
 
-    public ArrayList<String> getIdPlaceRestaurantList() {
+    public ArrayList<IdPlaceNumber> getIdPlaceRestaurantList() {
         return mListViewRepository.getIdPlaceRestaurant();
     }
 
@@ -150,7 +149,6 @@ public class ListViewViewModel extends AndroidViewModel {
         return mRetrofitRepository.getDistance(mListViewRepository.getLatlng(), placeId);
     }
 
-    //TODO METTRE DANS UNE CLASSE AVEC LE RATING
     private LocalTime buildTime(String hoursAndMinutes) {
         StringBuilder stringBuilderReturn = new StringBuilder(hoursAndMinutes);
         stringBuilderReturn.insert(2, ":");

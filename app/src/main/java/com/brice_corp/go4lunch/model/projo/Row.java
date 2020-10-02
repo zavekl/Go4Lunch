@@ -11,7 +11,7 @@ import java.util.List;
 public class Row {
     @SerializedName("elements")
     @Expose
-    public List<Element> elements = null;
+    private List<Element> elements = null;
 
     public List<Element> getElements() {
         return elements;
@@ -19,5 +19,12 @@ public class Row {
 
     public void setElements(List<Element> elements) {
         this.elements = elements;
+    }
+
+    @Override
+    public String toString() {
+        return "Row{" +
+                "elements=" + elements +
+                '}';
     }
 }

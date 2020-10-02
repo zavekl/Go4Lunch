@@ -27,6 +27,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.model.IdPlaceNumber;
 import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.MapViewModel;
@@ -75,6 +76,7 @@ public class MapViewFragment extends Fragment {
     private Boolean mIsCenter = false;
     private ArrayList<String> mIdPlaceRestaurant = new ArrayList<>();
     private Boolean iconMarker = false;
+    private int mNumberWorkamteEat;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -220,21 +222,26 @@ public class MapViewFragment extends Fragment {
             @Override
             public void onChanged(NearByPlaceResults nearByPlaceResults) {
                 Log.d(TAG, "onChanged: start :" + nearByPlaceResults.toString());
-                ArrayList<String> idPlaceRestaurant = new ArrayList<>();
+                ArrayList<IdPlaceNumber> idPlaceRestaurant = new ArrayList<>();
 
                 Log.d(TAG, "getRestaurantListAroundUser : get list today restaurant : " + mIdPlaceRestaurant);
                 for (Restaurant result : nearByPlaceResults.getResults()) {
+                    mNumberWorkamteEat = 0;
+                    Log.d(TAG, "onChanged: after 0");
                     for (String idPlace : mIdPlaceRestaurant) {
                         Log.d(TAG, "get  nearby restaurant : " + result.getPlaceId());
                         if (idPlace.equals(result.getPlaceId())) {
                             Log.d(TAG, "getRestaurantListAroundUser: onChanged restaurant green : " + idPlace);
                             iconMarker = true;
-                            break;
+                            Log.d(TAG, "onChanged: if someone eat");
+                            mNumberWorkamteEat = mNumberWorkamteEat+1;
+//                            break;
                         }
                     }
                     LatLng latLngRestaurant = new LatLng(result.getGeometry().getLocation().getLat(), result.getGeometry().getLocation().getLng());
                     mGoogleMap.addMarker(new MarkerOptions().position(latLngRestaurant).title(result.getName()).icon(bitmapDescriptorFromVector())).setTag(result.getPlaceId());
-                    idPlaceRestaurant.add(result.getPlaceId());
+                    Log.d(TAG, "onChanged: number workmates" + mNumberWorkamteEat);
+                    idPlaceRestaurant.add(new IdPlaceNumber(result.getPlaceId(), mNumberWorkamteEat));
                     iconMarker = false;
                 }
                 mMapViewModel.setRestaurantListView(idPlaceRestaurant);

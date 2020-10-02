@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.brice_corp.go4lunch.di.MyApplication;
+import com.brice_corp.go4lunch.model.IdPlaceNumber;
 import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.repository.ListViewRepository;
@@ -54,7 +55,7 @@ public class MapViewModel extends AndroidViewModel {
         return mRetrofitRepository.getRestaurantListAroundUser(latLng.latitude + "," + latLng.longitude);
     }
 
-    public void setRestaurantListView(ArrayList<String> idPlaceRestaurant) {
+    public void setRestaurantListView(ArrayList<IdPlaceNumber> idPlaceRestaurant) {
         mListViewRepository.setIdPlaceRestaurant(idPlaceRestaurant);
     }
 

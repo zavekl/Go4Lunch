@@ -60,4 +60,14 @@ public class DistanceMatrix {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "DistanceMatrix{" +
+                "destinationAddresses=" + destinationAddresses +
+                ", originAddresses=" + originAddresses +
+                ", rows=" + rows +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

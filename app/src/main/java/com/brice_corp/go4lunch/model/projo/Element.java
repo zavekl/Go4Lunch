@@ -40,4 +40,13 @@ public class Element {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Element{" +
+                "distance=" + distance +
+                ", duration=" + duration +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }
