@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.Objects;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -67,7 +68,7 @@ public class RetrofitRepository {
                     @Override
                     public void onResponse(@NotNull Call<Restaurant> call, @NotNull Response<Restaurant> response) {
                         if (response.body() != null) {
-                            Log.i(TAG, "onResponse: " + response.body().getResult());
+                            Log.i(TAG, "onResponse: " + response.body().getResult().toString());
                             restaurantDetailsResults.setValue(response.body());
                         }
                     }
@@ -89,6 +90,7 @@ public class RetrofitRepository {
             @Override
             public void onResponse(@NotNull Call<NearByPlaceResults> call, @NotNull Response<NearByPlaceResults> response) {
                 liveData.setValue(response.body());
+                Log.d(TAG, "onResponse: " + Objects.requireNonNull(response.body()).getResults());
             }
 
             @Override

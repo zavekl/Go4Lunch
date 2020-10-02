@@ -86,13 +86,15 @@ public class Restaurant {
 
     private String mDistanceMeter;
 
+    private int mNumberWorkamtesEating;
+
     public Restaurant(String id, String name, String address) {
         this.id = id;
         this.name = name;
         this.adrAddress = address;
     }
 
-    public Restaurant(String name, String address, Double rating, OpeningHours openingHours, List<Photo> photos,String id, String distance) {
+    public Restaurant(String name, String address, Double rating, OpeningHours openingHours, List<Photo> photos,String id, String distance, int numberWorkamtesEating) {
         this.name = name;
         this.adrAddress = address;
         this.rating = rating;
@@ -100,6 +102,7 @@ public class Restaurant {
         this.photos=photos;
         this.placeId=id;
         this.mDistanceMeter = distance;
+        this.mNumberWorkamtesEating = numberWorkamtesEating;
     }
 
 
@@ -207,6 +210,11 @@ public class Restaurant {
     public String getDistanceMeter() {
         return mDistanceMeter;
     }
+
+    public int getNumberWorkamtesEating() {
+        return mNumberWorkamtesEating;
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +

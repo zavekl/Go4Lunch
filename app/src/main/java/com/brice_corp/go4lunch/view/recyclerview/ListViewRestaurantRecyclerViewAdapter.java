@@ -95,7 +95,6 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         //RATING BAR
         if (mItemRestaurants.get(position).getRating() != null) {
             float rate = mItemRestaurants.get(position).getRating().floatValue();
-//            rate != 0.0f
             //Convert 5 stars to 3 stars
             rate = (rate * 3) / 5;
             holder.mRatingBar.setRating(rate);
@@ -104,10 +103,10 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         }
 
         //DISTANCE
-        holder.mDistanceRestaurant.setText(mItemRestaurants.get(position).
+        holder.mDistanceRestaurant.setText(mItemRestaurants.get(position).getDistanceMeter());
 
-                getDistanceMeter());
-
+        //NUMBER OF WORKMATES WHICH EAT AT THE RESTAURANT
+        holder.mNumberWorkmates.setText(String.valueOf(mItemRestaurants.get(position).getNumberWorkamtesEating()));
     }
 
     public void addItems(Restaurant restaurant) {
@@ -187,6 +186,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         final View mItemList;
         final RatingBar mRatingBar;
         final TextView mDistanceRestaurant;
+        final TextView mNumberWorkmates;
 
         ViewHolder(View view) {
             super(view);
@@ -197,6 +197,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
             mItemList = view.findViewById(R.id.item_list_listview);
             mRatingBar = view.findViewById(R.id.ratingbar_restaurant_listview);
             mDistanceRestaurant = view.findViewById(R.id.distance);
+            mNumberWorkmates = view.findViewById(R.id.number_workmates);
         }
     }
 }

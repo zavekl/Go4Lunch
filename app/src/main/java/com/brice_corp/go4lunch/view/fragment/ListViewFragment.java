@@ -3,7 +3,6 @@ package com.brice_corp.go4lunch.view.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.brice_corp.go4lunch.R;
+import com.brice_corp.go4lunch.model.IdPlaceNumber;
 import com.brice_corp.go4lunch.model.projo.DistanceMatrix;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.ListViewViewModel;
@@ -29,6 +29,7 @@ import java.util.Objects;
 public class ListViewFragment extends Fragment {
     private static final String TAG = "ListViewFragment";
     private RecyclerView mRecyclerView;
+    int numberWorkmatesEat;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -48,19 +49,21 @@ public class ListViewFragment extends Fragment {
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
 
-        for (String idRestaurant : mListViewViewModel.getIdPlaceRestaurantList()) {
-            mListViewViewModel.getRestaurantDetails(Objects.requireNonNull(idRestaurant)).observe(getViewLifecycleOwner(),
+        for (final IdPlaceNumber idRestaurant : mListViewViewModel.getIdPlaceRestaurantList()) {
+            mListViewViewModel.getRestaurantDetails(Objects.requireNonNull(idRestaurant.getIdPlace())).observe(getViewLifecycleOwner(),
                     new Observer<Restaurant>() {
                         @Override
                         public void onChanged(Restaurant restaurant) {
                             final Restaurant currentRestaurant = restaurant.getResult();
+                            numberWorkmatesEat = 0;
                             if (currentRestaurant != null) {
                                 mListViewViewModel.getDistance(currentRestaurant.getPlaceId()).observe(getViewLifecycleOwner(), new Observer<DistanceMatrix>() {
                                     @Override
                                     public void onChanged(DistanceMatrix distanceMatrix) {
+                                        Log.d(TAG, "onChanged: " + distanceMatrix.toString());
                                         adapter.addItems(new Restaurant(currentRestaurant.getName(), currentRestaurant.getFormattedAddress(), currentRestaurant.getRating(),
                                                 currentRestaurant.getOpeningHours(), currentRestaurant.getPhotos(), currentRestaurant.getPlaceId(),
-                                                distanceMatrix.getRows().get(0).getElements().get(0).getDistance().getText()));
+                                                distanceMatrix.getRows().get(0).getElements().get(0).getDistance().getText(), idRestaurant.isEatPerson()));
                                     }
                                 });
                             }

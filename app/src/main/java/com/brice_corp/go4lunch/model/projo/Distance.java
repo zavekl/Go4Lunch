@@ -29,4 +29,12 @@ public class Distance {
     public void setValue(int value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "Distance{" +
+                "text='" + text + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }
