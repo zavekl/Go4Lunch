@@ -45,4 +45,6 @@
 
 
     <string name="change_hour_of_notification">Changer l\'heure des notifications</string>
+    <string name="rating">évaluation</string>
+    <string name="workmates">collègues</string>
 </resources>

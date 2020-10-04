@@ -21,6 +21,8 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -153,5 +155,33 @@ public class ListViewViewModel extends AndroidViewModel {
         StringBuilder stringBuilderReturn = new StringBuilder(hoursAndMinutes);
         stringBuilderReturn.insert(2, ":");
         return LocalTime.parse(stringBuilderReturn);
+    }
+
+    public ArrayList<Restaurant> sortByRating(ArrayList<Restaurant> list) {
+        if (list != null && list.size() != 0) {
+            Collections.sort(list, new Comparator<Restaurant>() {
+                @Override
+                public int compare(Restaurant restaurant1, Restaurant restaurant2) {
+                    return restaurant2.getRating().compareTo(restaurant1.getRating());
+                }
+            });
+            return list;
+        } else {
+            return null;
+        }
+    }
+
+    public ArrayList<Restaurant> sortByWorkmates(ArrayList<Restaurant> list) {
+        if (list != null && list.size() != 0) {
+            Collections.sort(list, new Comparator<Restaurant>() {
+                @Override
+                public int compare(Restaurant restaurant1, Restaurant restaurant2) {
+                    return restaurant2.getNumberWorkamtesEating().compareTo(restaurant1.getNumberWorkamtesEating());
+                }
+            });
+            return list;
+        } else {
+            return null;
+        }
     }
 }
