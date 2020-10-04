@@ -22,6 +22,7 @@ import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -35,6 +36,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
     private Context mContext;
     private ListViewViewModel mListViewViewModel;
     private ArrayList<Restaurant> mSavedRestaurant = new ArrayList<>();
+
 
     public ListViewRestaurantRecyclerViewAdapter(Context context, ListViewViewModel listViewViewModel) {
         mItemRestaurants = new ArrayList<>();
@@ -116,6 +118,21 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         notifyDataSetChanged();
 
         mSavedRestaurant.add(restaurant);
+    }
+
+    public void setList(ArrayList<Restaurant> list) {
+        mItemRestaurants = list;
+        notifyDataSetChanged();
+        Log.d(TAG, "setList: " + mItemRestaurants);
+    }
+
+    public ArrayList<Restaurant> getList() {
+        return mItemRestaurants;
+    }
+
+    public void setSavedRestaurant() {
+        mItemRestaurants = mSavedRestaurant;
+        notifyDataSetChanged();
     }
 
     @Override

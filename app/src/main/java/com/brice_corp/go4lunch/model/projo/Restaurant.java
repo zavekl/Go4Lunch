@@ -86,7 +86,7 @@ public class Restaurant {
 
     private String mDistanceMeter;
 
-    private int mNumberWorkamtesEating;
+    private Integer mNumberWorkamtesEating;
 
     public Restaurant(String id, String name, String address) {
         this.id = id;
@@ -211,7 +211,7 @@ public class Restaurant {
         return mDistanceMeter;
     }
 
-    public int getNumberWorkamtesEating() {
+    public Integer getNumberWorkamtesEating() {
         return mNumberWorkamtesEating;
     }
 
