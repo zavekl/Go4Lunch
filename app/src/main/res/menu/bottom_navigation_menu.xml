@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/map_view_bottom_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_map"
+        android:title="@string/bottom_navigation_menu_map"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/list_view__bottom_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_format_list_bulleted_square"
+        android:title="@string/bottom_navigation_menu_restaurants"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/workmates__bottom_menu"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_supervisor"
+        android:title="@string/bottom_navigation_menu_workmates"
+        app:showAsAction="ifRoom" />
+</menu>

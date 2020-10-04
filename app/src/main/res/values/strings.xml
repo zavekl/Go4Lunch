@@ -1,3 +1,52 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
+    <string name="go4lunch">Go4Lunch</string>
+
+    <!-- FACEBOOK API -->
+    <string name="facebook_application_id" translatable="false">253851662625205</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb253851662625205</string>
+
+
+    <!-- BOTTOM MENU -->
+    <string name="bottom_navigation_menu_map">Restaurant map</string>
+    <string name="bottom_navigation_menu_restaurants">List of restaurants</string>
+    <string name="bottom_navigation_menu_workmates">List of workmates</string>
+
+    <!-- NAVIGATION DRAWER -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="your_lunch">YOUR LUNCH</string>
+    <string name="settings">SETTINGS</string>
+    <string name="logout">LOGOUT</string>
+
+
+    <string name="toast_nolunch">You didn\'t choose a restaurant</string>
+    <string name="search_image">search image</string>
+    <string name="restaurant_image">restaurant image</string>
+    <string name="phone_description">phone_description</string>
+    <string name="call">CALL</string>
+    <string name="like">LIKE</string>
+    <string name="website">WEBSITE</string>
+
+
+    <string name="stg_workmates">Workmates : </string>
+    <string name="stg_no_workmates">There is no workmate with you.</string>
+
+
+    <string name="tv_person_name_workmate_adp">%1$s is eating at %2$s</string>
+    <string name="tv_person_name_workmate_dont_know_adp">%1$s doesn\'t decided yet</string>
+    <string name="notif_title">D\'ont forgot your restaurant meeting!</string>
+    <string name="enter_name_min_3_letters">Enter name (min 3 letters)</string>
+    <string name="enter_name_restaurant">Enter restaurant name</string>
+    <string name="enter_name_workmate">Enter workmate name</string>
+
+
+    <string name="no_hour">No information</string>
+    <string name="change_hour_of_notification">Change hour of notification</string>
+    <string name="rating">Rating</string>
+    <string name="workmates">Workmates</string>
 </resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+    <string name="go4lunch">Go4Lunch</string>
+
+    <!-- BOTTOM MENU -->
+    <string name="bottom_navigation_menu_map">Carte des restaurants</string>
+    <string name="bottom_navigation_menu_restaurants">Liste des restaurants</string>
+    <string name="bottom_navigation_menu_workmates">Liste des collègues</string>
+
+    <!-- NAVIGATION DRAWER -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="your_lunch">VOTRE REPAS</string>
+    <string name="settings">PARAMETRES</string>
+    <string name="logout">DECONNEXION</string>
+
+
+    <string name="toast_nolunch">Vous n\'avez pas choisi de restaurant</string>
+    <string name="search_image">image recherche</string>
+    <string name="restaurant_image">image restaurant </string>
+    <string name="phone_description">description phone</string>
+    <string name="call">TELEPHONE</string>
+    <string name="like">AIME</string>
+    <string name="website">SITE INTERNET</string>
+
+
+    <string name="stg_workmates">Collègues : </string>
+    <string name="stg_no_workmates">Il n\'y a aucun collègues avec vous.</string>
+
+
+    <string name="tv_person_name_workmate_adp">%1$s mange à %2$s</string>
+    <string name="tv_person_name_workmate_dont_know_adp">%1$s n\'a pas encore décidé</string>
+    <string name="notif_title">N\'oubliez pas votre rendez-vous!</string>
+    <string name="enter_name_min_3_letters">Entrer le nom (min 3 lettres)</string>
+    <string name="enter_name_restaurant">Entrer le restaurant</string>
+    <string name="enter_name_workmate">Entrer le collègue</string>
+
+
+    <string name="no_hour">Aucune information</string>
+
+
+    <string name="change_hour_of_notification">Changer l\'heure des notifications</string>
+    <string name="rating">évaluation</string>
+    <string name="workmates">collègues</string>
+</resources>
