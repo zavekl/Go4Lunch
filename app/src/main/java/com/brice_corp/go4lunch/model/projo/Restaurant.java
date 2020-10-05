@@ -158,6 +158,10 @@ public class Restaurant {
         return rating;
     }
 
+    public void setRating(Double rating) {
+        this.rating=rating;
+    }
+
     public String getReference() {
         return reference;
     }
