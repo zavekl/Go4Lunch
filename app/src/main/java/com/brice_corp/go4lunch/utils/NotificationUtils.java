@@ -24,7 +24,7 @@ class NotificationUtils {
     private static final int NOTIFICATION_ID = 7;
     private static final String NOTIFICATION_TAG = "rappel";
     private static final CharSequence channelName = "Rappel";
-    private Context context;
+    private final Context context;
 
     NotificationUtils(Context context) {
         this.context = context;

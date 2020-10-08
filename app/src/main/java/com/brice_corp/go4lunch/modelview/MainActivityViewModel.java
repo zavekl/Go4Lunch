@@ -14,7 +14,7 @@ import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewA
  * Created by <NIATEL Brice on <19/08/2020>.
  */
 public class MainActivityViewModel extends AndroidViewModel {
-    private ListViewRepository mListViewRepository;
+    private final ListViewRepository mListViewRepository;
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);

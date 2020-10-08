@@ -1,6 +1,9 @@
 
 package com.brice_corp.go4lunch.model.projo;
 
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -13,6 +16,7 @@ public class Open {
     @Expose
     private String time;
 
+    @NonNull
     @Override
     public String toString() {
         return "Open{" +

@@ -4,14 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import androidx.work.Data;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static com.brice_corp.go4lunch.utils.Constants.RADDRESS;
-import static com.brice_corp.go4lunch.utils.Constants.RID;
-import static com.brice_corp.go4lunch.utils.Constants.RNAME;
 
 /**
  * Created by <NIATEL Brice> on <05/09/2020>.
@@ -22,7 +16,7 @@ public class ApplicationPreferences {
     private static final String PREF_DATA = "GO4LUNCH_DATA";
     private static final String PREF_TIME = "GO4LUNCH_TIME";
 
-    private Context mContext;
+    private final Context mContext;
 
     public ApplicationPreferences(Context Context) {
         this.mContext = Context;
@@ -70,13 +64,6 @@ public class ApplicationPreferences {
         SharedPreferences sharedPref = mContext.getApplicationContext().getSharedPreferences(PREF_DATA, Context.MODE_PRIVATE);
         return new ArrayList<>(Arrays.asList(sharedPref.getString("rname", null), sharedPref.getString("raddress", null),
                 sharedPref.getString("rid", null)));
-    }
-
-    public void deleteSharedPrefsTime() {
-        Log.d(TAG, "deleteSharedPrefsTime: ");
-        SharedPreferences sharedPref = mContext.getSharedPreferences(PREF_TIME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.clear().apply();
     }
 
     public void setSharedPrefsTime(long time) {

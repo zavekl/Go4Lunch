@@ -30,9 +30,9 @@ import java.util.List;
  */
 public class ListViewViewModel extends AndroidViewModel {
     private static final String TAG = "ListViewViewModel";
-    private ListViewRepository mListViewRepository;
-    private RetrofitRepository mRetrofitRepository;
-    private ArrayList<Restaurant> mRestaurantList = new ArrayList<>();
+    private final ListViewRepository mListViewRepository;
+    private final RetrofitRepository mRetrofitRepository;
+    private final ArrayList<Restaurant> mRestaurantList = new ArrayList<>();
 
     public ListViewViewModel(@NonNull Application application) {
         super(application);

@@ -24,7 +24,6 @@ import com.brice_corp.go4lunch.modelview.ListViewViewModel;
 import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**

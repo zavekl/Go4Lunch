@@ -1,6 +1,9 @@
 
 package com.brice_corp.go4lunch.model.projo;
 
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -14,6 +17,7 @@ public class Period {
     private Open open;
 
 
+    @NonNull
     @Override
     public String toString() {
         return "Period{" +

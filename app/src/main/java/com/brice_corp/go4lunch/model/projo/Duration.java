@@ -9,10 +9,10 @@ import com.google.gson.annotations.SerializedName;
 public class Duration {
     @SerializedName("text")
     @Expose
-    public String text;
+    private String text;
     @SerializedName("value")
     @Expose
-    public int value;
+    private int value;
 
     public String getText() {
         return text;

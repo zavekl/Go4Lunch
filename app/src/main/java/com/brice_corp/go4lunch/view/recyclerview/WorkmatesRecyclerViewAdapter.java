@@ -22,7 +22,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by <NIATEL Brice> on <20/05/2020>.
  */
 public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User, WorkmatesRecyclerViewAdapter.ViewHolder> {
-    private Context mContext;
+    private final Context mContext;
     private static final String TAG = "WorkmatesRVAdapter";
 
     public WorkmatesRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options, Context context) {
@@ -57,8 +57,8 @@ public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User,
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView mImageView;
-        TextView mPersonName;
+        final CircleImageView mImageView;
+        final TextView mPersonName;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);

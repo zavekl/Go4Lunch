@@ -12,7 +12,7 @@ import com.brice_corp.go4lunch.utils.WorkerManager;
  * Created by <NIATEL Brice> on <12/09/2020>.
  */
 public class SettingsViewModel extends AndroidViewModel {
-    private ApplicationPreferences mApplicationPreferences;
+    private final ApplicationPreferences mApplicationPreferences;
     public SettingsViewModel(@NonNull Application application) {
         super(application);
         mApplicationPreferences = new ApplicationPreferences(application.getApplicationContext());

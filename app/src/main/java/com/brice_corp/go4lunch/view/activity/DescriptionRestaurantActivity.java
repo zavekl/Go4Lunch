@@ -16,7 +16,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.work.Data;
 
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
@@ -33,9 +32,6 @@ import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 
-import static com.brice_corp.go4lunch.utils.Constants.RADDRESS;
-import static com.brice_corp.go4lunch.utils.Constants.RID;
-import static com.brice_corp.go4lunch.utils.Constants.RNAME;
 import static com.brice_corp.go4lunch.utils.WorkerManager.stopWorkRequest;
 
 public class DescriptionRestaurantActivity extends AppCompatActivity {

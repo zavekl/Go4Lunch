@@ -11,9 +11,5 @@ public class Constants {
     public static final int DESCRIPTION_RESTAURANT_REQUESTCODE = 10;
 
     public static final int AUTHENTICATION = 9004;
-
-    public static final String RNAME = "restaurant_name";
-    public static final String RID = "restaurant_id";
-    public static final String RADDRESS = "restaurant_address";
 }
 

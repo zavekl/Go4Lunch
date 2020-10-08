@@ -10,19 +10,20 @@ import java.util.List;
 
 public class OpeningHours {
 
-    @NonNull
+
     @SerializedName("open_now")
     @Expose
     private Boolean openNow;
-    @NonNull
+
     @SerializedName("periods")
     @Expose
     private List<Period> periods = null;
-    @NonNull
+
     @SerializedName("weekday_text")
     @Expose
     private List<String> weekdayText = null;
 
+    @NonNull
     @Override
     public String toString() {
         return "OpeningHours{" +

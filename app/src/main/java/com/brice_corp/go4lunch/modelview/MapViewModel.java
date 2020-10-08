@@ -25,10 +25,10 @@ import java.util.ArrayList;
  * Created by <NIATEL Brice> on <08/04/2020>.
  */
 public class MapViewModel extends AndroidViewModel {
-    private MapRepository mMapRepository;
-    private RetrofitRepository mRetrofitRepository;
-    private ListViewRepository mListViewRepository;
-    private FirestoreUserRepository mFirestoreRepository;
+    private final MapRepository mMapRepository;
+    private final RetrofitRepository mRetrofitRepository;
+    private final ListViewRepository mListViewRepository;
+    private final FirestoreUserRepository mFirestoreRepository;
 
     public MapViewModel(@NonNull Application application) {
         super(application);

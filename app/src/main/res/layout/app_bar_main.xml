@@ -64,7 +64,8 @@
                 android:inputType="textAutoComplete"
                 android:maxLines="1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/image_search" />
+                app:layout_constraintStart_toEndOf="@id/image_search"
+                android:labelFor="@id/search_edit_text"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView

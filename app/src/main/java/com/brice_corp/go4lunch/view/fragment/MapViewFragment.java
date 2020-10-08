@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,15 +47,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -74,7 +70,7 @@ public class MapViewFragment extends Fragment {
     private LocationCallback mLocationCallback;
     private LatLng mLatLng;
     private Boolean mIsCenter = false;
-    private ArrayList<String> mIdPlaceRestaurant = new ArrayList<>();
+    private final ArrayList<String> mIdPlaceRestaurant = new ArrayList<>();
     private Boolean iconMarker = false;
     private int mNumberWorkamteEat;
 
@@ -190,7 +186,7 @@ public class MapViewFragment extends Fragment {
     //Get the id of restaurant if workmates eat in today
     private void getUserTodayRestaurant() {
         Log.d(TAG, "getUserTodayRestaurant: start display");
-        Task task = mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        mMapViewModel.getUsersDocuments().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {

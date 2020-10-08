@@ -22,7 +22,6 @@ import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,9 +32,9 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
 
     private static final String TAG = "ListViewRVAdapter";
     private ArrayList<Restaurant> mItemRestaurants;
-    private Context mContext;
-    private ListViewViewModel mListViewViewModel;
-    private ArrayList<Restaurant> mSavedRestaurant = new ArrayList<>();
+    private final Context mContext;
+    private final ListViewViewModel mListViewViewModel;
+    private final ArrayList<Restaurant> mSavedRestaurant = new ArrayList<>();
 
 
     public ListViewRestaurantRecyclerViewAdapter(Context context, ListViewViewModel listViewViewModel) {
@@ -200,7 +199,6 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
         final TextView mAddressRestaurant;
         final TextView mScheduleRestaurant;
         final CircleImageView mImageRestaurant;
-        final View mItemList;
         final RatingBar mRatingBar;
         final TextView mDistanceRestaurant;
         final TextView mNumberWorkmates;
@@ -211,7 +209,6 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
             mAddressRestaurant = view.findViewById(R.id.addressRestaurant);
             mScheduleRestaurant = view.findViewById(R.id.scheduleRestaurant);
             mImageRestaurant = view.findViewById(R.id.imageRestaurant);
-            mItemList = view.findViewById(R.id.item_list_listview);
             mRatingBar = view.findViewById(R.id.ratingbar_restaurant_listview);
             mDistanceRestaurant = view.findViewById(R.id.distance);
             mNumberWorkmates = view.findViewById(R.id.number_workmates);

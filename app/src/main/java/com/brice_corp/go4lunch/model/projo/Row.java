@@ -1,5 +1,8 @@
 package com.brice_corp.go4lunch.model.projo;
 
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -21,6 +24,7 @@ public class Row {
         this.elements = elements;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Row{" +

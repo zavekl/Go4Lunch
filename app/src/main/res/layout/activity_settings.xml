@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -30,7 +29,8 @@
         android:background="@drawable/ic_arrow_back_black_24dp"
         app:layout_constraintBottom_toBottomOf="@id/appbar"
         app:layout_constraintEnd_toEndOf="@id/appbar"
-        app:layout_constraintTop_toTopOf="@id/appbar" />
+        app:layout_constraintTop_toTopOf="@id/appbar"
+        android:contentDescription="@string/back_arrow"/>
 
     <TextView
         android:id="@+id/settings_textView"

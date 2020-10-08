@@ -13,8 +13,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
     <string name="your_lunch">VOTRE REPAS</string>
     <string name="settings">PARAMETRES</string>
     <string name="logout">DECONNEXION</string>
@@ -31,6 +29,7 @@
 
     <string name="stg_workmates">Collègues : </string>
     <string name="stg_no_workmates">Il n\'y a aucun collègues avec vous.</string>
+    <string name="rv_adapter_name">%1$s mange ici !</string>
 
 
     <string name="tv_person_name_workmate_adp">%1$s mange à %2$s</string>

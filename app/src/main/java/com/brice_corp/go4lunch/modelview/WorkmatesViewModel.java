@@ -14,7 +14,7 @@ import com.google.firebase.firestore.Query;
  */
 public class WorkmatesViewModel extends AndroidViewModel {
 
-    private Query query;
+    private final Query query;
 
     public WorkmatesViewModel(@NonNull Application application) {
         super(application);
