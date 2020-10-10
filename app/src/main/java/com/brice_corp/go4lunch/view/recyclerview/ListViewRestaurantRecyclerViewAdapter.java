@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.ListViewViewModel;
+import com.brice_corp.go4lunch.utils.RatingBarUtils;
 import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.bumptech.glide.Glide;
 
@@ -95,10 +96,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
 
         //RATING BAR
         if (mItemRestaurants.get(position).getRating() != null) {
-            float rate = mItemRestaurants.get(position).getRating().floatValue();
-            //Convert 5 stars to 3 stars
-            rate = (rate * 3) / 5;
-            holder.mRatingBar.setRating(rate);
+            holder.mRatingBar.setRating(RatingBarUtils.CalculateRatingBar(mItemRestaurants.get(position).getRating().floatValue()));
         } else {
             Log.e(TAG, "setTheRatingBar: no rate from API Place");
         }
@@ -188,9 +186,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
                     Log.e(TAG, "publishResults: zero results from the API");
                 }
             }
-        }
-
-                ;
+        };
     }
 
 

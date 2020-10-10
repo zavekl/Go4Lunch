@@ -25,6 +25,7 @@ import com.brice_corp.go4lunch.modelview.DescriptionRestaurantViewModel;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.repository.RetrofitRepository;
 import com.brice_corp.go4lunch.utils.ApplicationPreferences;
+import com.brice_corp.go4lunch.utils.RatingBarUtils;
 import com.brice_corp.go4lunch.view.recyclerview.DescriptionRestaurantRecyclerViewAdapter;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -198,13 +199,7 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
 
     //Set the rating of the restaurant
     private void setTheRatingBar(float rate) {
-        if (rate != 0.0f) {
-            //Convert 5 stars to 3 stars
-            rate = (rate * 3) / 5;
-            mRatingBar.setRating(rate);
-        } else {
-            Log.e(TAG, "setTheRatingBar: no rate from API Place");
-        }
+        mRatingBar.setRating(RatingBarUtils.CalculateRatingBar(rate));
     }
 
     //Check if the user click on like button
