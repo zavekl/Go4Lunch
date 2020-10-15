@@ -1,5 +1,6 @@
 package com.brice_corp.go4lunch.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -20,10 +21,9 @@ import java.util.Objects;
 /**
  * Created by <NIATEL Brice> on <31/07/2020>.
  */
-public class NotificationWorker extends Worker {
+@SuppressLint("WorkerHasAPublicModifier")
+class NotificationWorker extends Worker {
     private static final String TAG = "NotificationWorker";
-
-
     private final FirestoreUserRepository mFirestoreUserRepository;
     private final ApplicationPreferences mApplicationPreferences;
 

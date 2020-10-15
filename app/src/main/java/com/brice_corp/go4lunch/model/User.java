@@ -15,11 +15,10 @@ public class User {
         //Need an empty constructor
     }
 
-    public User(String name, String email, String image, String id) {
+    public User(String name, String email, String image) {
         this.name = name;
         this.mEmail = email;
         this.image = image;
-        this.mId = id;
     }
 
     public String getName() {
@@ -44,14 +43,6 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getId() {
-        return mId;
-    }
-
-    public void setId(String mId) {
-        this.mId = mId;
     }
 
     public String getEatToday() {

@@ -25,7 +25,6 @@ public class MapRepository {
         mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
-
     public void startLocationUpdates(LocationCallback locationCallback) {
         fusedLocationProviderClient.requestLocationUpdates(createLocationRequest(), locationCallback, Looper.getMainLooper());
     }

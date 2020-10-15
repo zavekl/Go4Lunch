@@ -62,7 +62,7 @@ public class FirestoreUserRepository {
         CURRENT_USER_ID = getCurrentUser().getUid();
     }
 
-    //Check if current user is already created in database, if not create it
+    //Check if current user is already created in database, if no create it
     public void checkIfUserAlreadyCreated() {
         mNameNoteRef.document(CURRENT_USER_ID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -118,7 +118,7 @@ public class FirestoreUserRepository {
     //Get current user
     public User getUser() {
         FirebaseUser user = getCurrentUser();
-        return new User(user.getDisplayName(), user.getEmail(), String.valueOf(user.getPhotoUrl()), "");
+        return new User(user.getDisplayName(), user.getEmail(), String.valueOf(user.getPhotoUrl()));
     }
 
     //Get name of the current user

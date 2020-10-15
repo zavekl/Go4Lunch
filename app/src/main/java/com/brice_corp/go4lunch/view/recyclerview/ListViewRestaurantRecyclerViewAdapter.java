@@ -30,13 +30,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by <NIATEL Brice> on <11/05/2020>.
  */
 public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRestaurantRecyclerViewAdapter.ViewHolder> implements Filterable {
-
     private static final String TAG = "ListViewRVAdapter";
     private ArrayList<Restaurant> mItemRestaurants;
     private final Context mContext;
     private final ListViewViewModel mListViewViewModel;
     private final ArrayList<Restaurant> mSavedRestaurant = new ArrayList<>();
-
 
     public ListViewRestaurantRecyclerViewAdapter(Context context, ListViewViewModel listViewViewModel) {
         mItemRestaurants = new ArrayList<>();
@@ -188,7 +186,6 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
             }
         };
     }
-
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mNameRestaurant;
