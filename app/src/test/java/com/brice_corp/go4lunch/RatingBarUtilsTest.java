@@ -1,21 +1,9 @@
 package com.brice_corp.go4lunch;
 
-import android.util.Log;
-
-import com.brice_corp.go4lunch.model.User;
-import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.brice_corp.go4lunch.utils.RatingBarUtils;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.Collections;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

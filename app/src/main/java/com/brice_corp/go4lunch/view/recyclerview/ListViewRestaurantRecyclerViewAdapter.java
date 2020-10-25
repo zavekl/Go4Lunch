@@ -76,6 +76,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
                     .into(holder.mImageRestaurant);
         }
 
+        //OPENING HOUR
         if (mItemRestaurants.get(position).getOpeningHours() != null) {
             holder.mScheduleRestaurant.setText(mListViewViewModel.getOpeningHoursSorted(mItemRestaurants.get(position).getOpeningHours().getPeriods(), mItemRestaurants.get(position).getOpeningHours().getOpenNow()));
         } else {

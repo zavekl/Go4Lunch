@@ -20,6 +20,12 @@ public class Element {
     @Expose
     private String status;
 
+    public Element(Distance distance, Duration duration, String status) {
+        this.distance = distance;
+        this.duration = duration;
+        this.status = status;
+    }
+
     public Distance getDistance() {
         return distance;
     }

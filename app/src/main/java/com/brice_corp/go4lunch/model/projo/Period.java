@@ -16,6 +16,10 @@ public class Period {
     @Expose
     private Open open;
 
+    public Period(Close close, Open open) {
+        this.close = close;
+        this.open = open;
+    }
 
     @NonNull
     @Override

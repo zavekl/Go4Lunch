@@ -17,6 +17,11 @@ public class Distance {
     @Expose
     private int value;
 
+    public Distance(String text, int value) {
+        this.text = text;
+        this.value = value;
+    }
+
     public String getText() {
         return text;
     }

@@ -3,12 +3,11 @@ package com.brice_corp.go4lunch;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
-import java.sql.Time;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by <VOTRE-NOM> on <DATE-DU-JOUR>.
+ * Created by <NIATEL Brice> on <14/10/2020>.
  */
 class LiveDataUtils {
     static <T> T getOrAwaitValue(final LiveData<T> liveData) throws InterruptedException {
@@ -25,11 +24,10 @@ class LiveDataUtils {
         };
         liveData.observeForever(observer);
         //Don't await indefinitely if the liveData is not set
-        if (!latch.await(2, TimeUnit.SECONDS)) {
+        if (!latch.await(4, TimeUnit.SECONDS)) {
             throw new RuntimeException("LiveData value was never set");
         }
         //noinspection unchecked
         return (T) data[0];
-
     }
 }

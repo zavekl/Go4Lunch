@@ -16,6 +16,11 @@ public class Open {
     @Expose
     private String time;
 
+    public Open(Integer day, String time) {
+        this.day = day;
+        this.time = time;
+    }
+
     @NonNull
     @Override
     public String toString() {
