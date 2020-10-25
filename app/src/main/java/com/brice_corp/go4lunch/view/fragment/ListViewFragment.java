@@ -24,7 +24,6 @@ import com.brice_corp.go4lunch.modelview.ListViewViewModel;
 import com.brice_corp.go4lunch.view.recyclerview.ListViewRestaurantRecyclerViewAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -50,6 +49,8 @@ public class ListViewFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.list_restaurant_recyclerview);
         mRatingButton = view.findViewById(R.id.buttonlistview1);
         mWorkmatesButton = view.findViewById(R.id.buttonlistview2);
+        mWorkmatesButton.setBackgroundColor(Color.GRAY);
+        mRatingButton.setBackgroundColor(Color.GRAY);
         return view;
     }
 

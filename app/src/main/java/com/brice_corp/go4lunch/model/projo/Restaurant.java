@@ -10,12 +10,9 @@ import java.util.List;
  */
 public class Restaurant {
 
-    @SerializedName("address_components")
-    @Expose
-    private List<AddressComponent> addressComponents = null;
     @SerializedName("adr_address")
     @Expose
-    private String adrAddress;
+    private final String adrAddress;
     @SerializedName("formatted_address")
     @Expose
     private String formattedAddress;
@@ -31,12 +28,9 @@ public class Restaurant {
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("international_phone_number")
-    @Expose
-    private String internationalPhoneNumber;
     @SerializedName("name")
     @Expose
-    private String name;
+    private final String name;
     @SerializedName("opening_hours")
     @Expose
     private OpeningHours openingHours;
@@ -46,43 +40,15 @@ public class Restaurant {
     @SerializedName("place_id")
     @Expose
     private String placeId;
-    @SerializedName("plus_code")
-    @Expose
-    private PlusCode plusCode;
     @SerializedName("rating")
     @Expose
     private Double rating;
-    @SerializedName("reference")
-    @Expose
-    private String reference;
-    @SerializedName("scope")
-    @Expose
-    private String scope;
-    @SerializedName("types")
-    @Expose
-    private List<String> types = null;
-    @SerializedName("url")
-    @Expose
-    private String url;
-    @SerializedName("user_ratings_total")
-    @Expose
-    private Integer userRatingsTotal;
-    @SerializedName("utc_offset")
-    @Expose
-    private Integer utcOffset;
-    @SerializedName("vicinity")
-    @Expose
-    private String vicinity;
     @SerializedName("website")
     @Expose
     private String website;
-
     @SerializedName("result")
     @Expose
     private Restaurant result;
-    @SerializedName("status")
-    @Expose
-    private String status;
 
     private String mDistanceMeter;
 
@@ -106,10 +72,6 @@ public class Restaurant {
     }
 
 
-    public List<AddressComponent> getAddressComponents() {
-        return addressComponents;
-    }
-
     public String getAdrAddress() {
         return adrAddress;
     }
@@ -122,16 +84,8 @@ public class Restaurant {
         return formattedPhoneNumber;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
     public String getId() {
         return id;
-    }
-
-    public String getInternationalPhoneNumber() {
-        return internationalPhoneNumber;
     }
 
     public String getName() {
@@ -150,40 +104,12 @@ public class Restaurant {
         return placeId;
     }
 
-    public PlusCode getPlusCode() {
-        return plusCode;
-    }
-
     public Double getRating() {
         return rating;
     }
 
-    public String getReference() {
-        return reference;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    public List<String> getTypes() {
-        return types;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public Integer getUserRatingsTotal() {
-        return userRatingsTotal;
-    }
-
-    public Integer getUtcOffset() {
-        return utcOffset;
-    }
-
-    public String getVicinity() {
-        return vicinity;
+    public void setRating(Double rating) {
+        this.rating=rating;
     }
 
     public String getWebsite() {
@@ -194,17 +120,8 @@ public class Restaurant {
         return geometry;
     }
 
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
-    }
-
-
     public Restaurant getResult() {
         return result;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     public String getDistanceMeter() {
@@ -215,33 +132,23 @@ public class Restaurant {
         return mNumberWorkamtesEating;
     }
 
+    @androidx.annotation.NonNull
     @Override
     public String toString() {
         return "Restaurant{" +
-                "addressComponents=" + addressComponents +
                 ", adrAddress='" + adrAddress + '\'' +
                 ", formattedAddress='" + formattedAddress + '\'' +
                 ", formattedPhoneNumber='" + formattedPhoneNumber + '\'' +
                 ", geometry=" + geometry +
                 ", icon='" + icon + '\'' +
                 ", id='" + id + '\'' +
-                ", internationalPhoneNumber='" + internationalPhoneNumber + '\'' +
                 ", name='" + name + '\'' +
                 ", openingHours=" + openingHours +
                 ", photos=" + photos +
                 ", placeId='" + placeId + '\'' +
-                ", plusCode=" + plusCode +
                 ", rating=" + rating +
-                ", reference='" + reference + '\'' +
-                ", scope='" + scope + '\'' +
-                ", types=" + types +
-                ", url='" + url + '\'' +
-                ", userRatingsTotal=" + userRatingsTotal +
-                ", utcOffset=" + utcOffset +
-                ", vicinity='" + vicinity + '\'' +
                 ", website='" + website + '\'' +
                 ", result=" + result +
-                ", status='" + status + '\'' +
                 '}';
     }
 }

@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.work.Data;
 
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
@@ -20,8 +19,8 @@ import javax.annotation.Nonnull;
  */
 
 public class DescriptionRestaurantViewModel extends AndroidViewModel {
-    private FirestoreUserRepository mFirestoreUserRepository;
-    private ApplicationPreferences mApplicationPreferences;
+    private final FirestoreUserRepository mFirestoreUserRepository;
+    private final ApplicationPreferences mApplicationPreferences;
 
     public DescriptionRestaurantViewModel(@NonNull Application application) {
         super(application);

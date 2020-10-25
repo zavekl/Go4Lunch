@@ -18,11 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
 import com.brice_corp.go4lunch.modelview.ListViewViewModel;
+import com.brice_corp.go4lunch.utils.RatingBarUtils;
 import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -30,13 +30,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by <NIATEL Brice> on <11/05/2020>.
  */
 public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<ListViewRestaurantRecyclerViewAdapter.ViewHolder> implements Filterable {
-
     private static final String TAG = "ListViewRVAdapter";
     private ArrayList<Restaurant> mItemRestaurants;
-    private Context mContext;
-    private ListViewViewModel mListViewViewModel;
-    private ArrayList<Restaurant> mSavedRestaurant = new ArrayList<>();
-
+    private final Context mContext;
+    private final ListViewViewModel mListViewViewModel;
+    private final ArrayList<Restaurant> mSavedRestaurant = new ArrayList<>();
 
     public ListViewRestaurantRecyclerViewAdapter(Context context, ListViewViewModel listViewViewModel) {
         mItemRestaurants = new ArrayList<>();
@@ -78,6 +76,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
                     .into(holder.mImageRestaurant);
         }
 
+        //OPENING HOUR
         if (mItemRestaurants.get(position).getOpeningHours() != null) {
             holder.mScheduleRestaurant.setText(mListViewViewModel.getOpeningHoursSorted(mItemRestaurants.get(position).getOpeningHours().getPeriods(), mItemRestaurants.get(position).getOpeningHours().getOpenNow()));
         } else {
@@ -96,10 +95,7 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
 
         //RATING BAR
         if (mItemRestaurants.get(position).getRating() != null) {
-            float rate = mItemRestaurants.get(position).getRating().floatValue();
-            //Convert 5 stars to 3 stars
-            rate = (rate * 3) / 5;
-            holder.mRatingBar.setRating(rate);
+            holder.mRatingBar.setRating(RatingBarUtils.CalculateRatingBar(mItemRestaurants.get(position).getRating().floatValue()));
         } else {
             Log.e(TAG, "setTheRatingBar: no rate from API Place");
         }
@@ -189,18 +185,14 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
                     Log.e(TAG, "publishResults: zero results from the API");
                 }
             }
-        }
-
-                ;
+        };
     }
-
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView mNameRestaurant;
         final TextView mAddressRestaurant;
         final TextView mScheduleRestaurant;
         final CircleImageView mImageRestaurant;
-        final View mItemList;
         final RatingBar mRatingBar;
         final TextView mDistanceRestaurant;
         final TextView mNumberWorkmates;
@@ -211,7 +203,6 @@ public class ListViewRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<
             mAddressRestaurant = view.findViewById(R.id.addressRestaurant);
             mScheduleRestaurant = view.findViewById(R.id.scheduleRestaurant);
             mImageRestaurant = view.findViewById(R.id.imageRestaurant);
-            mItemList = view.findViewById(R.id.item_list_listview);
             mRatingBar = view.findViewById(R.id.ratingbar_restaurant_listview);
             mDistanceRestaurant = view.findViewById(R.id.distance);
             mNumberWorkmates = view.findViewById(R.id.number_workmates);

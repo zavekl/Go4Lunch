@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.model.IdPlaceNumber;
 import com.brice_corp.go4lunch.model.projo.DistanceMatrix;
@@ -30,9 +31,9 @@ import java.util.List;
  */
 public class ListViewViewModel extends AndroidViewModel {
     private static final String TAG = "ListViewViewModel";
-    private ListViewRepository mListViewRepository;
-    private RetrofitRepository mRetrofitRepository;
-    private ArrayList<Restaurant> mRestaurantList = new ArrayList<>();
+    private final ListViewRepository mListViewRepository;
+    private final RetrofitRepository mRetrofitRepository;
+    private final ArrayList<Restaurant> mRestaurantList = new ArrayList<>();
 
     public ListViewViewModel(@NonNull Application application) {
         super(application);
@@ -68,7 +69,6 @@ public class ListViewViewModel extends AndroidViewModel {
         mListViewRepository.setListViewAdapter(adapter);
     }
 
-    //TODO FAIRE UN FR / ENG SEPARé
     public String getOpeningHoursSorted(List<Period> periodArrayList, Boolean openNow) {
         String opening = null;
 
@@ -89,7 +89,7 @@ public class ListViewViewModel extends AndroidViewModel {
             }
             if (period.getOpen().getDay() == 0 && period.getOpen().getTime().equals("0000")) {
                 Log.d(TAG, "getOpeningHoursSorted: 24/7");
-                opening = "Open 24/7";
+                opening = getApplication().getApplicationContext().getResources().getString(R.string.tv_open7d24h);
                 break;
             }
 
@@ -108,12 +108,12 @@ public class ListViewViewModel extends AndroidViewModel {
                     //Open for less than hour hour left
                     if (Duration.between(actualTime, closeTime).abs().getSeconds() < 3600) {
                         Log.d(TAG, "getOpeningHoursSorted: openNow : Close soon");
-                        opening = "Close soon";
+                        opening = getApplication().getApplicationContext().getResources().getString(R.string.tv_close_soon);
                     }
                     //Open and it will close at closeTime
                     else {
                         Log.d(TAG, "getOpeningHoursSorted: openNow : Open until");
-                        opening = "Open until " + closeTime;
+                        opening = getApplication().getApplicationContext().getResources().getString(R.string.tv_open_until, closeTime);
                     }
                 }
                 //If it is not open with openNow
@@ -122,7 +122,7 @@ public class ListViewViewModel extends AndroidViewModel {
                     //Will open after the actual time
                     if (actualTime.isBefore(openTime)) {
                         Log.d(TAG, "getOpeningHoursSorted: no openNow : Open at");
-                        opening = "Open at " + openTime;
+                        opening = getApplication().getApplicationContext().getResources().getString(R.string.tv_open_at, openTime);
                     }
                     //Will open tomorrow or the second time today
                     else {
@@ -134,14 +134,14 @@ public class ListViewViewModel extends AndroidViewModel {
                         //Open tomorrow
                         else {
                             Log.d(TAG, "getOpeningHoursSorted: no openNow : i+ or tomorrow : tomorrow");
-                            opening = "Open tomorrow";
+                            opening = getApplication().getApplicationContext().getResources().getString(R.string.tv_open_tomorrow);
                         }
                     }
                 }
             }
         }
         if (opening == null) {
-            return "Closed";
+            return getApplication().getApplicationContext().getResources().getString(R.string.tv_closed);
         } else {
             return opening;
         }
@@ -162,6 +162,10 @@ public class ListViewViewModel extends AndroidViewModel {
             Collections.sort(list, new Comparator<Restaurant>() {
                 @Override
                 public int compare(Restaurant restaurant1, Restaurant restaurant2) {
+                    if (restaurant1.getRating() == null) {
+                        Log.d(TAG, "compare: " + restaurant1.getName());
+                        restaurant1.setRating(0.0);
+                    }
                     return restaurant2.getRating().compareTo(restaurant1.getRating());
                 }
             });

@@ -21,10 +21,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -40,7 +38,7 @@ public class FirestoreUserRepository {
     private static final String TAG = "FirestoreUserRepository";
 
     //Collections
-    private CollectionReference mNameNoteRef;
+    private final CollectionReference mNameNoteRef;
 
     //Document Reference
     private DocumentReference mDocumentReference;
@@ -48,12 +46,11 @@ public class FirestoreUserRepository {
     //Constants
     private static final String USERS = "users";
     private static final String USER_NAME = "name";
-    private String CURRENT_USER_ID;
-    public static User mUserShared;
+    private final String CURRENT_USER_ID;
 
     //Livedata
-    private MutableLiveData<Boolean> mLikeLivedata = new MutableLiveData<>();
-    private MutableLiveData<String> mEatTodayLivedata = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mLikeLivedata = new MutableLiveData<>();
+    private final MutableLiveData<String> mEatTodayLivedata = new MutableLiveData<>();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //Methods
@@ -65,7 +62,7 @@ public class FirestoreUserRepository {
         CURRENT_USER_ID = getCurrentUser().getUid();
     }
 
-    //Check if current user is already created in database, if not create it
+    //Check if current user is already created in database, if no create it
     public void checkIfUserAlreadyCreated() {
         mNameNoteRef.document(CURRENT_USER_ID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -121,8 +118,7 @@ public class FirestoreUserRepository {
     //Get current user
     public User getUser() {
         FirebaseUser user = getCurrentUser();
-        mUserShared = new User(user.getDisplayName(), user.getEmail(), String.valueOf(user.getPhotoUrl()), "");
-        return mUserShared;
+        return new User(user.getDisplayName(), user.getEmail(), String.valueOf(user.getPhotoUrl()));
     }
 
     //Get name of the current user

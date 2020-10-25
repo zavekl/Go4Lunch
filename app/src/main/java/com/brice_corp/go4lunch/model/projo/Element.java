@@ -1,5 +1,8 @@
 package com.brice_corp.go4lunch.model.projo;
 
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,6 +19,12 @@ public class Element {
     @SerializedName("status")
     @Expose
     private String status;
+
+    public Element(Distance distance, Duration duration, String status) {
+        this.distance = distance;
+        this.duration = duration;
+        this.status = status;
+    }
 
     public Distance getDistance() {
         return distance;
@@ -41,6 +50,7 @@ public class Element {
         this.status = status;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Element{" +

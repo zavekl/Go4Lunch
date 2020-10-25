@@ -13,8 +13,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
     <string name="your_lunch">VOTRE REPAS</string>
     <string name="settings">PARAMETRES</string>
     <string name="logout">DECONNEXION</string>
@@ -31,6 +29,7 @@
 
     <string name="stg_workmates">Collègues : </string>
     <string name="stg_no_workmates">Il n\'y a aucun collègues avec vous.</string>
+    <string name="rv_adapter_name">%1$s mange ici !</string>
 
 
     <string name="tv_person_name_workmate_adp">%1$s mange à %2$s</string>
@@ -42,9 +41,15 @@
 
 
     <string name="no_hour">Aucune information</string>
-
-
     <string name="change_hour_of_notification">Changer l\'heure des notifications</string>
     <string name="rating">évaluation</string>
     <string name="workmates">collègues</string>
+
+
+    <string name="tv_open7d24h">Ouvert 7/24</string>
+    <string name="tv_close_soon">Ferme bientôt</string>
+    <string name="tv_open_until">Ouvert jusqu\'à %1$s</string>
+    <string name="tv_open_at">Ouvre à %1$s</string>
+    <string name="tv_open_tomorrow">Ouvre demain</string>
+    <string name="tv_closed">Fermé</string>
 </resources>

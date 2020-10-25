@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.brice_corp.go4lunch.BuildConfig;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.model.projo.DistanceMatrix;
 import com.brice_corp.go4lunch.model.projo.NearByPlaceResults;
@@ -16,8 +15,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.Objects;
 
 import okhttp3.OkHttpClient;
@@ -34,13 +31,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitRepository {
     private static final String TAG = "RetrofitRepository";
 
-    private Context mContext;
+    private final Context mContext;
 
     private static final int RADIUS = 2500;
     private static final boolean SENSOR = true;
     private static final String TYPESEARCH = "restaurant";
 
-    private ApiGoogleMapRetrofit mApiService;
+    private final ApiGoogleMapRetrofit mApiService;
 
     public RetrofitRepository(Context context) {
         mContext = context;

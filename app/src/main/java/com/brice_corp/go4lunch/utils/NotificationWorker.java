@@ -1,5 +1,6 @@
 package com.brice_corp.go4lunch.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -10,30 +11,23 @@ import androidx.work.WorkerParameters;
 import com.brice_corp.go4lunch.di.MyApplication;
 import com.brice_corp.go4lunch.repository.FirestoreUserRepository;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-import static com.brice_corp.go4lunch.utils.Constants.RADDRESS;
-import static com.brice_corp.go4lunch.utils.Constants.RID;
-import static com.brice_corp.go4lunch.utils.Constants.RNAME;
 
 
 /**
  * Created by <NIATEL Brice> on <31/07/2020>.
  */
-public class NotificationWorker extends Worker {
+@SuppressLint("WorkerHasAPublicModifier")
+class NotificationWorker extends Worker {
     private static final String TAG = "NotificationWorker";
+    private final FirestoreUserRepository mFirestoreUserRepository;
+    private final ApplicationPreferences mApplicationPreferences;
 
-
-    private FirestoreUserRepository mFirestoreUserRepository;
-    private ApplicationPreferences mApplicationPreferences;
-
-    private NotificationUtils notificationUtils;
+    private final NotificationUtils notificationUtils;
     private String mName;
     private String mAddress;
     private String mId;

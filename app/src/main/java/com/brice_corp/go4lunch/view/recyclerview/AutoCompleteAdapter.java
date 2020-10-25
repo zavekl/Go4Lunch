@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.brice_corp.go4lunch.BuildConfig;
 import com.brice_corp.go4lunch.R;
 import com.brice_corp.go4lunch.view.activity.DescriptionRestaurantActivity;
 import com.brice_corp.go4lunch.model.projo.Restaurant;
@@ -41,10 +40,10 @@ import java.util.concurrent.TimeoutException;
 public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapter.ViewHolder> implements Filterable {
     private static final String TAG = "AutoCompleteAdapter";
     private final PlacesClient placesClient;
-    private RectangularBounds mBounds;
+    private final RectangularBounds mBounds;
     private ArrayList<Restaurant> mResultList = new ArrayList<>();
-    private LatLng mLatLng;
-    private Context mContext;
+    private final LatLng mLatLng;
+    private final Context mContext;
 
     /**
      * Constructor
@@ -195,8 +194,8 @@ public class AutoCompleteAdapter extends RecyclerView.Adapter<AutoCompleteAdapte
 
     //View holder of adapter
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView mName;
-        TextView mAddress;
+        final TextView mName;
+        final TextView mAddress;
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);

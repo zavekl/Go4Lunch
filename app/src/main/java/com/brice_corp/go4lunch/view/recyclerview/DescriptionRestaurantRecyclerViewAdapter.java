@@ -1,6 +1,5 @@
 package com.brice_corp.go4lunch.view.recyclerview;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +22,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by <NIATEL Brice> on <20/05/2020>.
  */
 public class DescriptionRestaurantRecyclerViewAdapter extends FirestoreRecyclerAdapter<User, DescriptionRestaurantRecyclerViewAdapter.ViewHolder> {
-    private Context mContext;
+    private final Context mContext;
 
     public DescriptionRestaurantRecyclerViewAdapter(@NonNull FirestoreRecyclerOptions<User> options, Context context) {
         super(options);
@@ -33,7 +32,7 @@ public class DescriptionRestaurantRecyclerViewAdapter extends FirestoreRecyclerA
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
         Log.i("TAG", "onBindViewHolder: " + model.getName());
-        holder.mPersonName.setText(model.getName() + " is joining !");
+        holder.mPersonName.setText(mContext.getResources().getString(R.string.rv_adapter_name, model.getName()));
         Glide.with(mContext)
                 .load(model.getImage())
                 .centerCrop()
@@ -48,8 +47,8 @@ public class DescriptionRestaurantRecyclerViewAdapter extends FirestoreRecyclerA
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        CircleImageView mImageView;
-        TextView mPersonName;
+        final CircleImageView mImageView;
+        final TextView mPersonName;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);

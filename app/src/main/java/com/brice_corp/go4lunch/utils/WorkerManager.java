@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.work.Constraints;
-import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
@@ -12,10 +11,6 @@ import androidx.work.WorkManager;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
-
-import static com.brice_corp.go4lunch.utils.Constants.RADDRESS;
-import static com.brice_corp.go4lunch.utils.Constants.RID;
-import static com.brice_corp.go4lunch.utils.Constants.RNAME;
 
 /**
  * Created by <NIATEL Brice> on <16/09/2020>.
@@ -25,8 +20,8 @@ public class WorkerManager {
     private static final String WORK_NAME = "work_name";
     private static final String NOTIF = "notification";
 
-    private Context mApplicationContext;
-    private ApplicationPreferences mApplicationPreferences;
+    private final Context mApplicationContext;
+    private final ApplicationPreferences mApplicationPreferences;
 
     public WorkerManager(Context applicationContext) {
         mApplicationContext = applicationContext;

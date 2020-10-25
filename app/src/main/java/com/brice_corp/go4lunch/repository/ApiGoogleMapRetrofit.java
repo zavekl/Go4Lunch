@@ -11,7 +11,7 @@ import retrofit2.http.Query;
 /**
  * Created by <NIATEL Brice> on <15/05/2020>.
  */
-public interface ApiGoogleMapRetrofit {
+interface ApiGoogleMapRetrofit {
 
     //Get the details of restaurant by the ID
     @GET("maps/api/place/details/json?")
