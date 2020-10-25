@@ -41,9 +41,15 @@
 
 
     <string name="no_hour">Aucune information</string>
-
-
     <string name="change_hour_of_notification">Changer l\'heure des notifications</string>
     <string name="rating">évaluation</string>
     <string name="workmates">collègues</string>
+
+
+    <string name="tv_open7d24h">Ouvert 7/24</string>
+    <string name="tv_close_soon">Ferme bientôt</string>
+    <string name="tv_open_until">Ouvert jusqu\'à %1$s</string>
+    <string name="tv_open_at">Ouvre à %1$s</string>
+    <string name="tv_open_tomorrow">Ouvre demain</string>
+    <string name="tv_closed">Fermé</string>
 </resources>

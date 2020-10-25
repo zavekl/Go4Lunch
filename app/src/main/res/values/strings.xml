@@ -48,4 +48,13 @@
     <string name="rating">Rating</string>
     <string name="workmates">Workmates</string>
     <string name="back_arrow" translatable="false">back arrow</string>
+
+
+    <string name="tv_open7d24h">Open 7/24</string>
+    <string name="tv_close_soon">Close soon</string>
+    <string name="tv_open_until">Open until %1$s</string>
+    <string name="tv_open_at">Open at %1$s</string>
+    <string name="tv_open_tomorrow">Open tomorrow</string>
+    <string name="tv_closed">Closed</string>
+
 </resources>
