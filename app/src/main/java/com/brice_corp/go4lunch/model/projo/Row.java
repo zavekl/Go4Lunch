@@ -12,9 +12,13 @@ import java.util.List;
  * Created by <NIATEL Brice> on <29/09/2020>.
  */
 public class Row {
+    public Row(List<Element> elements) {
+        this.elements = elements;
+    }
+
     @SerializedName("elements")
     @Expose
-    private List<Element> elements = null;
+    private List<Element> elements;
 
     public List<Element> getElements() {
         return elements;

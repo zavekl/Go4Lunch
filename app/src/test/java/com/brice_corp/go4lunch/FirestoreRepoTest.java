@@ -15,12 +15,13 @@ import org.mockito.Mockito;
 /**
  * Created by <NIATEL Brice> on <13/10/2020>.
  */
+
 public class FirestoreRepoTest {
-    private final String IDRESTAURANT = "xxx";
+    private final String ID_RESTAURANT = "xxx";
     @Rule
     public InstantTaskExecutorRule mInstantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    private FirestoreUserRepository mFtUserRepository = Mockito.mock(FirestoreUserRepository.class);
+    private final FirestoreUserRepository mFtUserRepository = Mockito.mock(FirestoreUserRepository.class);
 
     private MutableLiveData<Boolean> mGetTheLikeRestaurantLiveData;
 
@@ -28,11 +29,9 @@ public class FirestoreRepoTest {
 
     @Before
     public void setUp() {
-        //getTheLikeRestaurantLiveDataFalse() + getTheLikeRestaurantLiveDataTrue()
         mGetTheLikeRestaurantLiveData = new MutableLiveData<>();
-        Mockito.doReturn(mGetTheLikeRestaurantLiveData).when(mFtUserRepository).getTheLikeRestaurant(IDRESTAURANT);
+        Mockito.doReturn(mGetTheLikeRestaurantLiveData).when(mFtUserRepository).getTheLikeRestaurant(ID_RESTAURANT);
 
-        //getTheEatTodayLiveDataNothing() + getTheEatTodayLiveData()
         mGetTheEatTodayLiveData = new MutableLiveData<>();
         Mockito.doReturn((mGetTheEatTodayLiveData)).when(mFtUserRepository).getTheEatToday();
 
@@ -44,29 +43,27 @@ public class FirestoreRepoTest {
     @Test
     public void getTheLikeRestaurantLiveDataFalse() throws InterruptedException {
         //Given
-        boolean resultBoolean = false;
         mGetTheLikeRestaurantLiveData.setValue(false);
 
         //When
-        Boolean result = LiveDataUtils.getOrAwaitValue(mFtUserRepository.getTheLikeRestaurant(IDRESTAURANT));
+        Boolean result = LiveDataUtils.getOrAwaitValue(mFtUserRepository.getTheLikeRestaurant(ID_RESTAURANT));
 
         //Test
         Assert.assertNotNull(result);
-        Assert.assertEquals(result, resultBoolean);
+        Assert.assertEquals(false, result);
     }
 
     @Test
     public void getTheLikeRestaurantLiveDataTrue() throws InterruptedException {
         //Given
-        boolean resultBoolean = true;
         mGetTheLikeRestaurantLiveData.setValue(true);
 
         //When
-        Boolean result = LiveDataUtils.getOrAwaitValue(mFtUserRepository.getTheLikeRestaurant(IDRESTAURANT));
+        Boolean result = LiveDataUtils.getOrAwaitValue(mFtUserRepository.getTheLikeRestaurant(ID_RESTAURANT));
 
         //Test
         Assert.assertNotNull(result);
-        Assert.assertEquals(result, resultBoolean);
+        Assert.assertEquals(true, result);
     }
 
     @Test
@@ -80,7 +77,7 @@ public class FirestoreRepoTest {
 
         //Test
         Assert.assertNotNull(result);
-        Assert.assertEquals(result, resultString);
+        Assert.assertEquals(resultString, result);
     }
 
     @Test
@@ -93,14 +90,14 @@ public class FirestoreRepoTest {
 
         //Test
         Assert.assertNotNull(result);
-        Assert.assertEquals(result, IDRESTAURANT);
+        Assert.assertEquals(ID_RESTAURANT, result);
     }
 
     @Test
     public void getUser() {
         //Test
-        Assert.assertEquals(mFtUserRepository.getUser().getName(), "Toto");
-        Assert.assertEquals(mFtUserRepository.getUser().getEmail(), "toto@gmail.com");
-        Assert.assertEquals(mFtUserRepository.getUser().getImage(), "https://user.oc-static.com/users/avatars/15853453750743_IMG_20200311_190120.jpg");
+        Assert.assertEquals("Toto", mFtUserRepository.getUser().getName());
+        Assert.assertEquals("toto@gmail.com", mFtUserRepository.getUser().getEmail());
+        Assert.assertEquals("https://user.oc-static.com/users/avatars/15853453750743_IMG_20200311_190120.jpg", mFtUserRepository.getUser().getImage());
     }
 }

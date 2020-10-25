@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class DistanceMatrix {
 
+    public void setRows(List<Row> rows) {
+        this.rows = rows;
+    }
+
     @SerializedName("rows")
     @Expose
     private List<Row> rows;
