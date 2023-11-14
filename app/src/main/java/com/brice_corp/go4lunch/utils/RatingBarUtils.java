@@ -13,8 +13,8 @@ public class RatingBarUtils {
         if (rate != 0.0f) {
             return (rate * 3) / 5;
         } else {
-            Log.e(TAG, "setTheRatingBar: no rate from API Place");
-            return 0;
+            Log.d(TAG, "setTheRatingBar: no rate from API Place");
+            return 0.0f;
         }
     }
 }
