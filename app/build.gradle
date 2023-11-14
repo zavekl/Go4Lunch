@@ -2,8 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdk 29
 
     defaultConfig {
         applicationId "com.brice_corp.go4lunch"
@@ -45,12 +44,12 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2.19.0'
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
-
     //Firebase
     implementation 'com.google.firebase:firebase-firestore:21.7.1'
     implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.google.firebase:firebase-core:17.5.1'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
+    implementation 'com.firebaseui:firebase-ui-database:6.1.0'
     implementation 'com.firebaseui:firebase-ui-firestore:6.1.0'
 
     //Facebook API
