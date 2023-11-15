@@ -34,7 +34,8 @@ public class WorkmatesRecyclerViewAdapter extends FirestoreRecyclerAdapter<User,
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull User model) {
         String personName;
         Log.i(TAG, "onBindViewHolder:'" + model.getEatTodayName() + "'");
-        if (!model.getEatTodayName().equals("")) {
+
+        if (model.getEatTodayName() != null && !model.getEatTodayName().equals("")) {
             personName = mContext.getString(R.string.tv_person_name_workmate_adp, model.getName(), model.getEatTodayName());
         } else {
             personName = mContext.getString(R.string.tv_person_name_workmate_dont_know_adp, model.getName());
