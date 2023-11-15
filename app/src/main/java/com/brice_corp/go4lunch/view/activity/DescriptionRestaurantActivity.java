@@ -140,7 +140,12 @@ public class DescriptionRestaurantActivity extends AppCompatActivity {
                             setOnClickWebsite(currentRestaurant.getWebsite());
 
                             //Rating bar
-                            setTheRatingBar(currentRestaurant.getRating().floatValue());
+                            if (currentRestaurant.getRating() != null) {
+                                setTheRatingBar(currentRestaurant.getRating().floatValue());
+                            } else {
+                                setTheRatingBar(0.0f);
+                            }
+
 
                             //Set the like true or false from the firestore
                             getLike();

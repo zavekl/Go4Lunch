@@ -166,6 +166,10 @@ public class ListViewViewModel extends AndroidViewModel {
                         Log.d(TAG, "compare: " + restaurant1.getName());
                         restaurant1.setRating(0.0);
                     }
+                    if (restaurant2.getRating() == null) {
+                        Log.d(TAG, "compare: " + restaurant2.getName());
+                        restaurant2.setRating(0.0);
+                    }
                     return restaurant2.getRating().compareTo(restaurant1.getRating());
                 }
             });
