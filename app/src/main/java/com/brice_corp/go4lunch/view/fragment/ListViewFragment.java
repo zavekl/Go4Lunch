@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -49,8 +50,6 @@ public class ListViewFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.list_restaurant_recyclerview);
         mRatingButton = view.findViewById(R.id.buttonlistview1);
         mWorkmatesButton = view.findViewById(R.id.buttonlistview2);
-        mWorkmatesButton.setBackgroundColor(Color.GRAY);
-        mRatingButton.setBackgroundColor(Color.GRAY);
         return view;
     }
 
@@ -77,14 +76,14 @@ public class ListViewFragment extends Fragment {
             public void onClick(View v) {
                 mOnClicked1 = !mOnClicked1;
                 if (mOnClicked1) {
-                    mWorkmatesButton.setBackgroundColor(Color.GRAY);
+                    mWorkmatesButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.round_btn_state1,null));
                     mOnClicked2 = false;
-                    mRatingButton.setBackgroundColor(Color.DKGRAY);
+                    mRatingButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.round_btn_state2,null));
                     mAdapter.setList(mListViewViewModel.sortByRating(mSavedListRestaurant));
 
                     Log.d(TAG, "List rating: " + mListViewViewModel.sortByRating(mAdapter.getList()));
                 } else {
-                    mRatingButton.setBackgroundColor(Color.GRAY);
+                    mRatingButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.round_btn_state1,null));
                     ifNeedSetListRestaurant();
                 }
                 Log.d(TAG, "onClick1: " + mOnClicked1);
@@ -95,19 +94,21 @@ public class ListViewFragment extends Fragment {
         mWorkmatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnClicked2 = !mOnClicked2;
-                if (mOnClicked2) {
-                    mRatingButton.setBackgroundColor(Color.GRAY);
-                    mOnClicked1 = false;
-                    mWorkmatesButton.setBackgroundColor(Color.DKGRAY);
-                    mAdapter.setList(mListViewViewModel.sortByWorkmates(mSavedListRestaurant));
-                    Log.d(TAG, "List rating: " + mListViewViewModel.sortByWorkmates(mAdapter.getList()));
-                } else {
-                    mWorkmatesButton.setBackgroundColor(Color.GRAY);
-                    ifNeedSetListRestaurant();
+                if(!mSavedListRestaurant.isEmpty()) {
+                    mOnClicked2 = !mOnClicked2;
+                    if (mOnClicked2) {
+                        mRatingButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.round_btn_state1,null));
+                        mOnClicked1 = false;
+                        mWorkmatesButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.round_btn_state2,null));
+                        mAdapter.setList(mListViewViewModel.sortByWorkmates(mSavedListRestaurant));
+                        Log.d(TAG, "List rating: " + mListViewViewModel.sortByWorkmates(mAdapter.getList()));
+                    } else {
+                        mWorkmatesButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.round_btn_state1,null));
+                        ifNeedSetListRestaurant();
+                    }
+                    Log.d(TAG, "onClick1: " + mOnClicked1);
+                    Log.d(TAG, "onClick2: " + mOnClicked2);
                 }
-                Log.d(TAG, "onClick1: " + mOnClicked1);
-                Log.d(TAG, "onClick2: " + mOnClicked2);
             }
         });
     }
