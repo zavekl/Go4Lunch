@@ -21,7 +21,7 @@
         android:src="@android:drawable/ic_menu_mylocation"
         app:layout_constraintBottom_toBottomOf="@id/mapView"
         app:layout_constraintEnd_toEndOf="@id/mapView"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="@color/colorSecondary"
         tools:ignore="UnusedAttribute" />
 
 
