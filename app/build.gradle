@@ -20,12 +20,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             resValue("string", "map_api_key", go4lunch_mapAPIKey)
             resValue("string", "place_api_key", go4lunch_placeAPIKey)
+            resValue("string", "distance_matrix_api_key", go4lunch_distanceMatrixAPIKey)
+
         }
         debug {
             resValue("string", "map_api_key", go4lunch_mapAPIKey)
             resValue("string", "place_api_key", go4lunch_placeAPIKey)
+            resValue("string", "distance_matrix_api_key", go4lunch_distanceMatrixAPIKey)
         }
     }
+    namespace 'com.brice_corp.go4lunch'
 }
 
 dependencies {

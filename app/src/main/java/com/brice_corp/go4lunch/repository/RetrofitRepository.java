@@ -101,7 +101,7 @@ public class RetrofitRepository {
     public LiveData<DistanceMatrix> getDistance(LatLng latLng, String placeId) {
         final MutableLiveData<DistanceMatrix> liveData = new MutableLiveData<>();
         Log.d(TAG, "getDistance: " + latLng + placeId);
-        final Call<DistanceMatrix> call = mApiService.getDistance(latLng.latitude + "," + latLng.longitude, "place_id:" + placeId, mContext.getResources().getString(R.string.map_api_key));
+        final Call<DistanceMatrix> call = mApiService.getDistance(latLng.latitude + "," + latLng.longitude, "place_id:" + placeId, mContext.getResources().getString(R.string.distance_matrix_api_key));
 
         call.enqueue(new Callback<DistanceMatrix>() {
             @Override
